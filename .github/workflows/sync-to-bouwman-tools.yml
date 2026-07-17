@@ -1,0 +1,26 @@
+name: Sync naar bouwman-tools
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Kopieer naar bouwman-tools
+        env:
+          GH_TOKEN: ${{ secrets.BOUWMAN_TOOLS_PAT }}
+        run: |
+          gh auth setup-git
+          git clone https://github.com/bouwman-tools/bouwman-tools.git _bouwman
+          cp bewaarplicht.html _bouwman/bewaarplicht.html
+          cd _bouwman
+          git config user.email "s.bouwman@joinadministraties.nl"
+          git config user.name "Sylvainbouwman"
+          git add bewaarplicht.html
+          git diff --staged --quiet || git commit -m "Sync vanuit bewaarplicht-checker"
+          git pull origin master --rebase
+          git push
