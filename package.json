@@ -1,0 +1,9 @@
+{
+  "name": "bewaarplicht-checker",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Kennisbank en rekentool voor de fiscale bewaarplicht (art. 52 AWR) — Join Administraties",
+  "scripts": {
+    "test": "node --test tests/"
+  }
+}
