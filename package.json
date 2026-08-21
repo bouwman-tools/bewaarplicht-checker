@@ -4,6 +4,6 @@
   "private": true,
   "description": "Kennisbank en rekentool voor de fiscale bewaarplicht (art. 52 AWR) — Join Administraties",
   "scripts": {
-    "test": "node --test tests/"
+    "test": "node --test \"tests/**/*.test.mjs\""
   }
 }
