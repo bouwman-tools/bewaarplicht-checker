@@ -18,7 +18,7 @@ De tool is bedoeld voor adviseurs, niet voor cliënten, en rekent uitsluitend de
 
 ---
 
-## 2. Vier inhoudelijke correcties op de vorige versie
+## 2. Vijf inhoudelijke correcties op de vorige versie
 
 Dit zijn de wijzigingen waar een fiscale beoordeling bij hoort. De rest van de herziening was
 techniek en tekst.
@@ -104,9 +104,32 @@ Handboek deze categorie bewust naast de opgaaf en de kopie-ID zet. Als jij lieve
 aanhoudt (art. 52 AWR als restcategorie), horen we dat graag — dat is de voorzichtiger kant.
 
 Los daarvan een detail dat vaak misgaat en dat wij nu expliciet maken: het Handboek rekent
-**verlof- en ziektestaten** in §3.2.2 uitdrukkelijk tot de loonadministratie. Die vallen dus onder de
-fiscale zeven jaar, niet onder de AVG-termijn van twee jaar die voor de rest van het personeelsdossier
-geldt.
+**verlof- en ziektestaten** in §3.2.2 uitdrukkelijk tot de gegevens die bij de loonadministratie
+worden bewaard. Voor zover die staten de loondoorbetaling en de loonheffingen onderbouwen, vallen ze
+dus onder de fiscale zeven jaar.
+
+Maar dat is niet het hele verhaal, en de eerste opzet van de tool was hier te stellig. De AP zet
+**verzuimfrequentie** juist in de categorie waarvoor zij als richtsnoer maximaal twee jaar na
+uitdiensttreding noemt, met de kanttekening dat de wet daar geen termijn voor geeft. Zeven jaar is
+dus verdedigbaar voor de staten die de loonbetaling dragen, maar niet als blanco termijn voor de
+verzuimadministratie in het personeelsdossier. De tool scheidt die twee nu en zegt dat er ook bij.
+
+Twee gevolgen daarvan:
+
+- Verlof- en ziektestaten staan niet meer als **basisgegeven** aangemerkt. Het Handboek noemt ze in
+  §3.2.2 bij de *overige* gegevens bij de loonadministratie, niet in de opsomming van basisgegevens
+  in §3.5.2. Dat verschil is hier niet academisch: §3.5.2 sluit af met "Voor de overige gegevens
+  kunt u met ons afspraken maken over kortere bewaartermijnen dan 7 jaar", en juist bij
+  gezondheidsgerelateerde gegevens is die route door de AVG nodig.
+- De **leerwerkovereenkomst (bbl)** stond in dezelfde rij als de ziektestaten. Dat is losgetrokken
+  naar een eigen documenttype: een neutraal contractstuk en een gegeven met een gezondheidscomponent
+  horen niet onder één termijn met één privacyprofiel.
+
+Wij hebben in de tool ook de formulering over medische gegevens genuanceerd. Die luidde dat een
+werkgever medische gegevens "niet mag vastleggen". De AP hanteert het onderscheid tussen
+*verzuimgegevens* — een beperkte, limitatieve set die wél mag — en *medische gegevens* over aard en
+oorzaak, die niet mogen. **Is die tweedeling zoals wij hem nu neerzetten bruikbaar voor de
+praktijk?**
 
 ### 2.4 Digitaal bewaren: "notariële aktes" is geschrapt
 
@@ -131,6 +154,34 @@ De tool noemt nu dus twee uitzonderingen in plaats van drie. Voor zover er een b
 originele notariële aktes bestaat, vloeit die voort uit de Wet op het notarisambt en rust die op de
 notaris, niet op de administratieplichtige ondernemer. **Kun jij bevestigen dat wij hier niets over
 het hoofd zien?** Het is een hardnekkige aanname in de adviespraktijk.
+
+### 2.5 Civielrechtelijke verjaring: verkeerd artikel onder een algemeen contract
+
+Bij het documenttype "overige overeenkomst / contract" stond als enige civielrechtelijke bron
+**art. 7:761 BW**. Dat is een lex specialis voor gebreken in opgeleverd werk bij *aanneming van werk*.
+De zinsnede "in alle andere gevallen" in lid 2 ziet op andere aanneming dan bouwwerken — niet op
+overeenkomsten in het algemeen. Als enige verwijzing onder een willekeurig contract wees hij dus de
+verkeerde kant op.
+
+Vervangen door de algemene bepalingen:
+
+> **Art. 3:307 lid 1 BW** — "Een rechtsvordering tot nakoming van een verbintenis uit overeenkomst
+> tot een geven of een doen verjaart door verloop van vijf jaren na de aanvang van de dag, volgende
+> op die waarop de vordering opeisbaar is geworden."
+
+> **Art. 3:310 lid 1 BW** — verjaring "door verloop van vijf jaren" na bekendheid met schade én
+> aansprakelijke persoon, "en in ieder geval door verloop van twintig jaren na de gebeurtenis
+> waardoor de schade is veroorzaakt".
+
+Art. 7:761 BW blijft in de tool staan waar hij hoort: bij het aandachtspunt over niet-fiscale
+bewaarplichten, voor bouwdossiers.
+
+**Rittenregistratie.** Die stond als basisgegeven met het Handboek als grondslag. Het Handboek noemt
+de rittenregistratie echter niet in de opsomming van basisgegevens, en kent er ook geen eigen
+bewaartermijn voor — zeven jaar volgt uit art. 52 lid 4 AWR. Bovendien geldt dat voor de werkgever
+die de bijtelling zélf achterwege laat op grond van een sluitende registratie. Bij een "Verklaring
+geen privégebruik auto" ligt de bewijslast bij de wérknemer; de werkgever bewaart dan alleen een
+kopie van die verklaring. De tool zegt dat nu, en merkt de rittenregistratie aan als overig gegeven.
 
 ---
 
@@ -269,6 +320,10 @@ Dat is hersteld:
    basisgegeven aangemerkt? (§3)
 8. Investeringsdiensten ≥ € 30.000: tien jaar via art. 34a, of zeven jaar via art. 52 AWR omdat
    art. 34a niet is meegewijzigd? (§6)
+9. Verlof- en ziektestaten: is de knip tussen "onderbouwt de loonbetaling — zeven jaar" en
+   "verzuimfrequentie in het dossier — AP-richtsnoer twee jaar" in de praktijk werkbaar, of moeten
+   wij één termijn aanhouden? En is het terecht dat wij ze niet langer als basisgegeven aanmerken?
+   (§2.3)
 
 ---
 
@@ -283,14 +338,15 @@ wetten.overheid.nl.
 - Art. 13 en 31 Uitvoeringsbeschikking omzetbelasting 1968 — https://wetten.overheid.nl/BWBR0002634
 - Art. 7.5 en 7.9 Uitvoeringsregeling loonbelasting 2011 — https://wetten.overheid.nl/BWBR0028236
 - Art. 2:10 BW — https://wetten.overheid.nl/BWBR0003045 · Art. 3:15i BW — https://wetten.overheid.nl/BWBR0005291
-- Art. 7:761 BW — https://wetten.overheid.nl/BWBR0005290
+- Art. 3:307 en 3:310 BW — https://wetten.overheid.nl/BWBR0005291
+- Art. 7:640a en 7:642 BW (verval en verjaring vakantieaanspraken) · Art. 7:761 BW — https://wetten.overheid.nl/BWBR0005290
 - Art. 33 en 34a Wwft — https://wetten.overheid.nl/BWBR0024282
-- Art. 5 lid 1 sub e AVG, Verordening (EU) 2016/679 — https://eur-lex.europa.eu/eli/reg/2016/679/oj
+- Art. 5 lid 1 sub e AVG, Verordening (EU) 2016/679 — https://eur-lex.europa.eu/eli/reg/2016/679/oj/nld#art_5
 
 **Belastingdienst**
 - Hoelang moet u gegevens bewaren? — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/ondernemen/administratie/hoelang-moet-u-gegevens-bewaren
 - Administratie bewaren voor de btw: 7 of 10 jaar? — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/btw/administratie_bijhouden/administratie_bewaren/
-- Uw geautomatiseerde administratie en de fiscale bewaarplicht, AL 040, juli 2026 — https://download.belastingdienst.nl/belastingdienst/docs/geautomatiseerde_administratie_en_fiscale_bewaarplicht_al0401z14fd.pdf
+- Uw geautomatiseerde administratie en de fiscale bewaarplicht, AL 040, uitgave juli 2026 — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/uw_geautomatiseerde_administratie_en_de_fiscale_bewaarplicht (landingspagina; de directe pdf-link draagt een editiecode die per uitgave wijzigt en dan een 404 geeft)
 - Handboek Loonheffingen 2026, uitgave maart 2026 — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/handboek-loonheffingen
 
 **Autoriteit Persoonsgegevens**
