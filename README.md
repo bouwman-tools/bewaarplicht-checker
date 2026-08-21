@@ -28,7 +28,7 @@ Daarnaast staan er de bewaarplichten in voor het opdracht- en controledossier va
 | 5 jaar, vast | Wwft-cliëntonderzoek: bewaren én daarna vernietigen, vanaf einde zakelijke relatie | art. 33 lid 3 en 34a lid 3 Wwft |
 | 5 jaar, vast | Wwft-melding ongebruikelijke transactie, vanaf het tijdstip van de melding | art. 34 lid 2 en 34a lid 3 Wwft |
 | geen | Overig personeelsdossier, ziekteverzuimregistratie, sollicitatiegegevens | AVG, norminvulling AP |
-| 7 jaar, dossier accountant | Opdrachtdossier: na de datum van de opdrachtrapportage | QMS 1, par. 31(6) |
+| 7 jaar, dossier accountant | Opdrachtdossier: nadat het dossier is afgesloten | art. 25 NVKS, via overgangsrecht art. 6 NVKM |
 | 7 jaar, dossier accountant | Controledossier wettelijke controle: nadat het dossier is afgesloten | art. 11 lid 6 Bta |
 
 De termijn begint niet op de aanmaakdatum maar op **1 januari van het jaar volgend op het moment
@@ -121,7 +121,7 @@ verkeerde jaar op.
 npm test
 ```
 
-119 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
+121 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
 het HTML-bestand en draait die in een `vm`-sandbox. Die loader bewaakt ook dat de kern puur blijft:
 hij weigert DOM-toegang (`document.`, `window.`) en elk gebruik van `Date`.
 

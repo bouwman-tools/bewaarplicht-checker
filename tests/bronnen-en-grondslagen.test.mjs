@@ -62,11 +62,17 @@ test('wetten.overheid.nl-links gebruiken het Juriconnect-formaat met artikelnumm
   // De jci-vorm resolvet op artikelnummer en blijft werken als een hoofdstuk of
   // afdeling wordt hernummerd; een hard gecodeerd structuuranker doet dat niet
   // en faalt dan stil met HTTP 200 bovenaan de regeling.
+  // Uitzondering: bij een íngetrokken regeling levert de jci-resolver een
+  // redirect zonder fragment op, zodat de lezer boven aan de regeling landt in
+  // plaats van bij het artikel. Daar is de gedateerde ankervorm juist beter, en
+  // een vaste datum is dan ook gewenst omdat overgangsrecht de tekst conserveert.
+  const JCI = /^https:\/\/wetten\.overheid\.nl\/jci1\.3:c:BWBR\d{7}&artikel=[\w.]+$/;
+  const GEDATEERD_ANKER = /^https:\/\/wetten\.overheid\.nl\/BWBR\d{7}\/\d{4}-\d{2}-\d{2}#[\w.]+$/;
   for (const [sleutel, bron] of Object.entries(BRONNEN)) {
     if (!bron.url.includes('wetten.overheid.nl')) continue;
-    assert.match(
-      bron.url, /^https:\/\/wetten\.overheid\.nl\/jci1\.3:c:BWBR\d{7}&artikel=[\w.]+$/,
-      `bron "${sleutel}" gebruikt niet het jci-formaat`
+    assert.ok(
+      JCI.test(bron.url) || GEDATEERD_ANKER.test(bron.url),
+      `bron "${sleutel}" gebruikt niet het jci-formaat en ook geen gedateerd anker`
     );
   }
 });
@@ -315,6 +321,29 @@ test('opdrachtdossier: zeven jaar vanaf de datum van de opdrachtrapportage', () 
   assert.equal(r.bepalend.termijn.klok, 'datum', 'geen kalenderjaarklok');
   assert.deepEqual(plat(r.laatsteBewaardag), { jaar: 2033, maand: 8, dag: 21 });
   assert.deepEqual(plat(r.verstrekenVanaf), { jaar: 2033, maand: 8, dag: 22 });
+});
+
+test('opdrachtdossier ankert op de afsluiting, niet op de rapportagedatum', () => {
+  // Voor een kantoor zonder Wta-vergunning geldt de NVKS via art. 6 NVKM nog tot
+  // 1 januari 2027. Art. 25 lid 1 sub e rekent vanaf de afsluiting van het
+  // dossier; afsluiten gebeurt ná rapporteren, dus dat anker valt later en is
+  // de veilige kant.
+  const doc = vindDocumentType('opdrachtdossier');
+  assert.match(doc.datumLabel, /afgesloten/i);
+  assert.doesNotMatch(doc.datumLabel, /rapportage/i);
+  assert.ok(doc.bronnen.includes('nvks25'), 'art. 25 NVKS hoort de primaire bron te zijn');
+});
+
+test('de omschakeling naar SKM 1 is niet automatisch geprogrammeerd', () => {
+  // SKM 1 par. 31(6) eist zeven jaar, maar de koppeling aan de rapportagedatum
+  // staat in A85 en ziet op controle- en assurance-opdrachten. Voor bijvoorbeeld
+  // een samenstellingsopdracht is dat anker niet vastgesteld; automatisch
+  // omschakelen per 1-1-2027 zou een precisie suggereren die er niet is.
+  const doc = vindDocumentType('opdrachtdossier');
+  assert.match(doc.waarschuwing, /1 januari 2027/);
+  assert.match(doc.waarschuwing, /per opdrachtsoort/i);
+  assert.match(BRONNEN.qms1.omschrijving, /A85/);
+  assert.match(BRONNEN.qms1.omschrijving, /assurance/i);
 });
 
 test('controledossier: zeven jaar nadat het dossier is afgesloten', () => {

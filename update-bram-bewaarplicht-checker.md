@@ -433,20 +433,31 @@ documenttypen, allebei met een eigen startmoment dat níet aan een boekjaar hang
 
 | Dossier | Termijn | Startmoment | Grondslag |
 |---|---|---|---|
-| Opdrachtdossier (samenstel-, beoordelings-, adviesopdracht) | ten minste 7 jaar | datum van de opdrachtrapportage | QMS 1, par. 31(6) |
+| Opdrachtdossier (samenstel-, beoordelings-, adviesopdracht) | ten minste 7 jaar | nadat het dossier is **afgesloten** | art. 25 lid 1 sub e NVKS, via overgangsrecht art. 6 NVKM |
 | Controledossier wettelijke controle | ten minste 7 jaar | nadat het dossier is afgesloten | art. 11 lid 6 Bta |
 
-**Eén vondst die het vermelden waard is: de NVKS bestaat niet meer.** Die regelde de bewaartermijn
-van het opdrachtdossier in art. 22, maar is **per 21 februari 2025 ingetrokken, met terugwerkende
-kracht tot 1 januari 2025**. De opvolger, de Nadere voorschriften kwaliteitsmanagement (NVKM),
-bevat zélf geen bewaartermijn: die wijst de kwaliteitsmanagementstandaarden aan. De termijn staat nu
-in QMS 1, par. 31(6):
+**De NVKS is ingetrokken, maar nog niet uitgewerkt.** Zij regelde de bewaartermijn van het
+opdrachtdossier in art. 25 en is per 21 februari 2025 ingetrokken met terugwerkende kracht tot
+1 januari 2025. Maar **art. 6 NVKM houdt haar via overgangsrecht in stand**:
 
-> de opdrachtdocumentatie "wordt tijdig samengevoegd na de datum van de opdrachtrapportage en wordt
-> op passende wijze bijgehouden en tenminste zeven jaar bewaard"
+| Soort kantoor | NVKS blijft toepasbaar tot |
+|---|---|
+| Accountantsorganisatie met Wta-vergunning | 1 januari 2026 |
+| Kantoor zonder vergunning | 1 januari 2027 |
 
-Het startmoment is dus de **rapportagedatum**, niet de afsluiting van het dossier. Dat verschilt van
-het controledossier, waar art. 11 lid 6 Bta luidt:
+Join Administraties is blijkens het AFM-register zelf geen vergunninghouder — de vergunning binnen
+het netwerk staat op naam van IZA Accountants B.V., met DK Eemland B.V. en Join Administraties
+Utrecht B.V. als netwerkonderdeel. Voor 2026 gaan wij daarom uit van de tweede rij: de NVKS geldt
+nog. Art. 25 lid 1 onderdeel e luidt dat de kwaliteitsmanager "ten minste zeven jaren, tenzij bij of
+krachtens wet anders is bepaald (…) opdrachtdossiers nadat deze zijn afgesloten" bewaart.
+
+**Wat wij bewust níet hebben geprogrammeerd**, is dat het anker per 1 januari 2027 automatisch de
+rapportagedatum wordt. SKM 1 par. 31(6) eist "tenminste zeven jaar", maar de uitdrukkelijke
+koppeling aan de datum van de opdrachtrapportage staat in A85 en ziet daar op controle- en
+assurance-opdrachten. Voor een samenstellingsopdracht is het precieze ankermoment daarmee nog niet
+vastgesteld. De tool waarschuwt voor de overgang en laat het anker met rust tot dat is uitgezocht.
+
+Dat verschilt van het controledossier, waar art. 11 lid 6 Bta luidt:
 
 > "Een accountantsorganisatie bewaart een controledossier gedurende ten minste zeven jaren nadat het
 > is afgesloten."
@@ -465,9 +476,10 @@ uitdrukkelijk dat deze termijnen niet uit zichzelf op de administratie van de cl
 zijn, en dat bij een stuk in beide dossiers de langst lopende toepasselijke bewaarplicht in de
 praktijk bepalend is voor het moment van vernietigen.
 
-**Waar jouw blik het meest oplevert:** wij hebben de opdrachtdossiers niet verder gesplitst naar
-opdrachtsoort, omdat QMS 1 dat onderscheid voor de bewaartermijn niet maakt. Klopt dat, of kent een
-specifieke opdrachtsoort in jullie praktijk een afwijkende termijn?
+**Waar jouw blik het meest oplevert:** het ankermoment vanaf 1 januari 2027. Geldt de rapportagedatum
+uit A85 alleen voor controle- en assurance-opdrachten, of ook voor een samenstellingsopdracht? Zolang
+dat niet vaststaat, schakelt de tool niet automatisch om. Daarnaast hebben wij de opdrachtdossiers
+niet gesplitst naar opdrachtsoort, omdat SKM 1 dat onderscheid voor de bewaartermijn niet maakt.
 
 ---
 
@@ -488,7 +500,7 @@ wetten.overheid.nl.
 - Art. 33, 34 en 34a Wwft — https://wetten.overheid.nl/BWBR0024282
 - Art. 11 Besluit toezicht accountantsorganisaties — https://wetten.overheid.nl/BWBR0020184
 - Nadere voorschriften kwaliteitsmanagement (NVKM) — https://wetten.overheid.nl/BWBR0050792
-- Nadere voorschriften kwaliteitssystemen (NVKS), vervallen per 21-02-2025 — https://wetten.overheid.nl/BWBR0038869
+- Art. 25 Nadere voorschriften kwaliteitssystemen (NVKS), vervallen per 21-02-2025 maar via art. 6 NVKM nog toepasbaar — https://wetten.overheid.nl/BWBR0038869/2024-01-19#Paragraaf6_Artikel25
 - Art. 5 lid 1 sub e AVG, Verordening (EU) 2016/679 — https://eur-lex.europa.eu/eli/reg/2016/679/oj/nld#art_5
 
 **Belastingdienst**
@@ -498,7 +510,7 @@ wetten.overheid.nl.
 - Handboek Loonheffingen 2026, uitgave maart 2026 — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/handboek-loonheffingen
 
 **NBA**
-- Standaard voor kwaliteitsmanagement 1, par. 31(6) — https://www.nba.nl/wet--en-regelgeving/hra/1619/1600/
+- Standaard voor kwaliteitsmanagement 1 (SKM 1), par. 31(6) en A85 — https://www.nba.nl/wet--en-regelgeving/hra/1619/1600/
 
 **Autoriteit Persoonsgegevens**
 - Bewaren van persoonsgegevens — https://www.autoriteitpersoonsgegevens.nl/themas/basis-avg/privacy-en-persoonsgegevens/bewaren-van-persoonsgegevens
