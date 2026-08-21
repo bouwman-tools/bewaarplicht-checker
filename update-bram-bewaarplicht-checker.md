@@ -253,14 +253,17 @@ Twee gevolgen die wij bewust hebben doorgevoerd:
    einde van de zakelijke relatie, dus één termijn voor beide zou de verkeerde uitkomst geven. De
    tool rekent ze nu apart.
 
-**De slotclausule.** "Tenzij bij wettelijk voorschrift anders is bepaald" is voor een
-accountantskantoor niet theoretisch. Die uitzondering werkt op **documentniveau, niet op
-dossierniveau**: de wetsgeschiedenis licht toe dat dezelfde persoonsgegevens ook voor een ánder doel
-verzameld kunnen zijn en dáárvoor een eigen bewaartermijn kunnen hebben. De tool zegt daarom niet
-"een Wwft-dossier is ook fiscaal, dus alles zeven jaar", maar: beoordeel per stuk of er zelfstandig
-een tweede grondslag is. Gegevens die alleen voor de Wwft zijn verzameld, gaan na vijf jaar weg.
-Welke voorschriften in onze praktijk het vaakst die tweede grondslag vormen, benoemen wij nu niet
-limitatief in de tool — dat is het punt waar een aanvulling vanuit jouw praktijk het meest oplevert.
+**De slotclausule.** "Tenzij bij wettelijk voorschrift anders is bepaald" werkt **per gegeven, niet
+dossierbreed**. Dat een Wwft-document fysiek in een fiscaal dossier of opdrachtdossier zit, is op
+zichzelf onvoldoende: dezelfde gegevens moeten daadwerkelijk ook voor een ander doel zijn verzameld
+en bewaard, en onder een zelfstandige bewaarplicht vallen. Praktische voorbeelden die de tool noemt:
+
+- art. 52 AWR, voor zover de gegevens zelfstandig onderdeel zijn van de fiscale administratie;
+- art. 11 lid 6 Bta, voor zover zij zelfstandig onderdeel zijn van het wettelijke controledossier;
+- toepasselijke NBA-regelgeving over opdrachtdocumentatie, voor zover dezelfde gegevens werkelijk
+  als opdrachtdocumentatie voor dát doel moeten worden bewaard.
+
+Is zo een zelfstandige grondslag er niet, dan gaan de gegevens na de Wwft-termijn weg.
 
 ---
 
@@ -440,10 +443,12 @@ documenttypen, allebei met een eigen startmoment dat níet aan een boekjaar hang
 opdrachtdossier in art. 25 en is per 21 februari 2025 ingetrokken met terugwerkende kracht tot
 1 januari 2025. Maar **art. 6 NVKM houdt haar via overgangsrecht in stand**:
 
-| Soort kantoor | NVKS blijft toepasbaar tot |
+| Soort kantoor | NVKS kan onder de overgangsvoorwaarden worden toegepast tot |
 |---|---|
 | Accountantsorganisatie met Wta-vergunning | 1 januari 2026 |
 | Kantoor zonder vergunning | 1 januari 2027 |
+
+Het is een mógen, geen moeten: eerdere toepassing van NVKM en SKM 1 is toegestaan.
 
 Join Administraties is blijkens het AFM-register zelf geen vergunninghouder — de vergunning binnen
 het netwerk staat op naam van IZA Accountants B.V., met DK Eemland B.V. en Join Administraties
@@ -451,11 +456,16 @@ Utrecht B.V. als netwerkonderdeel. Voor 2026 gaan wij daarom uit van de tweede r
 nog. Art. 25 lid 1 onderdeel e luidt dat de kwaliteitsmanager "ten minste zeven jaren, tenzij bij of
 krachtens wet anders is bepaald (…) opdrachtdossiers nadat deze zijn afgesloten" bewaart.
 
-**Wat wij bewust níet hebben geprogrammeerd**, is dat het anker per 1 januari 2027 automatisch de
-rapportagedatum wordt. SKM 1 par. 31(6) eist "tenminste zeven jaar", maar de uitdrukkelijke
-koppeling aan de datum van de opdrachtrapportage staat in A85 en ziet daar op controle- en
-assurance-opdrachten. Voor een samenstellingsopdracht is het precieze ankermoment daarmee nog niet
-vastgesteld. De tool waarschuwt voor de overgang en laat het anker met rust tot dat is uitgezocht.
+**Eén rekenanker voor beide regimes.** SKM 1 par. 31(f) eist zeven jaar voor alle opdrachten binnen
+het toepassingsgebied: controle, beoordeling, andere assurance, en aan assurance verwante opdrachten
+zoals samenstellen en overeengekomen specifieke werkzaamheden. A85 koppelt die zeven jaar
+uitdrukkelijk aan de datum van de opdrachtrapportage, maar doet dat voor controle- en
+assurance-opdrachten; voor de aan assurance verwante opdrachten geeft A85 geen afzonderlijk
+startanker.
+
+De tool rekent daarom ook onder SKM 1 vanaf de afsluiting van het dossier. Afsluiten gebeurt ná
+rapporteren, dus dat is de latere en daarmee conservatieve datum: zo wordt nooit te kort
+geadviseerd. **Dat is een praktische keuze van deze tool, geen letterlijke tekst van A85.**
 
 Dat verschilt van het controledossier, waar art. 11 lid 6 Bta luidt:
 
@@ -476,10 +486,10 @@ uitdrukkelijk dat deze termijnen niet uit zichzelf op de administratie van de cl
 zijn, en dat bij een stuk in beide dossiers de langst lopende toepasselijke bewaarplicht in de
 praktijk bepalend is voor het moment van vernietigen.
 
-**Waar jouw blik het meest oplevert:** het ankermoment vanaf 1 januari 2027. Geldt de rapportagedatum
-uit A85 alleen voor controle- en assurance-opdrachten, of ook voor een samenstellingsopdracht? Zolang
-dat niet vaststaat, schakelt de tool niet automatisch om. Daarnaast hebben wij de opdrachtdossiers
-niet gesplitst naar opdrachtsoort, omdat SKM 1 dat onderscheid voor de bewaartermijn niet maakt.
+De opdrachtdossiers zijn niet verder gesplitst naar opdrachtsoort, omdat SKM 1 dat onderscheid voor
+de bewaartermijn niet maakt. Voor gewone belastingaangifte-, advies- of consultancyopdrachten die
+niet onder SKM 1 vallen rekent de tool geen accountancytermijn. Schrijft een subsidieregeling of een
+accountantsprotocol een eigen bewaartermijn voor, dan geldt die daarnaast; de tool berekent dat niet.
 
 ---
 

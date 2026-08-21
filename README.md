@@ -57,7 +57,7 @@ Twee valkuilen die de tool expliciet afvangt:
 
 ## Inhoudelijke verantwoording
 
-De fiscale keuzes, de bronnen en de open vragen staan in
+De fiscale keuzes en de bronnen staan in
 [`update-bram-bewaarplicht-checker.md`](update-bram-bewaarplicht-checker.md). Dat document is de
 plek voor inhoudelijke discussie; deze README beschrijft alleen het gebruik en de opzet.
 
@@ -121,7 +121,7 @@ verkeerde jaar op.
 npm test
 ```
 
-121 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
+123 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
 het HTML-bestand en draait die in een `vm`-sandbox. Die loader bewaakt ook dat de kern puur blijft:
 hij weigert DOM-toegang (`document.`, `window.`) en elk gebruik van `Date`.
 

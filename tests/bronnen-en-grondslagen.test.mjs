@@ -334,16 +334,40 @@ test('opdrachtdossier ankert op de afsluiting, niet op de rapportagedatum', () =
   assert.ok(doc.bronnen.includes('nvks25'), 'art. 25 NVKS hoort de primaire bron te zijn');
 });
 
-test('de omschakeling naar SKM 1 is niet automatisch geprogrammeerd', () => {
-  // SKM 1 par. 31(6) eist zeven jaar, maar de koppeling aan de rapportagedatum
-  // staat in A85 en ziet op controle- en assurance-opdrachten. Voor bijvoorbeeld
-  // een samenstellingsopdracht is dat anker niet vastgesteld; automatisch
-  // omschakelen per 1-1-2027 zou een precisie suggereren die er niet is.
+test('de afsluitdatum geldt onder beide regimes en is als keuze uitgelegd', () => {
+  // SKM 1 par. 31(f) eist zeven jaar voor alle opdrachten binnen het
+  // toepassingsgebied, maar A85 koppelt die aan de rapportagedatum alleen voor
+  // controle- en assurance-opdrachten. Voor de aan assurance verwante opdrachten
+  // houdt de tool de latere afsluitdatum aan: conservatief, en uitgelegd als
+  // keuze van de tool in plaats van als tekst van A85.
   const doc = vindDocumentType('opdrachtdossier');
-  assert.match(doc.waarschuwing, /1 januari 2027/);
-  assert.match(doc.waarschuwing, /per opdrachtsoort/i);
+  assert.match(doc.waarschuwing, /afsluiting van het dossier/i);
+  assert.match(doc.waarschuwing, /nooit te kort/i);
   assert.match(BRONNEN.qms1.omschrijving, /A85/);
-  assert.match(BRONNEN.qms1.omschrijving, /assurance/i);
+  assert.match(BRONNEN.qms1.omschrijving, /geen afzonderlijk startanker/i);
+});
+
+test('het NVKS-overgangsrecht is niet absoluut geformuleerd', () => {
+  // Niet ieder kantoor zonder vergunning valt automatisch tot 1-1-2027 onder de
+  // NVKS: het mág onder de overgangsvoorwaarden, en eerder overstappen kan ook.
+  const doc = vindDocumentType('opdrachtdossier');
+  assert.match(doc.waarschuwing, /kan .*blijven toepassen/i);
+  assert.match(doc.waarschuwing, /eerdere toepassing/i);
+  assert.doesNotMatch(doc.waarschuwing, /valt automatisch|geldt automatisch/i);
+});
+
+test('Wwft: de uitzondering werkt per gegeven en niet dossierbreed', () => {
+  const doc = vindDocumentType('wwft-clientonderzoek');
+  assert.match(doc.waarschuwing, /per gegeven/i);
+  assert.match(doc.waarschuwing, /niet dossierbreed|niet genoeg|onvoldoende/i);
+  assert.match(doc.waarschuwing, /alleen voor de Wwft/i);
+
+  const kaart = kern.AANDACHTSPUNTEN.find((n) => /Wwft/.test(n.body));
+  for (const grondslag of [/52 AWR/, /11 lid 6 Bta/, /NBA-regelgeving/]) {
+    assert.match(kaart.body, grondslag, 'voorbeeldgrondslag ontbreekt');
+  }
+  // Geen absolute uitspraak over de status van beroepsregelgeving.
+  assert.doesNotMatch(kaart.body, /geen wettelijk voorschrift is/i);
 });
 
 test('controledossier: zeven jaar nadat het dossier is afgesloten', () => {
