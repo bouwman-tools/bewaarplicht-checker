@@ -9,12 +9,13 @@ oordeel waarde heeft — niet de technische wijzigingen.
 
 ## 1. Wat de tool doet
 
-De tool bestaat uit een kennisbank (37 documenttypen in 7 categorieën) en een rekentool. Je kiest
+De tool bestaat uit een kennisbank (42 documenttypen in 8 categorieën) en een rekentool. Je kiest
 een documenttype, vult één datum in, en de tool geeft de laatste dag waarop het stuk bewaard moet
 blijven plus de dag waarop de termijn is verstreken.
 
-De tool is bedoeld voor adviseurs, niet voor cliënten, en rekent uitsluitend de **fiscale** termijn
-(plus de Wwft, zie §4).
+De tool is bedoeld voor adviseurs, niet voor cliënten. Hij rekent de **fiscale** termijn van de
+cliënt, de Wwft (§4), en sinds kort ook de bewaarplichten voor het **dossier van de accountant
+zelf** (§8). Die laatste twee zijn nadrukkelijk andere verplichtingen met een eigen startmoment.
 
 ---
 
@@ -43,15 +44,16 @@ Concreet: bij ingebruikneming in 2022 loopt de termijn t/m **31 december 2031**.
 met een factuurdatum in 2022 uit op 31 december 2032 — een jaar te lang, en bij een ouder pand met
 een recente factuur juist veel te kort.
 
-**De vraag aan jou zit in het vervolg.** Voor een onderhoudsfactuur uit 2024 op een pand dat sinds
+**Het vervolg is waar het schuurt.** Voor een onderhoudsfactuur uit 2024 op een pand dat sinds
 2010 in gebruik is, was de art. 34a-termijn al op 31-12-2019 afgelopen. Op de factuur zélf loopt dan
 nog gewoon de zevenjaarstermijn van art. 52 lid 4 AWR. De tool vraagt daarom bij onroerende zaken om
 een **tweede, optionele datum** (het moment waarop het stuk zijn actuele waarde verliest) en neemt
 de **laatste van beide** termijnen. Vult de gebruiker die tweede datum niet in en is de
 art. 34a-termijn voorbij, dan meldt de tool bewust "onvolledig" in plaats van "verstreken".
 
-Is die max-benadering wat jou betreft de juiste? En vind je dat wij een gebruiker met twee datums
-mogen opzadelen, of is het praktischer om altijd van het langste scenario uit te gaan?
+Wij houden de max-benadering aan en vragen de ingebruiknemingsdatum alléén bij
+onroerendezaakgegevens, zodat een gebruiker niet standaard met twee datums wordt opgezadeld. Zie
+§7.1 voor de onderbouwing.
 
 ### 2.2 De reikwijdte van art. 34a — hier zit onze zwakste onderbouwing
 
@@ -65,11 +67,12 @@ Voor de **huurovereenkomst** hebben wij geen expliciete bron gevonden. Onze rede
 belaste verhuur is het contract onderdeel van de onderbouwing van de optie en van de herziening.
 "Rechten waaraan deze zijn onderworpen" ziet op beperkte zakelijke rechten (erfpacht, opstal,
 vruchtgebruik) en dus niet op huur; wij plaatsen de huurovereenkomst onder de ruimere categorie
-"bescheiden betreffende". **Dat is een lezing, geen vindplaats.** Als jij vindt dat een
-huurovereenkomst gewoon onder de zeven jaar van art. 52 AWR valt, halen we hem uit de OG-categorie.
+"bescheiden betreffende". **Dat is een lezing, geen vindplaats.**
 
-Zelfde vraag, kleiner belang: geldt de tienjaarstermijn ook voor een schoonmaak- of
-kleinonderhoudsfactuur die met de herziening niets te maken heeft?
+Wij houden die lezing aan: de huurovereenkomst blijft in de OG-categorie, maar met art. 52 AWR
+vooraan en de OB-klok als optioneel tweede veld. Datzelfde geldt voor een schoonmaak- of
+kleinonderhoudsfactuur: die valt naar de letter onder "bescheiden betreffende", maar start geen
+nieuwe tienjaarsklok, want het anker blijft de ingebruikneming van het pand. Zie §7.2.
 
 ### 2.3 Loonadministratie: 7 jaar vanaf uitdiensttreding klopte niet als algemene regel
 
@@ -90,18 +93,17 @@ Beide URLB-bepalingen luiden woordelijk gelijk:
 > "De inhoudingsplichtige bewaart de in dit artikel bedoelde gegevens en afschriften **ten minste
 > vijf jaren na het einde van het kalenderjaar waarin de dienstbetrekking is geëindigd**."
 
-**Twee punten voor jou.**
+**Twee punten die hieruit volgden.**
 
 Ten eerste: het Handboek Loonheffingen 2026 is hier **intern tegenstrijdig**. §3.5.2 schrijft
 "ten minste 5 kalenderjaren na het einde van de dienstbetrekking", terwijl §2.3.4 en §17.2
 "na het kalenderjaar waarin de dienstbetrekking eindigt" schrijven — precies de wettekst. Dat
-scheelt een heel kalenderjaar. Wij volgen de wettekst en waarschuwen de gebruiker voor de afwijking.
-Ben je het daarmee eens?
+scheelt een heel kalenderjaar. Wij volgen de wettekst, die met §17.2 overeenkomt, en waarschuwen de
+gebruiker voor de afwijking (§7.3).
 
-Ten tweede: voor de rij "beschikking/verklaring van de werknemer" hebben wij **geen wetsbepaling**
-gevonden, alleen het Handboek. Wij hanteren daar toch vijf jaar, in de veronderstelling dat het
-Handboek deze categorie bewust naast de opgaaf en de kopie-ID zet. Als jij liever zeven jaar
-aanhoudt (art. 52 AWR als restcategorie), horen we dat graag — dat is de voorzichtiger kant.
+Ten tweede: voor "beschikking/verklaring van de werknemer" bestaat **geen wetsbepaling**, alleen het
+Handboek. Dat is inmiddels gesplitst op herkomst: wat u ván de werknemer krijgt vijf jaar, wat u
+zelf aanvraagt of wat op gezamenlijk verzoek is afgegeven zeven jaar via art. 52 AWR. Zie §7.3.
 
 Los daarvan een detail dat vaak misgaat en dat wij nu expliciet maken: het Handboek rekent
 **verlof- en ziektestaten** in §3.2.2 uitdrukkelijk tot de gegevens die bij de loonadministratie
@@ -128,8 +130,8 @@ Twee gevolgen daarvan:
 Wij hebben in de tool ook de formulering over medische gegevens genuanceerd. Die luidde dat een
 werkgever medische gegevens "niet mag vastleggen". De AP hanteert het onderscheid tussen
 *verzuimgegevens* — een beperkte, limitatieve set die wél mag — en *medische gegevens* over aard en
-oorzaak, die niet mogen. **Is die tweedeling zoals wij hem nu neerzetten bruikbaar voor de
-praktijk?**
+oorzaak, die niet mogen. De tool volgt die tweedeling, en scheidt de verzuimkant sinds §7.4 ook
+als eigen documenttype van de loononderbouwing.
 
 ### 2.4 Digitaal bewaren: "notariële aktes" is geschrapt
 
@@ -152,8 +154,10 @@ bij in- of uitvoer (zoals oorsprongscertificaten) moet het origineel bewaard bli
 
 De tool noemt nu dus twee uitzonderingen in plaats van drie. Voor zover er een bewaarplicht voor
 originele notariële aktes bestaat, vloeit die voort uit de Wet op het notarisambt en rust die op de
-notaris, niet op de administratieplichtige ondernemer. **Kun jij bevestigen dat wij hier niets over
-het hoofd zien?** Het is een hardnekkige aanname in de adviespraktijk.
+notaris, niet op de administratieplichtige ondernemer. Het is een hardnekkige aanname in de
+adviespraktijk, maar er is geen fiscale vindplaats voor. Wel iets anders: een notariële akte kan
+inhoudelijk prima onder art. 34a Wet OB vallen als bescheid betreffende een onroerende zaak. Dat
+gaat over hóé lang, niet over de vraag of hij mag worden gedigitaliseerd (§7.2).
 
 ### 2.5 Civielrechtelijke verjaring: verkeerd artikel onder een algemeen contract
 
@@ -249,9 +253,14 @@ Twee gevolgen die wij bewust hebben doorgevoerd:
    einde van de zakelijke relatie, dus één termijn voor beide zou de verkeerde uitkomst geven. De
    tool rekent ze nu apart.
 
-**De vraag aan jou:** die slotclausule "tenzij bij wettelijk voorschrift anders is bepaald" is voor
-een accountantskantoor niet theoretisch. Welke voorschriften komen in onze praktijk in aanmerking,
-en moeten wij die in de tool benoemen?
+**De slotclausule.** "Tenzij bij wettelijk voorschrift anders is bepaald" is voor een
+accountantskantoor niet theoretisch. Die uitzondering werkt op **documentniveau, niet op
+dossierniveau**: de wetsgeschiedenis licht toe dat dezelfde persoonsgegevens ook voor een ánder doel
+verzameld kunnen zijn en dáárvoor een eigen bewaartermijn kunnen hebben. De tool zegt daarom niet
+"een Wwft-dossier is ook fiscaal, dus alles zeven jaar", maar: beoordeel per stuk of er zelfstandig
+een tweede grondslag is. Gegevens die alleen voor de Wwft zijn verzameld, gaan na vijf jaar weg.
+Welke voorschriften in onze praktijk het vaakst die tweede grondslag vormen, benoemen wij nu niet
+limitatief in de tool — dat is het punt waar een aanvulling vanuit jouw praktijk het meest oplevert.
 
 ---
 
@@ -417,7 +426,53 @@ Alles hierboven is onze eigen invulling; tegenspraak blijft welkom, op deze vier
 
 ---
 
-## 8. Bronnen
+## 8. Accountancy: het dossier van de accountant zelf
+
+Nieuw, en het enige deel van de tool dat niet over de administratie van de cliënt gaat. Twee
+documenttypen, allebei met een eigen startmoment dat níet aan een boekjaar hangt.
+
+| Dossier | Termijn | Startmoment | Grondslag |
+|---|---|---|---|
+| Opdrachtdossier (samenstel-, beoordelings-, adviesopdracht) | ten minste 7 jaar | datum van de opdrachtrapportage | QMS 1, par. 31(6) |
+| Controledossier wettelijke controle | ten minste 7 jaar | nadat het dossier is afgesloten | art. 11 lid 6 Bta |
+
+**Eén vondst die het vermelden waard is: de NVKS bestaat niet meer.** Die regelde de bewaartermijn
+van het opdrachtdossier in art. 22, maar is **per 21 februari 2025 ingetrokken, met terugwerkende
+kracht tot 1 januari 2025**. De opvolger, de Nadere voorschriften kwaliteitsmanagement (NVKM),
+bevat zélf geen bewaartermijn: die wijst de kwaliteitsmanagementstandaarden aan. De termijn staat nu
+in QMS 1, par. 31(6):
+
+> de opdrachtdocumentatie "wordt tijdig samengevoegd na de datum van de opdrachtrapportage en wordt
+> op passende wijze bijgehouden en tenminste zeven jaar bewaard"
+
+Het startmoment is dus de **rapportagedatum**, niet de afsluiting van het dossier. Dat verschilt van
+het controledossier, waar art. 11 lid 6 Bta luidt:
+
+> "Een accountantsorganisatie bewaart een controledossier gedurende ten minste zeven jaren nadat het
+> is afgesloten."
+
+Afsluiten moet op grond van lid 5 uiterlijk 60 dagen na ondertekening van de accountantsverklaring.
+Verklaringsdatum en afsluitdatum vallen dus niet samen, en de tool vraagt bewust naar de laatste.
+
+Beide termijnen zijn "ten minste": ondergrenzen. En beide rekenen op de dag zelf, niet op het
+kalenderjaar — de fiscale kalenderjaarlogica zou hier een verkeerde einddatum geven. Dossier
+afgesloten op 21-08-2026 loopt t/m 21-08-2033, tegenover 31-12-2033 voor een fiscaal stuk met
+dezelfde datum.
+
+**Waarom dit uit elkaar wordt gehouden in de tool.** Hetzelfde stuk kan zowel in de administratie van
+de cliënt als in het opdrachtdossier zitten, met verschillende startmomenten. De tool zegt daarom
+uitdrukkelijk dat deze termijnen niet uit zichzelf op de administratie van de cliënt van toepassing
+zijn, en dat bij een stuk in beide dossiers de langst lopende toepasselijke bewaarplicht in de
+praktijk bepalend is voor het moment van vernietigen.
+
+**Waar jouw blik het meest oplevert:** wij hebben de opdrachtdossiers niet verder gesplitst naar
+opdrachtsoort, omdat QMS 1 dat onderscheid voor de bewaartermijn niet maakt. Klopt dat, of kent een
+specifieke opdrachtsoort in jullie praktijk een afwijkende termijn?
+
+---
+
+
+## 9. Bronnen
 
 Alle bronnen geraadpleegd op 21 augustus 2026. Wetteksten via de geldende geconsolideerde versie op
 wetten.overheid.nl.
@@ -431,6 +486,9 @@ wetten.overheid.nl.
 - Art. 3:307 en 3:310 BW — https://wetten.overheid.nl/BWBR0005291
 - Art. 7:640a en 7:642 BW (verval en verjaring vakantieaanspraken) · Art. 7:761 BW — https://wetten.overheid.nl/BWBR0005290
 - Art. 33, 34 en 34a Wwft — https://wetten.overheid.nl/BWBR0024282
+- Art. 11 Besluit toezicht accountantsorganisaties — https://wetten.overheid.nl/BWBR0020184
+- Nadere voorschriften kwaliteitsmanagement (NVKM) — https://wetten.overheid.nl/BWBR0050792
+- Nadere voorschriften kwaliteitssystemen (NVKS), vervallen per 21-02-2025 — https://wetten.overheid.nl/BWBR0038869
 - Art. 5 lid 1 sub e AVG, Verordening (EU) 2016/679 — https://eur-lex.europa.eu/eli/reg/2016/679/oj/nld#art_5
 
 **Belastingdienst**
@@ -438,6 +496,9 @@ wetten.overheid.nl.
 - Administratie bewaren voor de btw: 7 of 10 jaar? — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/btw/administratie_bijhouden/administratie_bewaren/
 - Uw geautomatiseerde administratie en de fiscale bewaarplicht, AL 040, uitgave juli 2026 — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/uw_geautomatiseerde_administratie_en_de_fiscale_bewaarplicht (landingspagina; de directe pdf-link draagt een editiecode die per uitgave wijzigt en dan een 404 geeft)
 - Handboek Loonheffingen 2026, uitgave maart 2026 — https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/handboek-loonheffingen
+
+**NBA**
+- Standaard voor kwaliteitsmanagement 1, par. 31(6) — https://www.nba.nl/wet--en-regelgeving/hra/1619/1600/
 
 **Autoriteit Persoonsgegevens**
 - Bewaren van persoonsgegevens — https://www.autoriteitpersoonsgegevens.nl/themas/basis-avg/privacy-en-persoonsgegevens/bewaren-van-persoonsgegevens
