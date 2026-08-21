@@ -236,6 +236,19 @@ Twee gevolgen die wij bewust hebben doorgevoerd:
    vanaf 1 maart 2029, niet vanaf 28 februari. Anders zou de tool vernietigen adviseren voordat de
    vijf jaar vol zijn.
 
+3. **De melding is een apart documenttype geworden.** Art. 34a lid 3 verwijst niet alleen naar
+   art. 33 lid 3 maar ook naar **art. 34**, en dat artikel kent een eigen ankermoment:
+
+   > Art. 34 lid 2 Wwft: "Een instelling bewaart de in het eerste lid bedoelde gegevens op
+   > toegankelijke wijze gedurende vijf jaar **na het tijdstip van het doen van de melding**,
+   > respectievelijk het tijdstip van de ontvangst van het bericht van de Financiële inlichtingen
+   > eenheid."
+
+   Het gaat om de gegevens waarmee de transactie te reconstrueren is, een afschrift van de melding
+   en het ontvangstbericht van de FIU. Dat anker — de meldingsdatum — ligt bijna altijd vóór het
+   einde van de zakelijke relatie, dus één termijn voor beide zou de verkeerde uitkomst geven. De
+   tool rekent ze nu apart.
+
 **De vraag aan jou:** die slotclausule "tenzij bij wettelijk voorschrift anders is bepaald" is voor
 een accountantskantoor niet theoretisch. Welke voorschriften komen in onze praktijk in aanmerking,
 en moeten wij die in de tool benoemen?
@@ -340,7 +353,7 @@ wetten.overheid.nl.
 - Art. 2:10 BW — https://wetten.overheid.nl/BWBR0003045 · Art. 3:15i BW — https://wetten.overheid.nl/BWBR0005291
 - Art. 3:307 en 3:310 BW — https://wetten.overheid.nl/BWBR0005291
 - Art. 7:640a en 7:642 BW (verval en verjaring vakantieaanspraken) · Art. 7:761 BW — https://wetten.overheid.nl/BWBR0005290
-- Art. 33 en 34a Wwft — https://wetten.overheid.nl/BWBR0024282
+- Art. 33, 34 en 34a Wwft — https://wetten.overheid.nl/BWBR0024282
 - Art. 5 lid 1 sub e AVG, Verordening (EU) 2016/679 — https://eur-lex.europa.eu/eli/reg/2016/679/oj/nld#art_5
 
 **Belastingdienst**

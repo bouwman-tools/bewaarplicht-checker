@@ -431,8 +431,23 @@ describe('centrale configuratie — kennisbank en calculator komen uit één bro
   });
 
   test('alleen de Wwft is een maximumtermijn', () => {
-    const maxima = plat(DOCUMENT_TYPES.filter((doc) => doc.maximum).map((doc) => doc.id));
-    assert.deepEqual(maxima, ['wwft-clientonderzoek']);
+    // Op de intentie toetsen, niet op een vaste lijst id's: elke maximumtermijn
+    // moet uit de Wwft komen, en geen enkel fiscaal documenttype mag er een zijn.
+    // De vernietigingsplicht van art. 34a lid 3 Wwft ziet op art. 33 lid 3 én
+    // art. 34, dus er is meer dan één Wwft-documenttype.
+    const maxima = plat(DOCUMENT_TYPES.filter((doc) => doc.maximum));
+    assert.ok(maxima.length > 0, 'geen enkele maximumtermijn gevonden');
+    for (const doc of maxima) {
+      assert.ok(
+        doc.bronnen.some((b) => b.startsWith('wwft')),
+        `${doc.id} is een maximumtermijn zonder Wwft-grondslag`
+      );
+      assert.equal(doc.basis, false, `${doc.id} is maximum én basisgegeven`);
+    }
+    const fiscaleMaxima = plat(DOCUMENT_TYPES)
+      .filter((doc) => doc.maximum && !doc.bronnen.some((b) => b.startsWith('wwft')))
+      .map((doc) => doc.id);
+    assert.deepEqual(fiscaleMaxima, []);
   });
 
   test('de zes basisgegevens van de Belastingdienst zitten in de kennisbank', () => {
