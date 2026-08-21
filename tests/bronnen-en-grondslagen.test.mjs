@@ -301,6 +301,69 @@ test('bij gemengde bestanden zegt de tool: eerst splitsen', () => {
   assert.match(verzuim.waarschuwing, /splits/i);
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Accountancy: de bewaarplicht van de accountant zelf, niet die van de cliënt.
+// Beide lopen op de datumklok en hebben een eigen startmoment.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PEIL = { jaar: 2026, maand: 8, dag: 21 };
+const rekenAcc = (id, datum, vandaag = PEIL) =>
+  kern.berekenBewaarplicht(id, { datum, datum2: '' }, vandaag);
+
+test('opdrachtdossier: zeven jaar vanaf de datum van de opdrachtrapportage', () => {
+  const r = rekenAcc('opdrachtdossier', '2026-08-21');
+  assert.equal(r.bepalend.termijn.klok, 'datum', 'geen kalenderjaarklok');
+  assert.deepEqual(plat(r.laatsteBewaardag), { jaar: 2033, maand: 8, dag: 21 });
+  assert.deepEqual(plat(r.verstrekenVanaf), { jaar: 2033, maand: 8, dag: 22 });
+});
+
+test('controledossier: zeven jaar nadat het dossier is afgesloten', () => {
+  const r = rekenAcc('controledossier', '2026-08-21');
+  assert.equal(r.bepalend.termijn.klok, 'datum');
+  assert.deepEqual(plat(r.laatsteBewaardag), { jaar: 2033, maand: 8, dag: 21 });
+  assert.deepEqual(plat(r.verstrekenVanaf), { jaar: 2033, maand: 8, dag: 22 });
+});
+
+test('status op de laatste bewaardag en de dag erna', () => {
+  for (const id of ['opdrachtdossier', 'controledossier']) {
+    assert.equal(rekenAcc(id, '2026-08-21', { jaar: 2033, maand: 8, dag: 20 }).verstreken, false, id);
+    assert.equal(rekenAcc(id, '2026-08-21', { jaar: 2033, maand: 8, dag: 21 }).verstreken, false,
+      `${id}: op de laatste bewaardag nog niet verstreken`);
+    assert.equal(rekenAcc(id, '2026-08-21', { jaar: 2033, maand: 8, dag: 22 }).verstreken, true,
+      `${id}: de dag erna wél verstreken`);
+  }
+});
+
+test('het startmoment verschilt van een fiscale termijn met hetzelfde ankerjaar', () => {
+  // Zelfde datum, ander regime: de fiscale klok loopt tot en met 31 december van
+  // het eindjaar, de accountancyklok tot de dag zelf. Dat verschil moet zichtbaar
+  // blijven — één generieke regel voor beide zou fout zijn.
+  const dossier = rekenAcc('opdrachtdossier', '2026-08-21');
+  const factuur = rekenAcc('inkoopfactuur', '2026-08-21');
+  assert.deepEqual(plat(dossier.laatsteBewaardag), { jaar: 2033, maand: 8, dag: 21 });
+  assert.deepEqual(plat(factuur.laatsteBewaardag), { jaar: 2033, maand: 12, dag: 31 });
+  assert.notDeepEqual(plat(dossier.laatsteBewaardag), plat(factuur.laatsteBewaardag));
+});
+
+test('de accountancytermijnen claimen geen fiscale grondslag', () => {
+  // De termijn van de accountant geldt niet uit zichzelf voor de administratie
+  // van de cliënt; die suggestie mag de tool niet wekken.
+  for (const id of ['opdrachtdossier', 'controledossier']) {
+    const doc = vindDocumentType(id);
+    assert.equal(doc.categorie, 'accountancy');
+    assert.equal(doc.basis, false);
+    assert.ok(!doc.bronnen.includes('awr52'), `${id} verwijst naar art. 52 AWR`);
+    assert.match(doc.basisNoot, /niet|geen/i);
+  }
+});
+
+test('een aandachtspunt legt het verschil met de fiscale bewaarplicht uit', () => {
+  const kaart = kern.AANDACHTSPUNTEN.find((n) => /opdrachtdossier/i.test(n.body));
+  assert.ok(kaart, 'geen aandachtspunt over het dossier van de accountant');
+  assert.match(kaart.body, /langst lopende/i);
+  assert.match(kaart.body, /ander startmoment/i);
+});
+
 test('id, naam en datumLabel zijn uniek genoeg om niet te verwarren', () => {
   const ids = DOCUMENT_TYPES.map((d) => d.id);
   assert.equal(new Set(ids).size, ids.length, 'dubbele id in DOCUMENT_TYPES');

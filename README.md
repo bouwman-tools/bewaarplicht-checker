@@ -5,11 +5,12 @@ geldt, vanaf welk moment die loopt, en tot wanneer een concreet stuk bewaard moe
 
 Hoofdregel is art. 52 lid 4 AWR (zeven jaar). Daarnaast rekent de tool de afwijkende termijnen uit
 de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelasting 2011 en de Wwft.
+Daarnaast staan er de bewaarplichten in voor het opdracht- en controledossier van de accountant zelf.
 
 ## Gebruik
 
 1. Open de tool via [bouwman.tools/bewaarplicht.html](https://bouwman.tools/bewaarplicht.html)
-2. **Kennisbank** — 40 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
+2. **Kennisbank** — 42 documenttypen in 8 categorieën, met per type de termijn, het startmoment en
    of het een basisgegeven is
 3. **Einddatum berekenen** — kies een documenttype en vul de datum in waar dat type om vraagt. Welke
    datum dat is verschilt per type en staat onder het invoerveld
@@ -27,9 +28,16 @@ de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelast
 | 5 jaar, vast | Wwft-cliëntonderzoek: bewaren én daarna vernietigen, vanaf einde zakelijke relatie | art. 33 lid 3 en 34a lid 3 Wwft |
 | 5 jaar, vast | Wwft-melding ongebruikelijke transactie, vanaf het tijdstip van de melding | art. 34 lid 2 en 34a lid 3 Wwft |
 | geen | Overig personeelsdossier, ziekteverzuimregistratie, sollicitatiegegevens | AVG, norminvulling AP |
+| 7 jaar, dossier accountant | Opdrachtdossier: na de datum van de opdrachtrapportage | QMS 1, par. 31(6) |
+| 7 jaar, dossier accountant | Controledossier wettelijke controle: nadat het dossier is afgesloten | art. 11 lid 6 Bta |
 
 De termijn begint niet op de aanmaakdatum maar op **1 januari van het jaar volgend op het moment
-waarop het gegeven zijn actuele waarde verliest** — behalve bij de Wwft, die vanaf de dag zelf telt.
+waarop het gegeven zijn actuele waarde verliest** — behalve bij de Wwft en de accountancydossiers,
+die vanaf de dag zelf tellen.
+
+De onderste twee rijen zijn geen bewaarplicht van de cliënt maar van de accountant, met een eigen
+startmoment. Zit een stuk in beide dossiers, dan is de langst lopende toepasselijke termijn in de
+praktijk bepalend voor het moment van vernietigen.
 
 Twee valkuilen die de tool expliciet afvangt:
 
@@ -96,8 +104,9 @@ in plaats van stilletjes de uitkomst van een ander documenttype te veranderen.
 `bewaartermijnUitJaar(ankerjaar, n)` — N jaren die gaan lopen ná afloop van het kalenderjaar van het
 ankermoment. Dit is de klok voor vrijwel alles.
 
-`bewaartermijnVanafDatum(ankerdatum, n)` — N jaren vanaf de dag zelf. Alleen de Wwft. De wet rekent
-daar vanaf een *tijdstip*, terwijl de UI alleen een kalenderdatum kent; daarom telt de N-de
+`bewaartermijnVanafDatum(ankerdatum, n)` — N jaren vanaf de dag zelf. Voor de Wwft en voor de
+accountancydossiers: die regelingen knopen aan bij een gebeurtenis, niet bij een boekjaar. De wet
+rekent vanaf een *tijdstip*, terwijl de UI alleen een kalenderdatum kent; daarom telt de N-de
 verjaardag zelf nog mee als bewaardag en mag pas de dag daarna worden vernietigd. Bij een
 schrikkeldag klemt deze vooruit (29-02 + 5 jaar → t/m 1 maart), zodat de termijn altijd minstens het
 volle aantal jaren beslaat.
@@ -112,7 +121,7 @@ verkeerde jaar op.
 npm test
 ```
 
-113 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
+119 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
 het HTML-bestand en draait die in een `vm`-sandbox. Die loader bewaakt ook dat de kern puur blijft:
 hij weigert DOM-toegang (`document.`, `window.`) en elk gebruik van `Date`.
 
