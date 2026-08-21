@@ -170,6 +170,87 @@ test('documenttypen met een tweede termijn leggen beide grondslagen vast', () =>
   }
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Dubbele termijnen: welke klok vooraan staat verschilt per documenttype, dus de
+// meldingen mogen niet aannemen dat art. 34a altijd primair is.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const OG_34A_PRIMAIR = ['og-akte', 'og-overig'];
+const OG_AWR_PRIMAIR = ['og-onderhoud', 'og-huur-verhuurder'];
+
+test('beide richtingen komen voor: 34a primair én AWR primair', () => {
+  for (const id of OG_34A_PRIMAIR) {
+    assert.match(vindDocumentType(id).primaireGrondslag, /34a/, `${id}`);
+    assert.match(vindDocumentType(id).tweedeTermijn.grondslag, /52/, `${id}: tweede termijn`);
+  }
+  for (const id of OG_AWR_PRIMAIR) {
+    assert.match(vindDocumentType(id).primaireGrondslag, /52/, `${id}`);
+    assert.match(vindDocumentType(id).tweedeTermijn.grondslag, /34a/, `${id}: tweede termijn`);
+  }
+});
+
+test('kortGrondslag knipt de grondslag af op het artikel', () => {
+  assert.equal(kern.TEKSTEN.kortGrondslag('art. 34a Wet OB — negen jaren na ingebruikneming'),
+    'art. 34a Wet OB');
+  assert.equal(kern.TEKSTEN.kortGrondslag('art. 52 lid 4 AWR — zeven jaar op het stuk zelf'),
+    'art. 52 lid 4 AWR');
+  assert.equal(kern.TEKSTEN.kortGrondslag(undefined), '');
+});
+
+test('de melding bij een lopende primaire termijn noemt de juiste twee grondslagen', () => {
+  // Zonder de tweede datum is de getoonde datum een ondergrens. De melding moet
+  // per documenttype de eigen primaire en secundaire grondslag noemen.
+  for (const id of [...OG_34A_PRIMAIR, ...OG_AWR_PRIMAIR]) {
+    const doc = vindDocumentType(id);
+    const primair = kern.TEKSTEN.kortGrondslag(doc.primaireGrondslag);
+    const tweede = kern.TEKSTEN.kortGrondslag(doc.tweedeTermijn.grondslag);
+    const tekst = kern.TEKSTEN.tweedeVeldOnbenut(primair, tweede);
+
+    assert.ok(tekst.includes(primair), `${id}: primaire grondslag ontbreekt in de melding`);
+    assert.ok(tekst.includes(tweede), `${id}: tweede grondslag ontbreekt in de melding`);
+    assert.notEqual(primair, tweede, `${id}: beide grondslagen zijn gelijk`);
+  }
+});
+
+test('de melding bij een verstreken primaire termijn zegt "kan rusten", niet "loopt nog"', () => {
+  // Zonder de tweede datum weet de tool niet óf de andere termijn loopt. Een
+  // stellige formulering zou een zekerheid suggereren die er niet is.
+  const tekst = kern.TEKSTEN.tweedeVeldNodig('art. 34a Wet OB', 'art. 52 lid 4 AWR');
+  assert.match(tekst, /kan .*rusten/i);
+  assert.doesNotMatch(tekst, /loopt .*nog door/i);
+  assert.match(tekst, /niet vaststellen of/i);
+});
+
+test('34a primair: verstreken OB-termijn zonder tweede datum blijft onvolledig', () => {
+  // Akte van een pand uit 2010: art. 34a liep t/m 31-12-2019. Zonder de tweede
+  // datum mag dat geen "verstreken" heten.
+  const r = kern.berekenBewaarplicht('og-akte',
+    { datum: '2010-05-01', datum2: '' }, { jaar: 2026, maand: 8, dag: 21 });
+  assert.equal(r.onvolledig, true);
+  assert.match(r.bepalend.grondslag, /34a/);
+});
+
+test('AWR primair: verstreken AWR-termijn zonder tweede datum blijft onvolledig', () => {
+  // Onderhoudsfactuur uit 2010: art. 52 AWR liep t/m 31-12-2017. Of de OB-klok
+  // van het pand nog loopt is zonder de tweede datum onbekend.
+  const r = kern.berekenBewaarplicht('og-onderhoud',
+    { datum: '2010-05-01', datum2: '' }, { jaar: 2026, maand: 8, dag: 21 });
+  assert.equal(r.onvolledig, true);
+  assert.match(r.bepalend.grondslag, /52/);
+});
+
+test('een nog lopende primaire termijn is in beide richtingen niet onvolledig', () => {
+  const akte = kern.berekenBewaarplicht('og-akte',
+    { datum: '2024-05-01', datum2: '' }, { jaar: 2026, maand: 8, dag: 21 });
+  assert.equal(akte.onvolledig, false);
+  assert.equal(akte.verstreken, false);
+
+  const factuur = kern.berekenBewaarplicht('og-onderhoud',
+    { datum: '2024-05-01', datum2: '' }, { jaar: 2026, maand: 8, dag: 21 });
+  assert.equal(factuur.onvolledig, false);
+  assert.equal(factuur.verstreken, false);
+});
+
 test('id, naam en datumLabel zijn uniek genoeg om niet te verwarren', () => {
   const ids = DOCUMENT_TYPES.map((d) => d.id);
   assert.equal(new Set(ids).size, ids.length, 'dubbele id in DOCUMENT_TYPES');

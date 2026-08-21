@@ -157,24 +157,54 @@ describe('bewaartermijnUitJaar — de kalenderjaarklok', () => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 describe('bewaartermijnVanafDatum — de datumklok (Wwft)', () => {
-  test('5 jaar na 15 maart 2026 loopt t/m 14 maart 2031', () => {
+  // Art. 33 lid 3 Wwft rekent "vijf jaar na het tijdstip", maar de invoer is een
+  // kalenderdatum zonder tijdstip. Eindigde de relatie laat op de dag, dan loopt
+  // de termijn nog een groot deel van de vijfde verjaardag door. De verjaardag
+  // telt daarom zelf nog mee als bewaardag.
+  test('de vijfde verjaardag telt zelf nog mee als bewaardag', () => {
     const r = bewaartermijnVanafDatum(d(2026, 3, 15), 5);
-    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 3, 14));
-    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 3, 15));
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 3, 15));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 3, 16));
   });
 
-  test('een relatie die op 1 januari eindigt loopt t/m 31 december vijf jaar later', () => {
+  test('21 augustus 2026 + 5 jaar: vernietigen pas vanaf 22 augustus 2031', () => {
+    // Zou de tool op 21 augustus 2031 al vernietigen adviseren, dan is dat te
+    // vroeg voor elke relatie die niet om middernacht eindigde.
+    const r = bewaartermijnVanafDatum(d(2026, 8, 21), 5);
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 8, 21));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 8, 22));
+  });
+
+  test('een relatie die op 1 januari eindigt loopt t/m 1 januari vijf jaar later', () => {
     const r = bewaartermijnVanafDatum(d(2026, 1, 1), 5);
-    assert.deepEqual(plat(r.laatsteBewaardag), d(2030, 12, 31));
-    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 1, 1));
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 1, 1));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 1, 2));
+  });
+
+  test('een maandeinde rolt netjes door naar de volgende maand', () => {
+    const r = bewaartermijnVanafDatum(d(2026, 5, 31), 5);
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 5, 31));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 6, 1));
+  });
+
+  test('een jaareinde rolt netjes door naar het volgende jaar', () => {
+    const r = bewaartermijnVanafDatum(d(2026, 12, 31), 5);
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 12, 31));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2032, 1, 1));
   });
 
   test('29 februari wordt vooruit geklemd zodat de vijf jaar echt vol zijn', () => {
-    // Art. 33 lid 3 Wwft is óók een bewaarplicht. Achteruit klemmen (28 februari)
-    // zou vernietigen adviseren vóórdat er vijf volle jaren om zijn.
+    // 29 februari 2029 bestaat niet. Achteruit klemmen (28 februari) zou
+    // vernietigen adviseren vóórdat er vijf volle jaren om zijn.
     const r = bewaartermijnVanafDatum(d(2024, 2, 29), 5);
-    assert.deepEqual(plat(r.verstrekenVanaf), d(2029, 3, 1));
-    assert.deepEqual(plat(r.laatsteBewaardag), d(2029, 2, 28));
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2029, 3, 1));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2029, 3, 2));
+  });
+
+  test('29 februari naar een schrikkeljaar houdt gewoon 29 februari', () => {
+    const r = bewaartermijnVanafDatum(d(2024, 2, 29), 4);
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2028, 2, 29));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2028, 3, 1));
   });
 
   test('een relatie die 29 februari eindigt krijgt niet minder dan één die 28 februari eindigt', () => {

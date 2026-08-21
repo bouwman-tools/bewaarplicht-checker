@@ -287,8 +287,10 @@ describe('Wwft — een maximumtermijn met vernietigingsplicht', () => {
     const r = reken('wwft-clientonderzoek', '2026-03-15', d(2026, 8, 21));
     assert.equal(r.maximum, true);
     assert.equal(r.bepalend.termijn.klok, 'datum');
-    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 3, 14));
-    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 3, 15));
+    // De vijfde verjaardag telt zelf nog mee: de wet rekent vanaf een tijdstip,
+    // en dat is uit een kalenderdatum niet af te leiden.
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 3, 15));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 3, 16));
   });
 
   test('verschilt daarmee bewust van de loon-5-jaarstermijn met dezelfde einddatum', () => {
