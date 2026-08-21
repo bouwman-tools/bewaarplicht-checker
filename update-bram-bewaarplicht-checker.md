@@ -316,13 +316,15 @@ Dat is hersteld:
 
 ---
 
-## 7. Beoordeling ontvangen — wat er is aangepast
+## 7. Onze eigen voorlopige standpunten — graag jouw toets
 
-Bram heeft de negen openstaande vragen langs de wettekst, de actuele Belastingdienstinformatie, het
-Handboek Loonheffingen 2026 en de wetsgeschiedenis gelegd. Hieronder zijn oordeel en wat er in de
-tool is veranderd.
+De negen punten uit de vorige versie hebben wij zelf langs de wettekst, de actuele
+Belastingdienstinformatie, het Handboek Loonheffingen 2026 en de wetsgeschiedenis gelegd, en op basis
+daarvan de tool aangepast. **Dit is dus onze eigen invulling en nog niet extern getoetst** — precies
+daarom leggen we hem hier voor. De onderbouwing per punt staat hieronder; waar wij een keuze hebben
+gemaakt die niet dwingend uit de wet volgt, is dat aangegeven.
 
-| # | Onderwerp | Oordeel | Doorgevoerd |
+| # | Onderwerp | Ons standpunt | Doorgevoerd |
 |---|---|---|---|
 | 1 | Max-benadering onroerende zaken | Praktisch en juridisch verdedigbaar | Ongewijzigd. Ingebruikneming wordt alleen bij onroerendezaakgegevens uitgevraagd |
 | 2 | Huurovereenkomst verhuurder | Valt onder art. 34a, maar géén nieuwe tienjaarsklok vanaf het contract | **Omgedraaid**: art. 52 AWR vooraan, OB-klok als optioneel tweede veld |
@@ -370,13 +372,21 @@ vasthoudt. De tool adviseert nu ook uitdrukkelijk die twee technisch gescheiden 
 | Huur eindigt 2026, pand in gebruik sinds 2010 | t/m 31-12-2033 (art. 52 AWR na afloop huurperiode) |
 | Einde dienstbetrekking 10-01-2026, kopie identiteitsbewijs | t/m 31-12-2031 (niet 10-01-2031) |
 
-### Wat nog openstaat
+### Waar jouw oordeel het meest oplevert
 
-1. De Drebers-uitzondering: in bijzondere gevallen kan een investeringsdienst een langere
+Alle standpunten hierboven zijn van ons, dus overal is tegenspraak welkom. Deze vier wegen het
+zwaarst, omdat de wet er zelf geen uitsluitsel geeft:
+
+1. **Punt 2 en 8** — de lezing dat art. 34a ruim is in scope maar smal in termijn, en dat een
+   investeringsdienst daarom onder de zeven jaar van art. 52 AWR valt. Dit is de kern van onze
+   aanpassing en tegelijk de plek waar wij het meest interpreteren.
+2. **De Drebers-uitzondering** — in bijzondere gevallen kan een investeringsdienst een langere
    herzieningsperiode vergen. Dat staat nu als waarschuwing bij het documenttype, niet als
    rekenregel. Is dat de juiste plek?
-2. Voor "beschikking/verklaring van de werknemer" blijft het Handboek de enige bron. Heeft de
-   voorzichtiger kant (zeven jaar via art. 52 AWR) de voorkeur, dan is dat één regel werk.
+3. **Punt 4** — voor "beschikking/verklaring van de werknemer" blijft het Handboek de enige bron.
+   Heeft de voorzichtiger kant (zeven jaar via art. 52 AWR) de voorkeur, dan is dat één regel werk.
+4. **Punt 9** — de knip tussen loononderbouwing (zeven jaar) en verzuimregistratie (AP-richtsnoer
+   twee jaar). Werkbaar in de praktijk, of te fijnmazig?
 
 ---
 
