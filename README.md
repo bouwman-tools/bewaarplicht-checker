@@ -9,7 +9,7 @@ de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelast
 ## Gebruik
 
 1. Open de tool via [bouwman.tools/bewaarplicht.html](https://bouwman.tools/bewaarplicht.html)
-2. **Kennisbank** — 37 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
+2. **Kennisbank** — 39 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
    of het een basisgegeven is
 3. **Einddatum berekenen** — kies een documenttype en vul de datum in waar dat type om vraagt. Welke
    datum dat is verschilt per type en staat onder het invoerveld
@@ -23,8 +23,9 @@ de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelast
 | 10 jaar | Onroerende zaken: negen jaren volgend op het jaar van ingebruikneming | art. 34a Wet OB 1968 |
 | 10 jaar | OSS: tien jaar na afloop van het jaar van de handeling | art. 28rl, 28sj, 28tn Wet OB |
 | 5 jaar | Kopie identiteitsbewijs en opgaaf gegevens voor de loonheffingen | art. 7.5 lid 4 en 7.9 lid 2 URLB 2011 |
-| 5 jaar, vast | Wwft-cliëntonderzoek: bewaren én daarna vernietigen | art. 33 lid 3 en 34a lid 3 Wwft |
-| geen | Overig personeelsdossier, sollicitatiegegevens | AVG, norminvulling AP |
+| 5 jaar, vast | Wwft-cliëntonderzoek: bewaren én daarna vernietigen, vanaf einde zakelijke relatie | art. 33 lid 3 en 34a lid 3 Wwft |
+| 5 jaar, vast | Wwft-melding ongebruikelijke transactie, vanaf het tijdstip van de melding | art. 34 lid 2 en 34a lid 3 Wwft |
+| geen | Overig personeelsdossier, ziekteverzuimregistratie, sollicitatiegegevens | AVG, norminvulling AP |
 
 De termijn begint niet op de aanmaakdatum maar op **1 januari van het jaar volgend op het moment
 waarop het gegeven zijn actuele waarde verliest** — behalve bij de Wwft, die vanaf de dag zelf telt.
@@ -34,9 +35,16 @@ Twee valkuilen die de tool expliciet afvangt:
 - **De twee tienjaarstermijnen zijn niet gelijk.** Art. 34a telt negen jaren *volgend op* het jaar
   van ingebruikneming; de OSS-bepalingen tellen tien jaar *na afloop van* het jaar van de handeling.
   Bij hetzelfde ankerjaar 2022 is dat 31-12-2031 tegen 31-12-2032.
-- **Bij onroerende zaken lopen twee termijnen naast elkaar.** Naast art. 34a loopt op het stuk zelf
-  de zevenjaarstermijn van art. 52 AWR. De tool vraagt daarom om een tweede, optionele datum en
-  neemt de laatst aflopende termijn.
+- **Bij onroerende zaken lopen twee termijnen naast elkaar**, en welke vooraan staat verschilt per
+  documenttype. Art. 34a is ruim in scope maar smal in termijn: de klok hangt aan de ingebruikneming
+  van het *pand*, niet aan het stuk, dus onderhoud of een nieuw huurcontract start geen nieuwe
+  tienjaarsklok. Bij stukken met een eigen ankermoment (factuur, huurovereenkomst) staat art. 52 AWR
+  daarom vooraan — die geldt altijd — met de OB-klok als optioneel tweede veld. Bij stukken die het
+  pand zelf betreffen (akte, overige gegevens) is het andersom. De tool berekent beide en neemt de
+  laatst aflopende termijn.
+- **Ontbreekt de tweede datum en is de eerste termijn verstreken, dan zegt de tool "onvolledig"** in
+  plaats van "verstreken". Dat voorkomt een vernietigingssignaal voor een stuk waarop de andere klok
+  nog kan lopen.
 
 ## Inhoudelijke verantwoording
 
@@ -87,8 +95,10 @@ in plaats van stilletjes de uitkomst van een ander documenttype te veranderen.
 `bewaartermijnUitJaar(ankerjaar, n)` — N jaren die gaan lopen ná afloop van het kalenderjaar van het
 ankermoment. Dit is de klok voor vrijwel alles.
 
-`bewaartermijnVanafDatum(ankerdatum, n)` — N jaren vanaf de dag zelf. Alleen de Wwft. Bij een
-schrikkeldag klemt deze vooruit (29-02 + 5 jaar → 1 maart), zodat de termijn altijd minstens het
+`bewaartermijnVanafDatum(ankerdatum, n)` — N jaren vanaf de dag zelf. Alleen de Wwft. De wet rekent
+daar vanaf een *tijdstip*, terwijl de UI alleen een kalenderdatum kent; daarom telt de N-de
+verjaardag zelf nog mee als bewaardag en mag pas de dag daarna worden vernietigd. Bij een
+schrikkeldag klemt deze vooruit (29-02 + 5 jaar → t/m 1 maart), zodat de termijn altijd minstens het
 volle aantal jaren beslaat.
 
 Datums zijn platte `{jaar, maand, dag}`-objecten. `Date` wordt in de kern niet gebruikt:
@@ -101,7 +111,7 @@ verkeerde jaar op.
 npm test
 ```
 
-81 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
+109 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
 het HTML-bestand en draait die in een `vm`-sandbox. Die loader bewaakt ook dat de kern puur blijft:
 hij weigert DOM-toegang (`document.`, `window.`) en elk gebruik van `Date`.
 
