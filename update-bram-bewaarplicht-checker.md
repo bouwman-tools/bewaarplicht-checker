@@ -316,27 +316,67 @@ Dat is hersteld:
 
 ---
 
-## 7. Open vragen
+## 7. Beoordeling ontvangen — wat er is aangepast
 
-1. Is de max-benadering bij onroerende zaken (art. 34a naast art. 52 AWR, langste wint) juist, en is
-   twee datums vragen werkbaar? (§2.1)
-2. Valt een huurovereenkomst van de verhuurder onder art. 34a, of gewoon onder art. 52 AWR? En geldt
-   de tienjaarstermijn ook voor klein onderhoud zonder herzieningsgevolg? (§2.2)
-3. Volgen wij bij de 5-jaarstermijn terecht de wettekst in plaats van §3.5.2 van het Handboek? (§2.3)
-4. Vijf of zeven jaar voor "beschikking/verklaring van de werknemer", waarvoor alleen het Handboek
-   een bron is? (§2.3)
-5. Zien wij iets over het hoofd bij het schrappen van "notariële aktes" als conversie-uitzondering?
-   (§2.4)
-6. Welke wettelijke voorschriften vallen onder de uitzondering van art. 34a lid 3 Wwft in onze
-   praktijk? (§4)
-7. Zijn bankafschriften, de aangifte loonheffingen en de margeadministratie terecht als
-   basisgegeven aangemerkt? (§3)
-8. Investeringsdiensten ≥ € 30.000: tien jaar via art. 34a, of zeven jaar via art. 52 AWR omdat
-   art. 34a niet is meegewijzigd? (§6)
-9. Verlof- en ziektestaten: is de knip tussen "onderbouwt de loonbetaling — zeven jaar" en
-   "verzuimfrequentie in het dossier — AP-richtsnoer twee jaar" in de praktijk werkbaar, of moeten
-   wij één termijn aanhouden? En is het terecht dat wij ze niet langer als basisgegeven aanmerken?
-   (§2.3)
+Bram heeft de negen openstaande vragen langs de wettekst, de actuele Belastingdienstinformatie, het
+Handboek Loonheffingen 2026 en de wetsgeschiedenis gelegd. Hieronder zijn oordeel en wat er in de
+tool is veranderd.
+
+| # | Onderwerp | Oordeel | Doorgevoerd |
+|---|---|---|---|
+| 1 | Max-benadering onroerende zaken | Praktisch en juridisch verdedigbaar | Ongewijzigd. Ingebruikneming wordt alleen bij onroerendezaakgegevens uitgevraagd |
+| 2 | Huurovereenkomst verhuurder | Valt onder art. 34a, maar géén nieuwe tienjaarsklok vanaf het contract | **Omgedraaid**: art. 52 AWR vooraan, OB-klok als optioneel tweede veld |
+| 2b | Klein onderhoud | Ook binnen scope, maar het anker blijft de ingebruikneming van het pand | **Omgedraaid**, idem. Pand 1995 + factuur 2026 → zeven jaar, niet opnieuw tien |
+| 3 | Vijfjaarstermijn loon | Wettekst volgen; §17.2 van het Handboek bevestigt dat | Was al zo; onderbouwing toegevoegd aan de bron |
+| 4 | Beschikking/verklaring werknemer | Vijf jaar, met bronstatus Handboek in plaats van wet | Was al zo |
+| 5 | Notariële aktes | Schrappen als conversie-uitzondering is juist | Was al zo; toegevoegd dat een akte inhoudelijk wél onder art. 34a kan vallen |
+| 6 | Wwft-slotclausule | Werkt op documentniveau, niet op dossierniveau | Teksten aangescherpt |
+| 7 | Basisgegevens | Bankafschriften niet categorisch basisgegeven | **Geherclassificeerd** naar overig gegeven |
+| 8 | Investeringsdiensten vanaf € 30.000 | Zeven jaar via art. 52 AWR, geen zelfstandige tienjaarstermijn | **Doorgevoerd**, met Drebers als uitzondering |
+| 9 | Verlof- en ziektestaten | Knip behouden en verfijnen | **Gesplitst** in twee documenttypen |
+
+### De twee die er echt toe deden
+
+**Punt 2 en 8 draaien om hetzelfde onderscheid: scope versus termijn.** Art. 34a Wet OB is ruim in
+wát eronder valt — "betreffende onroerende zaken en rechten waaraan deze zijn onderworpen" — maar
+smal in de termijn: negen jaren volgend op het jaar waarin de ondernemer *het goed* in gebruik nam.
+Het anker is het pand, niet het stuk. Een onderhoudsfactuur of een nieuwe huurovereenkomst start dus
+geen nieuwe tienjaarsklok.
+
+Daarom staat bij stukken met een eigen ankermoment nu art. 52 AWR vooraan — die geldt altijd — en is
+de OB-klok het optionele tweede veld, dat alleen bijdraagt zolang het pand nog binnen zijn termijn
+zit. Bij stukken die het pand zelf betreffen (akte, overige gegevens) is het andersom. De tool
+berekent beide en neemt de langste.
+
+Voor investeringsdiensten vanaf € 30.000 volgt hieruit zeven jaar. De wetgever heeft per 2026 in
+art. 13 Uitvoeringsbeschikking OB de onroerende zaak (tien jaar herziening) en de investeringsdienst
+(vijf jaar) uitdrukkelijk náást elkaar gezet, maar art. 34a Wet OB ongemoeid gelaten: daar staat nog
+steeds "het goed", niet "het goed of de investeringsdienst". Een tienjaarslezing zou bovendien
+betekenen dat een dakrenovatie in 2026 op een pand uit 1998 een klok start die in art. 34a nergens
+is te vinden.
+
+**Punt 9 is juist niet vereenvoudigd.** Een urenstaat waaruit blijkt dat iemand in maart 160 uur
+betaald kreeg waarvan 16 verlofuren, onderbouwt de loonberekening en hoort bij de loonadministratie.
+"Zes ziekmeldingen" of een verzuimdossier is privacyrechtelijk iets anders. Eén gedeelde termijn zou
+betekenen dat je uit angst voor de fiscale bewaarplicht zeven jaar een volledige ziektehistorie
+vasthoudt. De tool adviseert nu ook uitdrukkelijk die twee technisch gescheiden te bewaren.
+
+### Nieuwe testvectoren uit deze ronde
+
+| Situatie | Uitkomst |
+|---|---|
+| Onderhoudsfactuur 2026, pand in gebruik sinds 1995 | t/m 31-12-2033 (art. 52 AWR; OB-termijn allang voorbij) |
+| Onderhoudsfactuur 2027, pand in gebruik sinds 2024 | t/m 31-12-2034 (art. 52 AWR wint van OB t/m 31-12-2033) |
+| Huur eindigt 2026, pand in gebruik sinds 2010 | t/m 31-12-2033 (art. 52 AWR na afloop huurperiode) |
+| Einde dienstbetrekking 10-01-2026, kopie identiteitsbewijs | t/m 31-12-2031 (niet 10-01-2031) |
+
+### Wat nog openstaat
+
+1. De Drebers-uitzondering: in bijzondere gevallen kan een investeringsdienst een langere
+   herzieningsperiode vergen. Dat staat nu als waarschuwing bij het documenttype, niet als
+   rekenregel. Is dat de juiste plek?
+2. Voor "beschikking/verklaring van de werknemer" blijft het Handboek de enige bron. Heeft de
+   voorzichtiger kant (zeven jaar via art. 52 AWR) de voorkeur, dan is dat één regel werk.
 
 ---
 

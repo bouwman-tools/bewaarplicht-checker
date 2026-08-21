@@ -117,29 +117,41 @@ describe('onroerende zaken (art. 34a Wet OB) — negen jaren ná ingebruikneming
       'één generieke +10-regel voor beide zou fout zijn');
   });
 
-  test('tweede termijn: de langste van art. 34a en art. 52 AWR is bepalend', () => {
-    // Pand in gebruik sinds 2010 → OB-termijn liep t/m 31-12-2019.
+  // Bij een factuur of huurcontract staat art. 52 AWR vooraan: die termijn geldt
+  // altijd. De OB-klok van het pand is het optionele tweede veld, want die start
+  // niet opnieuw bij elk onderhoud — hij hangt aan de ingebruikneming van het pand.
+  test('onderhoud start geen nieuwe tienjaarsklok: bij een oud pand resteert art. 52 AWR', () => {
     // Onderhoudsfactuur uit 2024 → art. 52 AWR loopt t/m 31-12-2031.
-    const r = reken('og-onderhoud', '2010-01-01', d(2026, 8, 21), '2024-07-01');
+    // Pand in gebruik sinds 2010 → OB-termijn liep al t/m 31-12-2019.
+    const r = reken('og-onderhoud', '2024-07-01', d(2026, 8, 21), '2010-01-01');
     assert.equal(r.termijnen.length, 2);
     assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 12, 31),
-      'de nog lopende zevenjaarstermijn op de factuur zelf is hier bepalend');
-    assert.equal(r.bepalend.rol, 'tweede');
+      'de zevenjaarstermijn op de factuur zelf is hier bepalend, niet opnieuw tien jaar');
+    assert.equal(r.bepalend.rol, 'primair');
     assert.equal(r.verstreken, false);
   });
 
-  test('tweede termijn: is de OB-termijn langer, dan wint die', () => {
+  test('zit het pand nog binnen zijn OB-termijn, dan wint die', () => {
+    // Factuur verliest actuele waarde in 2024 → art. 52 AWR t/m 31-12-2031.
     // Pand in gebruik sinds 2024 → OB-termijn t/m 31-12-2033.
-    // Stuk verliest actuele waarde in 2024 → art. 52 AWR t/m 31-12-2031.
-    const r = reken('og-onderhoud', '2024-01-01', d(2026, 8, 21), '2024-07-01');
+    const r = reken('og-onderhoud', '2024-07-01', d(2026, 8, 21), '2024-01-01');
     assert.deepEqual(plat(r.laatsteBewaardag), d(2033, 12, 31));
-    assert.equal(r.bepalend.rol, 'primair');
+    assert.equal(r.bepalend.rol, 'tweede');
   });
 
-  test('zonder tweede datum rekent de tool alleen de OB-termijn', () => {
-    const r = reken('og-onderhoud', '2010-01-01', d(2026, 8, 21), '');
+  test('zonder de ingebruiknemingsdatum rekent de tool alleen art. 52 AWR', () => {
+    const r = reken('og-onderhoud', '2024-07-01', d(2026, 8, 21), '');
     assert.equal(r.termijnen.length, 1);
-    assert.deepEqual(plat(r.laatsteBewaardag), d(2019, 12, 31));
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 12, 31));
+  });
+
+  test('een huurovereenkomst van de verhuurder rekent vanaf het einde van de huur', () => {
+    // Art. 34a blijft hangen aan het pand; een nieuw huurcontract start geen
+    // nieuwe tienjaarsklok. Bij een langlopende huur komt art. 52 AWR juist later
+    // uit, omdat die pas na afloop van de huurperiode begint te lopen.
+    const r = reken('og-huur-verhuurder', '2026-06-30', d(2026, 8, 21), '2010-01-01');
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2033, 12, 31));
+    assert.equal(r.bepalend.rol, 'primair');
   });
 
   test('verstreken OB-termijn zónder tweede datum heet "onvolledig", niet "verstreken"', () => {
@@ -183,12 +195,24 @@ describe('onroerende zaken (art. 34a Wet OB) — negen jaren ná ingebruikneming
     assert.equal(r.status, 'ok', 'de primaire berekening blijft gewoon geldig');
   });
 
-  test('alle onroerendezaak-typen vragen om de ingebruiknemingsdatum', () => {
+  test('elk onroerendezaak-type kent beide klokken en vraagt nergens de transportdatum', () => {
+    // Welke klok vooraan staat verschilt: bij stukken die het pand zelf betreffen
+    // (akte, overige gegevens) is dat art. 34a; bij stukken met een eigen
+    // ankermoment (factuur, huurcontract) art. 52 AWR, omdat die altijd geldt.
+    // Wat nooit mag: de transport- of factuurdatum als anker voor art. 34a.
     for (const doc of documentenInCategorie('og')) {
-      assert.match(doc.datumLabel, /ingebruikneming/i,
-        `${doc.id} moet om de ingebruiknemingsdatum vragen, niet om transport-/factuurdatum`);
-      assert.equal(doc.termijn, 9, `${doc.id} moet negen jaren rekenen (art. 34a Wet OB)`);
-      assert.ok(doc.tweedeTermijn, `${doc.id} moet ook de zevenjaarstermijn kunnen meerekenen`);
+      const labels = doc.datumLabel + ' ' + (doc.tweedeTermijn ? doc.tweedeTermijn.datumLabel : '');
+      assert.match(labels, /ingebruikneming/i,
+        `${doc.id} moet de ingebruiknemingsdatum ergens uitvragen`);
+      assert.ok(doc.tweedeTermijn, `${doc.id} moet beide termijnen kunnen meerekenen`);
+      assert.ok(doc.primaireGrondslag, `${doc.id} legt niet vast welke klok vooraan staat`);
+      assert.doesNotMatch(doc.datumLabel, /transportdatum/i,
+        `${doc.id} mag niet op de transportdatum ankeren`);
+
+      // De twee klokken samen moeten negen en zeven jaar zijn, in welke volgorde
+      // dan ook.
+      const termijnen = [doc.termijn, doc.tweedeTermijn.termijn].sort();
+      assert.deepEqual(termijnen, [7, 9], `${doc.id}: onverwachte combinatie van termijnen`);
     }
   });
 });
@@ -423,6 +447,11 @@ describe('centrale configuratie — kennisbank en calculator komen uit één bro
       } else if (doc.termijn === 9) {
         assert.equal(doc.badge, '10 jaar',
           'negen jaren ná ingebruikneming = tien boekjaren; zo noemt de Belastingdienst het');
+      } else if (doc.categorie === 'og' && doc.tweedeTermijn) {
+        // Stukken waarop art. 52 AWR vooraan staat maar de OB-klok van het pand
+        // er nog overheen kan lopen: de uitkomst is 7 of 10 jaar, afhankelijk van
+        // hoe recent het pand in gebruik is genomen.
+        assert.equal(doc.badge, '7 of 10 jaar', `${doc.id}`);
       } else {
         assert.ok(doc.badge.startsWith(String(doc.termijn) + ' jaar'),
           `${doc.id}: badge "${doc.badge}" past niet bij termijn ${doc.termijn}`);

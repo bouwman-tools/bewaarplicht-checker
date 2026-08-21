@@ -96,9 +96,24 @@ test('gegevens met een AVG-gevoelige kant zijn geen basisgegeven', () => {
   // de opsomming van basisgegevens. Ze als basisgegeven aanmerken ontneemt de
   // gebruiker bovendien de route naar een kortere termijn, en die is hier door
   // de AVG juist nodig.
-  for (const id of ['verlof-ziekte', 'rittenregistratie']) {
+  // Bankafschriften staan evenmin in die opsomming: zeven jaar bewaren wel,
+  // maar zonder het label basisgegeven.
+  for (const id of ['verlof-uren', 'rittenregistratie', 'bankafschrift']) {
     assert.equal(vindDocumentType(id).basis, false, `${id} staat ten onrechte als basisgegeven`);
   }
+});
+
+test('de ziekteverzuimkant staat los van de loononderbouwing', () => {
+  // Eén gedeelde termijn zou betekenen dat je uit angst voor de fiscale
+  // bewaarplicht zeven jaar een volledige ziektehistorie vasthoudt.
+  const uren = vindDocumentType('verlof-uren');
+  const verzuim = vindDocumentType('verzuimregistratie');
+  assert.ok(uren && verzuim, 'verlof/uren en verzuim horen aparte documenttypen te zijn');
+  assert.equal(uren.termijn, 7, 'de loononderbouwing volgt de fiscale zeven jaar');
+  assert.equal(verzuim.methode, 'indicatief', 'verzuimgegevens kennen geen fiscale rekenregel');
+  assert.equal(verzuim.termijn, null);
+  // De verzuimkant mag nergens een fiscale grondslag claimen.
+  assert.ok(!verzuim.bronnen.includes('awr52'), 'verzuimregistratie claimt een fiscale grondslag');
 });
 
 test('de basisgegevens zijn precies de zes die de Belastingdienst opsomt', () => {
@@ -120,15 +135,19 @@ test('de leerwerkovereenkomst staat los van de ziektestaten', () => {
   // in één documenttype met één termijn: hun privacyprofiel verschilt volledig.
   const bbl = vindDocumentType('leerwerkovereenkomst');
   assert.ok(bbl, 'documenttype leerwerkovereenkomst ontbreekt');
-  assert.doesNotMatch(vindDocumentType('verlof-ziekte').naam, /BBL|leerwerk/i);
+  for (const doc of DOCUMENT_TYPES) {
+    if (doc.id === 'leerwerkovereenkomst') continue;
+    assert.doesNotMatch(doc.naam, /BBL|leerwerk/i, `${doc.id} bundelt de leerwerkovereenkomst weer`);
+  }
 });
 
 test('de verzuimtekst onderscheidt verzuimgegevens van medische gegevens', () => {
-  const doc = vindDocumentType('verlof-ziekte');
+  const doc = vindDocumentType('verzuimregistratie');
   assert.match(doc.waarschuwing, /verzuimgegevens/i);
-  assert.match(doc.waarschuwing, /medische gegevens/i);
-  // De AP-norm van twee jaar voor de verzuimfrequentie mag niet ontbreken.
-  assert.match(doc.toelichting, /twee jaar/i);
+  assert.match(doc.waarschuwing, /aard en/i);
+  // De AP-norm van twee jaar hoort erbij, met de uitzonderingen.
+  assert.match(doc.indicatief, /twee jaar/i);
+  assert.match(doc.indicatief, /eigenrisicodrager|geschil/i);
 });
 
 test('de Wwft heet overal een vaste termijn, niet een maximum', () => {
