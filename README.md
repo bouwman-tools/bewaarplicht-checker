@@ -1,124 +1,129 @@
 # Bewaarplicht Checker
 
-Kennisbank en rekentool voor de fiscale bewaarplicht (AWR art. 52). Toont de wettelijke bewaartermijnen per documenttype en berekent de einddatum voor een specifiek document.
+Kennisbank en rekentool voor de fiscale bewaarplicht. Toont per documenttype welke bewaartermijn
+geldt, vanaf welk moment die loopt, en tot wanneer een concreet stuk bewaard moet blijven.
+
+Hoofdregel is art. 52 lid 4 AWR (zeven jaar). Daarnaast rekent de tool de afwijkende termijnen uit
+de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelasting 2011 en de Wwft.
 
 ## Gebruik
 
 1. Open de tool via [bouwman.tools/bewaarplicht.html](https://bouwman.tools/bewaarplicht.html)
-2. **Kennisbank**: blader door de categorieën voor een overzicht van alle bewaartermijnen (7 of 10 jaar per documenttype)
-3. **Einddatum berekenen**: selecteer een documenttype en vul de relevante datum in
-4. De tool toont automatisch de berekende fiscale bewaardatum ("31 december [jaar]")
-5. Als de termijn al verstreken is, verschijnt de melding "Fiscale bewaartermijn verstreken" met een toelichting om vóór vernietiging te controleren of geen andere bewaarplicht geldt
-
-## Inhoud
-
-- **Kennisbank** — 7 categorieën: facturen & betalingen, jaarrekening & boekhouding, contracten & overeenkomsten, personeel & loon, onroerend goed, bijzondere regelingen (margegoederen, OSS), correspondentie
-- **Aandachtspunten** — AVG-spanning, digitaal bewaren, buitenlandse bestanddelen / lopende fiscale geschillen (art. 16 lid 4 AWR)
-- **Bronnen** — directe links naar AWR art. 52 en belastingdienst.nl
+2. **Kennisbank** — 36 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
+   of het een basisgegeven is
+3. **Einddatum berekenen** — kies een documenttype en vul de datum in waar dat type om vraagt. Welke
+   datum dat is verschilt per type en staat onder het invoerveld
+4. De uitkomst toont de laatste bewaardag en de dag waarop de termijn verstrijkt
 
 ## Bewaartermijnen
 
-| Termijn | Geldt voor |
-|---|---|
-| 7 jaar | Facturen, bankafschriften, aangiften, contracten (na afloop), loonadministratie, correspondentie |
-| 10 jaar | Onroerend goed documenten, onderhoudsfacturen OG, OSS/Unieregeling |
+| Termijn | Geldt voor | Grondslag |
+|---|---|---|
+| 7 jaar | Basisgegevens en de overige administratie | art. 52 lid 4 AWR |
+| 10 jaar | Onroerende zaken: negen jaren volgend op het jaar van ingebruikneming | art. 34a Wet OB 1968 |
+| 10 jaar | OSS: tien jaar na afloop van het jaar van de handeling | art. 28rl, 28sj, 28tn Wet OB |
+| 5 jaar | Kopie identiteitsbewijs en opgaaf gegevens voor de loonheffingen | art. 7.5 lid 4 en 7.9 lid 2 URLB 2011 |
+| 5 jaar, vast | Wwft-cliëntonderzoek: bewaren én daarna vernietigen | art. 33 lid 3 en 34a lid 3 Wwft |
+| geen | Overig personeelsdossier, sollicitatiegegevens | AVG, norminvulling AP |
 
-De termijn start op **1 januari van het jaar volgend op het moment waarop het document zijn actuele waarde verliest** — niet op de aanmaakdatum.
+De termijn begint niet op de aanmaakdatum maar op **1 januari van het jaar volgend op het moment
+waarop het gegeven zijn actuele waarde verliest** — behalve bij de Wwft, die vanaf de dag zelf telt.
+
+Twee valkuilen die de tool expliciet afvangt:
+
+- **De twee tienjaarstermijnen zijn niet gelijk.** Art. 34a telt negen jaren *volgend op* het jaar
+  van ingebruikneming; de OSS-bepalingen tellen tien jaar *na afloop van* het jaar van de handeling.
+  Bij hetzelfde ankerjaar 2022 is dat 31-12-2031 tegen 31-12-2032.
+- **Bij onroerende zaken lopen twee termijnen naast elkaar.** Naast art. 34a loopt op het stuk zelf
+  de zevenjaarstermijn van art. 52 AWR. De tool vraagt daarom om een tweede, optionele datum en
+  neemt de laatst aflopende termijn.
+
+## Inhoudelijke verantwoording
+
+De fiscale keuzes, de bronnen en de open vragen staan in
+[`update-bram-bewaarplicht-checker.md`](update-bram-bewaarplicht-checker.md). Dat document is de
+plek voor inhoudelijke discussie; deze README beschrijft alleen het gebruik en de opzet.
 
 ## Toegang
 
-Via het bouwman.tools portaal (sectie Administratie & Archief). Geen installatie nodig, werkt volledig in de browser zonder externe API.
+Via het bouwman.tools portaal (sectie Administratie & Archief). Geen installatie nodig, werkt
+volledig in de browser zonder externe API.
 
 ## Sync
 
-Bij elke push naar `master` kopieert de GitHub Action automatisch `bewaarplicht.html` naar de centrale [bouwman-tools/bouwman-tools](https://github.com/bouwman-tools/bouwman-tools) repo. De tool is binnen ~1 minuut live.
+Bij elke push naar `master` kopieert een GitHub Action `bewaarplicht.html` naar de centrale
+[bouwman-tools/bouwman-tools](https://github.com/bouwman-tools/bouwman-tools) repo. De tool is binnen
+~1 minuut live.
 
 ---
 
 ## Voor de ontwikkelaar
 
-> Dit blok is bedoeld voor de technicus die de tool integreert in de productieomgeving. Het beschrijft de opzet van de tool, de recente inhoudelijke wijzigingen en de aandachtspunten bij implementatie.
-
 ### Opzet
 
-De tool bestaat uit één zelfstandig HTML-bestand (`bewaarplicht.html`) zonder externe afhankelijkheden: geen frameworks, geen CDN-links, geen API-aanroepen. Alle logica, stijlen en inhoud staan in dat ene bestand. De tool werkt volledig in de browser.
+De tool is één zelfstandig HTML-bestand (`bewaarplicht.html`) zonder externe afhankelijkheden: geen
+frameworks, geen CDN-links, geen API-aanroepen. Dat is een bewuste keuze — de tool moet ook werken
+zonder internetverbinding.
 
-Dit is een bewuste keuze. De tool moet ook functioneren in omgevingen zonder internetverbinding en mag niet afhankelijk zijn van externe services.
+Het bestand valt uiteen in twee delen:
 
-### Intentie en scope
+- **De fiscale kern**, tussen de markers `FISCALE KERN — BEGIN` en `FISCALE KERN — EINDE`. Puur
+  JavaScript: geen DOM, geen `Date`, geen globale state. Hier staan de documenttypen, de termijnen,
+  de bronnen, de teksten en de rekenregels.
+- **De UI-laag** daaronder. Leest de DOM, roept de kern aan, schrijft de DOM. Bouwt het
+  documenttype-menu, de kennisbank, de aandachtspunten en de bronnenlijst op uit de kern.
 
-De tool is bedoeld als praktische interne kennis- en rekentool voor adviseurs. Het is nadrukkelijk **geen juridisch systeem** en geen vervanging voor fiscaal advies. De berekeningen zijn gebaseerd op art. 52 AWR en geven een praktische richtlijn, geen juridisch bindende uitkomst.
+### Eén centrale gegevensbron
 
-Die beperking is bewust verwerkt in de teksten (zie "Recente wijzigingen" hieronder). Vergroot die scope niet bij integratie in de productieomgeving.
+`DOCUMENT_TYPES` is de enige plek waar een documenttype bestaat. Menu, kennisbank, invoerlabels,
+toelichtingen, rekenregels en bronverwijzingen komen daar alle uit voort. Een documenttype toevoegen
+is één object toevoegen aan die array; er staat niets in de HTML dat je hoeft bij te werken.
 
-### Recente wijzigingen (augustus 2025)
+De configuratie wordt aan het eind van de kern diep bevroren, zodat een schrijfactie zichtbaar faalt
+in plaats van stilletjes de uitkomst van een ander documenttype te veranderen.
 
-De volgende aanpassingen zijn doorgevoerd ten opzichte van de vorige versie. Ze zijn inhoudelijk gemotiveerd; de technische uitwerking staat per punt beschreven.
+### Twee klokken
 
-**1. Verstreken bewaartermijn — tekst genuanceerd**
+`bewaartermijnUitJaar(ankerjaar, n)` — N jaren die gaan lopen ná afloop van het kalenderjaar van het
+ankermoment. Dit is de klok voor vrijwel alles.
 
-De vorige versie toonde bij een verlopen termijn: *"Dit document mag worden vernietigd — de wettelijke bewaartermijn is verstreken."* Die tekst was te absoluut: ook na het verstrijken van de fiscale bewaartermijn kunnen andere bewaarverplichtingen gelden (civielrechtelijk, AVG, lopende procedures).
+`bewaartermijnVanafDatum(ankerdatum, n)` — N jaren vanaf de dag zelf. Alleen de Wwft. Bij een
+schrikkeldag klemt deze vooruit (29-02 + 5 jaar → 1 maart), zodat de termijn altijd minstens het
+volle aantal jaren beslaat.
 
-Nieuwe tekst:
-> Volgens deze berekening is de fiscale bewaartermijn verstreken. Controleer vóór vernietiging of geen andere bewaarplicht, lopende procedure of andere reden voor langere bewaring geldt.
+Datums zijn platte `{jaar, maand, dag}`-objecten. `Date` wordt in de kern niet gebruikt:
+`new Date('2022-01-01')` parst als UTC-middernacht en levert in een negatieve UTC-offset het
+verkeerde jaar op.
 
-**2. Dynamisch resultaatlabel**
+### Tests
 
-De vaste kop "Bewaren tot en met" boven het resultaat werd ook getoond bij een verlopen termijn, wat leidde tot de tegenstrijdige combinatie "Bewaren tot en met / Termijn verstreken". Het label wordt nu dynamisch bijgewerkt via JavaScript:
-
-- Lopende termijn: `Berekende fiscale bewaardatum`
-- Verlopen termijn: `Fiscale bewaartermijn verstreken`
-
-Technisch: het `<div class="result-label">` heeft nu `id="result-label"` gekregen. De `bereken()`-functie in het script schrijft dit element bij elke berekening.
-
-**3. Aandachtspunt buitenlandse bestanddelen gecorrigeerd**
-
-De vorige versie koppelde de verlengde navorderingstermijn van 12 jaar (art. 16 lid 4 AWR) aan fraude. Dat is juridisch onjuist: de 12-jaarsterm geldt specifiek voor in het buitenland opgekomen of gehouden inkomens- of vermogensbestanddelen, niet als algemene fraudesanctie.
-
-Nieuwe titel: `Buitenlandse bestanddelen / lopend fiscaal geschil`
-
-De bijbehorende brontekst (bronnenlijst onderaan de pagina) is in dezelfde zin gecorrigeerd.
-
-**4. Algemene disclaimer toegevoegd**
-
-Direct onder de intro van de rekentool staat nu een compacte disclaimer:
-> Deze tool geeft een praktische indicatie van fiscale bewaartermijnen. Bij bijzondere situaties, andere wettelijke bewaarplichten of lopende procedures kan een langere of afwijkende bewaartermijn gelden.
-
-De formulering vermijdt bewust "raadpleeg een adviseur" omdat de tool intern door adviseurs wordt gebruikt.
-
-**5. Personeelsdossier — categorie hernoemd en genuanceerd**
-
-De generieke categorie "Personeelsdossier (loongegevens)" was te breed: een personeelsdossier omvat meerdere documentsoorten met uiteenlopende bewaarregimes (fiscaal, arbeidsrechtelijk, AVG).
-
-De categorie is hernoemd naar `Loonadministratie (loonstroken / salarisadministratie)` en beperkt zich expliciet tot de fiscale component. De toelichting in de kennisbank vermeldt dat voor overige onderdelen van een personeelsdossier andere wettelijke of AVG-bewaartermijnen kunnen gelden.
-
-**6. Zakelijke correspondentie — scope beperkt**
-
-"Overige zakelijke correspondentie" suggereerde dat alle zakelijke communicatie standaard zeven jaar bewaard moet worden. Dat klopt niet: alleen correspondentie die deel uitmaakt van de administratie of relevant is voor de belastingheffing valt onder art. 52 AWR.
-
-Hernoemd naar `Zakelijke correspondentie (fiscaal relevant)` met een bijbehorende toelichting. Dezelfde toelichting is toegevoegd bij `Offerte / orderbevestiging`.
-
-**7. Huurcontract — rol van de gebruiker verduidelijkt**
-
-De categorie "Huurcontract" (7 jaar) stond naast "Huurovereenkomst onroerend goed (verhuurder)" (10 jaar) zonder duidelijk onderscheid. De 10-jaarsterm geldt voor verhuurders in het kader van de BTW-herzieningsperiode. Het kortere label is hernoemd naar `Huurcontract (huurder)` om verwarring te voorkomen.
-
-**8. Accessibility verbeterd**
-
-De vorige CSS verwijderde de focus-indicator volledig (`outline: none`) voor zowel muis- als toetsenbordgebruikers. Dat is een toegankelijkheidsprobleem voor gebruikers die met het toetsenbord navigeren.
-
-Toegevoegd:
-```css
-select:focus-visible, input[type="date"]:focus-visible {
-  outline: 2px solid #C0522A;
-  outline-offset: 2px;
-}
+```bash
+npm test
 ```
 
-Dit toont de focusring uitsluitend bij toetsenbordnavigatie (`:focus-visible`), niet bij muisklikken. Het resultaatblok heeft `aria-live="polite"` gekregen zodat schermlezers de bijgewerkte uitkomst aankondigen.
+81 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
+het HTML-bestand en draait die in een `vm`-sandbox. Die loader bewaakt ook dat de kern puur blijft:
+hij weigert DOM-toegang (`document.`, `window.`) en elk gebruik van `Date`.
 
-### Wat ongewijzigd is gebleven
+Omdat de kern in een eigen realm draait, zijn objecten die hij teruggeeft niet `deepStrictEqual` aan
+objectliteralen in de tests. Gebruik daarvoor de `plat()`-helper uit `laad-kern.mjs`.
 
-- De berekeningsmethodiek: `eindJaar = datum.getFullYear() + termijn`, einddatum altijd 31 december van het eindejaar. Dit is een conservatieve maar correct toepasbare benadering.
-- Alle documentcategorieën en bijbehorende termijnen.
-- De visuele stijl en layout.
-- De enkelvoudige bestandsstructuur (geen externe afhankelijkheden).
+De suite dekt onder meer: de 31-decembergrens, tijdzonegedrag, schrikkeljaren, de vier fiscale
+klokken, de dubbele termijn bij onroerende zaken, ongeldige invoer, en consistentie van de
+configuratie (unieke id's, bestaande bronnen, badge past bij termijn, geen dode bronconfiguratie).
+
+### Lokaal bekijken
+
+```bash
+python -m http.server 8842
+```
+
+Daarna `http://127.0.0.1:8842/bewaarplicht.html`. Via `file://` werkt de pagina ook, maar een echte
+origin is handiger bij het debuggen.
+
+### Scope
+
+De tool is een intern hulpmiddel voor adviseurs, geen juridisch systeem en geen vervanging voor
+fiscaal advies. Die beperking zit bewust in de teksten: bij een verstreken termijn toont de tool
+uitdrukkelijk dat verstreken niet hetzelfde is als vernietigen. Vergroot die scope niet bij
+integratie in de productieomgeving.

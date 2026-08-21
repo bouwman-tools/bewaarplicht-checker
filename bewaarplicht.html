@@ -547,9 +547,13 @@ const BRONNEN = {
       'afspraken schriftelijk vast.',
   },
   bdConversie: {
-    icoon: '\u{1F4C4}', kort: 'Belastingdienst — brochure bewaarplicht', host: 'download.belastingdienst.nl (pdf)',
-    titel: 'Belastingdienst — Uw geautomatiseerde administratie en de fiscale bewaarplicht (AL 040, juli 2026)',
-    url: 'https://download.belastingdienst.nl/belastingdienst/docs/geautomatiseerde_administratie_en_fiscale_bewaarplicht_al0401z14fd.pdf',
+    icoon: '\u{1F4C4}', kort: 'Belastingdienst — brochure bewaarplicht', host: 'belastingdienst.nl',
+    titel: 'Belastingdienst — Uw geautomatiseerde administratie en de fiscale bewaarplicht (AL 040)',
+    // Bewust de landingspagina en niet de pdf zelf: de bestandsnaam van de pdf
+    // bevat een editiecode (…al0401z14fd.pdf) die per uitgave wijzigt. Oudere
+    // codes geven een harde 404 zonder redirect, dus een directe pdf-link breekt
+    // gegarandeerd bij de volgende editie.
+    url: 'https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/uw_geautomatiseerde_administratie_en_de_fiscale_bewaarplicht',
     omschrijving: 'De vijf voorwaarden voor conversie naar een andere gegevensdrager, de regel dat een ' +
       'balans en staat van baten en lasten op papier niet mag worden geconverteerd, en de eis dat van ' +
       'douanedocumenten die de rechten bij in- of uitvoer bepalen het origineel bewaard blijft.',
@@ -663,7 +667,9 @@ const BRONNEN = {
   avg5: {
     icoon: '\u{1F512}', kort: 'art. 5 lid 1 sub e AVG', host: 'eur-lex.europa.eu',
     titel: 'Art. 5 lid 1 sub e AVG — opslagbeperking',
-    url: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj',
+    // /oj alleen levert de Engelse tekst bovenaan de hele verordening; met de
+    // taalcode en het artikel-anker landt de lezer op de Nederlandse art. 5.
+    url: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj/nld#art_5',
     omschrijving: 'Persoonsgegevens worden bewaard “in een vorm die het mogelijk maakt de betrokkenen ' +
       'niet langer te identificeren dan voor de doeleinden waarvoor de persoonsgegevens worden ' +
       'verwerkt noodzakelijk is”. De norm is identificeerbaarheid, niet vernietiging: anonimiseren ' +
