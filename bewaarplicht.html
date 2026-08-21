@@ -49,6 +49,11 @@
     a { color: #C0522A; }
     :focus-visible { outline: 2px solid #C0522A; outline-offset: 2px; }
 
+    /* Zonder deze regel wint een eigen display-waarde (zoals .calc-row's grid)
+       van de browserregel [hidden] { display: none } en blijft een verborgen
+       rij gewoon staan. */
+    [hidden] { display: none !important; }
+
     .noscript {
       background: #FDE8E8;
       border: 1px solid #F4ABAB;
@@ -436,10 +441,22 @@ function vergelijkDatum(a, b) {
   return a.dag - b.dag;
 }
 
-// 29 februari + n jaar bestaat niet in een niet-schrikkeljaar; dan 28 februari.
-function datumPlusJaren(d, n) {
+// 29 februari + n jaar bestaat niet in een niet-schrikkeljaar. Welke kant we dan
+// op klemmen hangt af van wat de termijn is:
+//   'achteruit' → 28 februari (de termijn eindigt een dag eerder)
+//   'vooruit'   → 1 maart     (de termijn duurt gegarandeerd n volle jaren)
+// Bij een bewaarPLICHT klemmen we vooruit: anders zou de tool vernietigen
+// adviseren voordat de wettelijke termijn vol is.
+function datumPlusJaren(d, n, richting) {
   const jaar = d.jaar + n;
-  return { jaar: jaar, maand: d.maand, dag: Math.min(d.dag, dagenInMaand(jaar, d.maand)) };
+  const laatste = dagenInMaand(jaar, d.maand);
+  if (d.dag <= laatste) return { jaar: jaar, maand: d.maand, dag: d.dag };
+  if (richting === 'vooruit') {
+    return d.maand === 12
+      ? { jaar: jaar + 1, maand: 1, dag: 1 }
+      : { jaar: jaar, maand: d.maand + 1, dag: 1 };
+  }
+  return { jaar: jaar, maand: d.maand, dag: laatste };
 }
 
 function dagErvoor(d) {
@@ -481,7 +498,9 @@ function bewaartermijnUitJaar(ankerjaar, termijnJaren) {
 }
 
 function bewaartermijnVanafDatum(ankerdatum, termijnJaren) {
-  const grens = datumPlusJaren(ankerdatum, termijnJaren);
+  // Vooruit klemmen: art. 33 lid 3 Wwft is óók een bewaarplicht, dus de termijn
+  // moet altijd minstens het volle aantal jaren beslaan.
+  const grens = datumPlusJaren(ankerdatum, termijnJaren, 'vooruit');
   return {
     klok: 'datum',
     ankerdatum: ankerdatum,
@@ -551,15 +570,17 @@ const BRONNEN = {
     omschrijving: 'Lid 2: bij onroerende zaken wordt de aftrek herzien “in elk van de negen boekjaren, ' +
       'volgende op dat waarin de ondernemer het goed is gaan gebruiken”, telkens voor een tiende ' +
       'gedeelte. Lid 1 sub c en lid 3 voegen per 1 januari 2026 de investeringsdiensten vanaf ' +
-      '€ 30.000 toe, met een herziening over vijf boekjaren.',
+      '€ 30.000 toe: herziening “in elk van de vier boekjaren, volgende op” het jaar van ' +
+      'ingebruikneming, telkens voor een vijfde gedeelte — samen met dat jaar dus vijf boekjaren.',
   },
   ob28oss: {
     icoon: '⚖️', kort: 'art. 28rl / 28sj / 28tn Wet OB', host: 'wetten.overheid.nl',
     titel: 'Art. 28rl, 28sj en 28tn Wet OB 1968 — boekhouding niet-Unieregeling, Unieregeling en Invoerregeling',
     url: 'https://wetten.overheid.nl/jci1.3:c:BWBR0002629&artikel=28sj',
-    omschrijving: 'Alle drie de OSS-regelingen kennen dezelfde bepaling: “De boekhouding wordt bewaard ' +
-      'gedurende tien jaar na afloop van het jaar waarin de handeling is verricht.” Let op het ' +
-      'verschil met art. 34a: die telt negen jaren, deze tien.',
+    omschrijving: 'Art. 28rl en 28sj luiden gelijk: “De boekhouding wordt bewaard gedurende tien jaar ' +
+      'na afloop van het jaar waarin de handeling is verricht.” Art. 28tn zegt hetzelfde met “tien ' +
+      'jaren”. De link wijst naar 28sj (Unieregeling); 28rl is de niet-Unieregeling en 28tn de ' +
+      'Invoerregeling. Let op het verschil met art. 34a: die telt negen jaren, deze tien.',
   },
   ob34: {
     icoon: '⚖️', kort: 'art. 34 Wet OB', host: 'wetten.overheid.nl',
@@ -589,7 +610,7 @@ const BRONNEN = {
   },
   handboekLh: {
     icoon: '\u{1F4D8}', kort: 'Handboek Loonheffingen 2026', host: 'belastingdienst.nl',
-    titel: 'Handboek Loonheffingen 2026 (Belastingdienst)',
+    titel: 'Handboek Loonheffingen 2026, uitgave maart 2026 (Belastingdienst) — downloadpagina',
     url: 'https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/handboek-loonheffingen',
     omschrijving: '§3.2.2 rekent onder meer het arbeidscontract, de opgaaf gegevens voor de ' +
       'loonheffingen, de kopie van het identiteitsbewijs en de verlof- en ziektestaten tot de ' +
@@ -625,10 +646,19 @@ const BRONNEN = {
     icoon: '\u{1F50E}', kort: 'art. 33 en 34a Wwft', host: 'wetten.overheid.nl',
     titel: 'Art. 33 lid 3 en art. 34a lid 3 Wwft — bewaren én vernietigen cliëntonderzoek',
     url: 'https://wetten.overheid.nl/jci1.3:c:BWBR0024282&artikel=33',
-    omschrijving: 'Art. 33 lid 3: bewaren “gedurende vijf jaar na het tijdstip van het beëindigen van ' +
-      'de zakelijke relatie of gedurende vijf jaar na het uitvoeren van de desbetreffende transactie”. ' +
-      'Art. 34a lid 3: de instelling “vernietigt de persoonsgegevens die zij uit hoofde van deze wet ' +
-      'heeft verkregen onmiddellijk na het verstrijken van de termijn”. Dit is dus een maximum.',
+    omschrijving: 'Art. 33 lid 3: de instelling “bewaart de … gegevens op toegankelijke wijze ' +
+      'gedurende vijf jaar na het tijdstip van het beëindigen van de zakelijke relatie of gedurende ' +
+      'vijf jaar na het uitvoeren van de desbetreffende transactie”. Art. 34a lid 3: zij “vernietigt ' +
+      'de persoonsgegevens … onmiddellijk na het verstrijken van de termijn …, tenzij bij wettelijk ' +
+      'voorschrift anders is bepaald”. Samen: vijf jaar is hier ondergrens én bovengrens.',
+  },
+  apSollicitatie: {
+    icoon: '\u{1F512}', kort: 'AP — sollicitanten', host: 'autoriteitpersoonsgegevens.nl',
+    titel: 'Autoriteit Persoonsgegevens — Persoonsgegevens van sollicitanten',
+    url: 'https://www.autoriteitpersoonsgegevens.nl/themas/werk-en-uitkering/sollicitaties/persoonsgegevens-van-sollicitanten',
+    omschrijving: 'De AP noemt het “gebruikelijk” de gegevens van een afgewezen sollicitant uiterlijk ' +
+      'vier weken na afloop van de procedure te verwijderen, en met toestemming van de sollicitant is ' +
+      '“een termijn van maximaal 1 jaar” redelijk. Uitdrukkelijk norminvulling, geen wettelijke termijn.',
   },
   avg5: {
     icoon: '\u{1F512}', kort: 'art. 5 lid 1 sub e AVG', host: 'eur-lex.europa.eu',
@@ -643,9 +673,10 @@ const BRONNEN = {
     icoon: '\u{1F512}', kort: 'AP — bewaren van persoonsgegevens', host: 'autoriteitpersoonsgegevens.nl',
     titel: 'Autoriteit Persoonsgegevens — Bewaren van persoonsgegevens',
     url: 'https://www.autoriteitpersoonsgegevens.nl/themas/basis-avg/privacy-en-persoonsgegevens/bewaren-van-persoonsgegevens',
-    omschrijving: '“In de AVG staat geen concrete bewaartermijn voor persoonsgegevens. Organisaties ' +
-      'bepalen zelf hoe lang zij persoonsgegevens bewaren.” De AP noemt lopende procedures en ' +
-      'operationele noodzaak als zelfstandige bewaargronden, en anonimiseren als alternatief voor wissen.',
+    omschrijving: '“In de Algemene verordening gegevensbescherming (AVG) staat geen concrete ' +
+      'bewaartermijn voor persoonsgegevens. Organisaties bepalen zelf hoe lang zij persoonsgegevens ' +
+      'bewaren.” De AP noemt lopende procedures en operationele noodzaak als zelfstandige ' +
+      'bewaargronden, en anonimiseren als alternatief voor wissen.',
   },
   apDossier: {
     icoon: '\u{1F512}', kort: 'AP — personeelsdossier', host: 'autoriteitpersoonsgegevens.nl',
@@ -700,6 +731,8 @@ const CATEGORIEEN = [
 // Naast de OB-termijn van negen jaren blijft op het stuk zelf de gewone
 // zevenjaarstermijn van art. 52 AWR lopen. Die kan later aflopen — bijvoorbeeld
 // bij een recente onderhoudsfactuur op een pand dat al lang in gebruik is.
+const OG_PRIMAIRE_GRONDSLAG = 'art. 34a Wet OB — negen jaren na ingebruikneming';
+
 const OG_TWEEDE_TERMIJN = {
   termijn: 7,
   datumLabel: 'Datum waarop dit stuk zijn actuele waarde verliest (optioneel)',
@@ -843,9 +876,9 @@ const DOCUMENT_TYPES = [
     id: 'huurcontract-huurder', categorie: 'contracten', naam: 'Huurcontract (als huurder)',
     termijn: 7, badge: '7 jaar', methode: 'jaareinde', toekomstNormaal: true,
     datumLabel: 'Einddatum van de huurperiode',
-    datumHint: 'Een lopend contract heeft nog actuele waarde. De Belastingdienst noemt zelf het ' +
-      'voorbeeld van een huurcontract van vijf jaar: dat verliest pas ná die vijf jaar zijn actuele ' +
-      'waarde, en pas dán begint de bewaartermijn van zeven jaar.',
+    datumHint: 'Een lopend huurcontract heeft nog actuele waarde en hoort dus nog gewoon bij de ' +
+      'administratie. Pas als de huurperiode voorbij is begint de bewaartermijn van zeven jaar te ' +
+      'lopen — vanaf 1 januari van het jaar daarna.',
     startMoment: '1 januari na het jaar waarin de huurperiode eindigt',
     basis: false, basisNoot: 'Overig gegeven: een kortere termijn is in overleg met de Belastingdienst mogelijk.',
     bronnen: ['awr52', 'bdBewaartermijnen'],
@@ -999,7 +1032,7 @@ const DOCUMENT_TYPES = [
     indicatief: 'Er is geen wettelijke bewaartermijn. De Autoriteit Persoonsgegevens noemt het ' +
       'gebruikelijk de gegevens uiterlijk vier weken na afloop van de procedure te verwijderen, en met ' +
       'toestemming van de sollicitant maximaal één jaar.',
-    bronnen: ['avg5', 'apDossier'],
+    bronnen: ['avg5', 'apSollicitatie'],
   },
 
   // ── Onroerende zaken ───────────────────────────────────────────────────────
@@ -1142,17 +1175,20 @@ const DOCUMENT_TYPES = [
   {
     id: 'wwft-clientonderzoek', categorie: 'overig',
     naam: 'Wwft-cliëntonderzoek (identificatie, verificatie, UBO, risicoprofiel)',
-    termijn: 5, badge: '5 jaar (maximum)', methode: 'datum', maximum: true,
+    termijn: 5, badge: '5 jaar (vaste termijn)', methode: 'datum', maximum: true,
     datumLabel: 'Datum einde zakelijke relatie (of van de incidentele transactie)',
     datumHint: 'Art. 33 lid 3 Wwft rekent vanaf het tijdstip zelf, niet vanaf het einde van het ' +
       'kalenderjaar. Dit veld verwacht dus de werkelijke einddatum van de relatie.',
     startMoment: 'de dag zelf — geen kalenderjaarklok',
-    basis: false, basisNoot: 'Geen fiscaal stuk. Dit is een BOVENgrens met vernietigingsplicht.',
-    toelichting: 'Let op de omkering: art. 34a lid 3 Wwft verplicht de instelling de persoonsgegevens ' +
-      '“onmiddellijk na het verstrijken van de termijn” te vernietigen. Een Wwft-dossier ' +
-      '“voor de zekerheid” zeven jaar bewaren is dus geen veilige keuze maar een overtreding.',
-    waarschuwing: 'Dit is een maximum, geen minimum. Bewaar Wwft-gegevens niet mee in de fiscale ' +
-      'zevenjaarsbak en houd het dossier administratief gescheiden.',
+    basis: false,
+    basisNoot: 'Geen fiscaal stuk. Vijf jaar is hier ondergrens én bovengrens.',
+    toelichting: 'Twee bepalingen samen maken hier één vaste termijn. Art. 33 lid 3 Wwft verplicht ' +
+      'tot bewaren gedurende vijf jaar; art. 34a lid 3 verplicht daarna tot vernietiging ' +
+      '“onmiddellijk na het verstrijken van de termijn …, tenzij bij wettelijk voorschrift anders is ' +
+      'bepaald”. Eerder wissen mag dus niet, en langer bewaren alleen als u het andere wettelijke ' +
+      'voorschrift kunt benoemen.',
+    waarschuwing: 'Anders dan de fiscale termijnen is dit geen ondergrens waar u veilig overheen kunt ' +
+      'gaan. Houd het Wwft-dossier administratief gescheiden van de fiscale zevenjaarsbak.',
     bronnen: ['wwft', 'avg5'],
   },
 ];
@@ -1224,7 +1260,36 @@ const AANDACHTSPUNTEN = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 6. BEREKENING
+// 6. VASTE TEKSTEN IN DE UITKOMST
+//
+// Ook deze horen bij de inhoud, niet bij de opmaak — daarom staan ze binnen de
+// markers en niet verspreid door de UI-laag.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const TEKSTEN = {
+  datumOngeldig: (min, max) =>
+    `Deze datum kan niet worden gelezen. Gebruik een bestaande kalenderdatum tussen ${min} en ${max}.`,
+  tweedeDatumOngeldig: 'Deze datum kan niet worden gelezen en is niet meegerekend.',
+  tweeTermijnen: 'Twee termijnen lopen naast elkaar; de langste is bepalend:',
+  datumInToekomst: 'De ingevulde datum ligt in de toekomst. Controleer of dat klopt voor dit documenttype.',
+  datumOnwaarschijnlijk: 'Deze datum ligt meer dan 25 jaar in de toekomst. Controleer het jaartal.',
+  tweedeVeldNodig:
+    'De termijn van art. 34a Wet OB is voorbij, maar op het stuk zelf loopt de zevenjaarstermijn van ' +
+    'art. 52 AWR nog door. Vul het tweede veld in om te zien tot wanneer u het moet bewaren — zonder ' +
+    'dat gegeven is dit géén volledige uitkomst.',
+  verstrekenLetOp:
+    '<strong>Verstreken is niet hetzelfde als vernietigen.</strong> Alleen de fiscale termijn volgens ' +
+    'deze berekening is voorbij. Ga vóór vernietiging na of de zevenjaarstermijn van ' +
+    'art. 2:10 BW nog loopt, of er nog bezwaar, beroep of een boekenonderzoek open staat, of er ' +
+    'arbeidsrechtelijke of civielrechtelijke redenen zijn om het stuk te bewaren (bij bouwwerken tot ' +
+    'twintig jaar na oplevering), en wat uw eigen bewaarbeleid voorschrijft.',
+  wwftVerstreken:
+    'Deze gegevens hadden op grond van art. 34a lid 3 Wwft al vernietigd moeten zijn, tenzij een ander ' +
+    'wettelijk voorschrift langer bewaren eist. Controleer wat er is gebeurd.',
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. BEREKENING
 // ─────────────────────────────────────────────────────────────────────────────
 
 function vindDocumentType(id) {
@@ -1258,7 +1323,20 @@ function termijnOmschrijving(doc) {
 //   'geen-datum'     documenttype gekozen, primaire datum ontbreekt
 //   'datum-ongeldig' de ingevulde datum bestaat niet of ligt buiten bereik
 //   'ok'             berekend
+function isKalenderdatum(d) {
+  return !!d && Number.isInteger(d.jaar) && Number.isInteger(d.maand) && Number.isInteger(d.dag)
+    && d.maand >= 1 && d.maand <= 12 && d.dag >= 1 && d.dag <= dagenInMaand(d.jaar, d.maand);
+}
+
 function berekenBewaarplicht(docId, invoer, vandaag) {
+  // Zonder een geldige "vandaag" kan verstreken-ja/nee niet worden bepaald. Stil
+  // op false uitkomen zou de onveilige kant zijn, dus we weigeren luid.
+  if (!isKalenderdatum(vandaag)) {
+    throw new TypeError(
+      'berekenBewaarplicht verwacht "vandaag" als {jaar, maand, dag}; kreeg ' + JSON.stringify(vandaag)
+    );
+  }
+
   const doc = vindDocumentType(docId);
   if (!doc) return { status: 'geen-document' };
   if (doc.methode === 'indicatief') return { status: 'indicatief', doc: doc };
@@ -1273,7 +1351,7 @@ function berekenBewaarplicht(docId, invoer, vandaag) {
     rol: 'primair',
     datum: primair,
     omschrijving: termijnOmschrijving(doc),
-    grondslag: null,
+    grondslag: doc.tweedeTermijn ? OG_PRIMAIRE_GRONDSLAG : null,
     termijn: doc.methode === 'datum'
       ? bewaartermijnVanafDatum(primair, doc.termijn)
       : bewaartermijnUitJaar(primair.jaar, doc.termijn),
@@ -1308,6 +1386,20 @@ function berekenBewaarplicht(docId, invoer, vandaag) {
     }
   }
 
+  // Toekomstcontrole op élke ingevulde datum, niet alleen de eerste: een vertypt
+  // jaartal in het tweede veld wordt anders bepalend en passeert ongemerkt.
+  const ingevuld = termijnen.map((t) => t.datum);
+  const datumInToekomst = ingevuld.some((dt) => vergelijkDatum(dt, vandaag) > 0);
+  const grensOnwaarschijnlijk = { jaar: vandaag.jaar + 25, maand: vandaag.maand, dag: vandaag.dag };
+  const datumOnwaarschijnlijk = ingevuld.some((dt) => vergelijkDatum(dt, grensOnwaarschijnlijk) > 0);
+
+  // Bij onroerende zaken is een verstreken OB-termijn zonder de tweede datum
+  // géén compleet antwoord: op het stuk zelf kan art. 52 AWR nog lopen. Dat als
+  // "verstreken" tonen zou een vernietigingssignaal zijn dat we niet kunnen waarmaken.
+  const onvolledig = !!doc.tweedeTermijn
+    && termijnen.length === 1
+    && isVerstreken(bepalend.termijn, vandaag);
+
   return {
     status: 'ok',
     doc: doc,
@@ -1317,18 +1409,35 @@ function berekenBewaarplicht(docId, invoer, vandaag) {
     laatsteBewaardag: bepalend.termijn.laatsteBewaardag,
     verstrekenVanaf: bepalend.termijn.verstrekenVanaf,
     verstreken: isVerstreken(bepalend.termijn, vandaag),
+    onvolledig: onvolledig,
     tweedeOngeldig: tweedeOngeldig,
-    datumInToekomst: vergelijkDatum(primair, vandaag) > 0,
+    datumInToekomst: datumInToekomst,
+    datumOnwaarschijnlijk: datumOnwaarschijnlijk,
   };
 }
+
+// De configuratie is gedeelde, levende state: OG_TWEEDE_TERMIJN hangt aan vier
+// documenttypen tegelijk en berekenBewaarplicht geeft het documentobject zelf
+// terug. Bevriezen houdt de belofte "geen globale state" waar: een schrijfactie
+// vanuit de UI of een test faalt dan zichtbaar in plaats van stilletjes de
+// uitkomst van een ánder documenttype te veranderen.
+function bevriesDiep(waarde) {
+  if (waarde && typeof waarde === 'object' && !Object.isFrozen(waarde)) {
+    Object.freeze(waarde);
+    Object.getOwnPropertyNames(waarde).forEach((k) => bevriesDiep(waarde[k]));
+  }
+  return waarde;
+}
+[BRONNEN, CATEGORIEEN, DOCUMENT_TYPES, AANDACHTSPUNTEN, OG_TWEEDE_TERMIJN, TEKSTEN].forEach(bevriesDiep);
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     MAANDEN_NL, JAAR_MIN, JAAR_MAX,
-    isSchrikkeljaar, dagenInMaand, datumPlusJaren, dagErvoor,
+    isSchrikkeljaar, dagenInMaand, datumPlusJaren, dagErvoor, isKalenderdatum,
     parseKalenderdatum, formatDatumNl, vergelijkDatum,
     bewaartermijnUitJaar, bewaartermijnVanafDatum, isVerstreken,
-    BRONNEN, CATEGORIEEN, DOCUMENT_TYPES, AANDACHTSPUNTEN, OG_TWEEDE_TERMIJN,
+    BRONNEN, CATEGORIEEN, DOCUMENT_TYPES, AANDACHTSPUNTEN, TEKSTEN,
+    OG_TWEEDE_TERMIJN, OG_PRIMAIRE_GRONDSLAG,
     vindDocumentType, documentenInCategorie, termijnOmschrijving, berekenBewaarplicht,
   };
 }
@@ -1424,8 +1533,9 @@ function renderAandachtspunten() {
 }
 
 // ─── Opbouw: bronnen (alleen wat daadwerkelijk wordt aangehaald) ───
-// Bronnen die alleen in de aandachtspunten voorkomen en dus niet via een
-// documenttype in de lijst belanden.
+// De aandachtspunten halen bronnen aan die niet per se aan een documenttype
+// hangen. Deze lijst zorgt dat die tóch in de bronnenlijst komen; wat al via een
+// documenttype binnenkomt wordt hieronder ontdubbeld.
 const EXTRA_BRONNEN = ['bdConversie', 'bw210', 'bw7761', 'awr16', 'wwft', 'avg5', 'apBewaren'];
 
 function gebruikteBronnen() {
@@ -1466,36 +1576,52 @@ function bronLinks(doc) {
 }
 
 // ─── Invoervelden bijwerken bij wisselen van documenttype ───
-function updateVelden() {
-  const doc = vindDocumentType($('doctype').value);
-  const datum = $('datum');
-  const rij2 = $('datum2-row');
+//
+// Elke datum betekent per documenttype iets anders: bij een inkoopfactuur de
+// factuurdatum, bij een akte de ingebruikneming, bij een kopie-ID het einde van
+// de dienstbetrekking. Een ingevulde datum laten staan bij het wisselen van type
+// zou daarom een gezaghebbend ogende uitkomst geven op een vraag die de
+// gebruiker niet heeft gesteld. We legen de velden dus bij elke wissel.
+let vorigDocId = null;
 
-  if (!doc) {
+function verbergTweedeRij() {
+  const rij2 = $('datum2-row');
+  rij2.hidden = true;
+  $('datum2').value = '';
+  $('datum2-label').textContent = 'Tweede datum';
+  $('datum2-note').textContent = '';
+  $('datum2-error').textContent = '';
+}
+
+function updateVelden() {
+  const docId = $('doctype').value;
+  const doc = vindDocumentType(docId);
+  const datum = $('datum');
+
+  if (docId !== vorigDocId) {
+    datum.value = '';
+    $('datum-error').textContent = '';
+    vorigDocId = docId;
+  }
+
+  if (!doc || doc.methode === 'indicatief') {
     $('datum-label').textContent = 'Relevante datum';
-    $('datum-note').textContent = 'Selecteer eerst een documenttype.';
+    $('datum-note').textContent = doc
+      ? 'Voor dit type bestaat geen wettelijke bewaartermijn om te berekenen.'
+      : 'Selecteer eerst een documenttype.';
     datum.disabled = true;
     datum.value = '';
-    rij2.hidden = true;
-    $('datum2').value = '';
-  } else if (doc.methode === 'indicatief') {
-    $('datum-label').textContent = 'Relevante datum';
-    $('datum-note').textContent = 'Voor dit type bestaat geen wettelijke bewaartermijn om te berekenen.';
-    datum.disabled = true;
-    datum.value = '';
-    rij2.hidden = true;
-    $('datum2').value = '';
+    verbergTweedeRij();
   } else {
     $('datum-label').textContent = doc.datumLabel;
     $('datum-note').textContent = doc.datumHint;
     datum.disabled = false;
     if (doc.tweedeTermijn) {
-      rij2.hidden = false;
+      $('datum2-row').hidden = false;
       $('datum2-label').textContent = doc.tweedeTermijn.datumLabel;
       $('datum2-note').textContent = doc.tweedeTermijn.datumHint;
     } else {
-      rij2.hidden = true;
-      $('datum2').value = '';
+      verbergTweedeRij();
     }
   }
   bereken();
@@ -1531,20 +1657,18 @@ function bereken() {
   }
 
   if (r.status === 'geen-datum') {
-    zet('is-leeg', 'Uitkomst',
-      'Vul “' + doc.datumLabel.replace(/ \(optioneel\)$/, '') + '” in.', '', '');
+    zet('is-leeg', 'Uitkomst', 'Vul “' + doc.datumLabel + '” in.', '', '');
     return;
   }
 
   if (r.status === 'datum-ongeldig') {
-    $('datum-error').textContent = 'Deze datum kan niet worden gelezen. Gebruik een bestaande ' +
-      'kalenderdatum tussen ' + JAAR_MIN + ' en ' + JAAR_MAX + '.';
+    $('datum-error').textContent = TEKSTEN.datumOngeldig(JAAR_MIN, JAAR_MAX);
     zet('is-leeg', 'Uitkomst', 'De ingevulde datum is niet geldig.', '', '');
     return;
   }
 
   if (r.tweedeOngeldig) {
-    $('datum2-error').textContent = 'Deze datum kan niet worden gelezen en is niet meegerekend.';
+    $('datum2-error').textContent = TEKSTEN.tweedeDatumOngeldig;
   }
 
   // ── status 'ok' ──
@@ -1558,49 +1682,55 @@ function bereken() {
     ':</strong> ' + formatDatumNl(b.verstrekenVanaf);
 
   if (r.termijnen.length > 1) {
-    meta += '<div class="result-grond">Twee termijnen lopen naast elkaar; de langste is bepalend:<br>' +
+    meta += '<div class="result-grond">' + esc(TEKSTEN.tweeTermijnen) + '<br>' +
       r.termijnen.map(function (t) {
         const merk = t === r.bepalend ? '<strong>bepalend</strong> &mdash; ' : '';
-        return '&bull; ' + merk + esc(t.grondslag || 'art. 34a Wet OB — negen jaren na ingebruikneming') +
-          ', vanaf ' + esc(formatDatumNl(t.datum)) + ' &rarr; t/m 31 december ' + t.termijn.eindJaar;
+        return '&bull; ' + merk + esc(t.grondslag) +
+          ', vanaf ' + esc(formatDatumNl(t.datum)) +
+          ' &rarr; t/m ' + esc(formatDatumNl(t.termijn.laatsteBewaardag));
       }).join('<br>') + '</div>';
   }
 
   meta += '<div class="result-grond">Grondslag: ' + bronLinks(doc) + '</div>';
 
   if (r.datumInToekomst && !doc.toekomstNormaal) {
-    meta += '<div class="result-waarschuwing">De ingevulde datum ligt in de toekomst. Controleer of ' +
-      'dat klopt voor dit documenttype.</div>';
+    meta += '<div class="result-waarschuwing">' + esc(TEKSTEN.datumInToekomst) + '</div>';
+  }
+  if (r.datumOnwaarschijnlijk) {
+    meta += '<div class="result-waarschuwing">' + esc(TEKSTEN.datumOnwaarschijnlijk) + '</div>';
   }
 
   if (doc.waarschuwing) {
     meta += '<div class="result-waarschuwing">' + esc(doc.waarschuwing) + '</div>';
   }
 
-  // Wwft: bovengrens met vernietigingsplicht.
+  // Wwft: vaste termijn — vijf jaar bewaren en daarna vernietigen.
   if (r.maximum) {
     if (r.verstreken) {
-      meta += '<div class="result-waarschuwing">Deze gegevens hadden op grond van art. 34a lid 3 Wwft ' +
-        'al vernietigd moeten zijn. Controleer of dat is gebeurd.</div>';
+      meta += '<div class="result-waarschuwing">' + esc(TEKSTEN.wwftVerstreken) + '</div>';
       zet('is-verstreken', 'Wwft-bewaartermijn verstreken',
         'Bewaartermijn liep t/m ' + formatDatumNl(b.laatsteBewaardag),
         '<span class="result-status status-vernietig">Vernietigen sinds ' +
         esc(formatDatumNl(b.verstrekenVanaf)) + '</span>', meta);
     } else {
-      zet('', 'Uiterlijk bewaren tot en met', formatDatumNl(b.laatsteBewaardag),
-        '<span class="result-status status-vernietig">Vernietigen vanaf ' +
+      zet('', 'Bewaren tot en met', formatDatumNl(b.laatsteBewaardag),
+        '<span class="result-status status-vernietig">Daarna vernietigen &mdash; vanaf ' +
         esc(formatDatumNl(b.verstrekenVanaf)) + '</span>', meta);
     }
     return;
   }
 
+  // Onroerende zaken zonder de tweede datum: de OB-termijn is voorbij, maar we
+  // weten niet of art. 52 AWR op het stuk zelf nog loopt. Geen "verstreken" tonen.
+  if (r.onvolledig) {
+    meta = '<div class="result-let-op">' + esc(TEKSTEN.tweedeVeldNodig) + '</div>' + meta;
+    zet('is-indicatief', 'Onvolledig — vul ook de tweede datum in',
+      'Termijn art. 34a Wet OB liep t/m ' + formatDatumNl(b.laatsteBewaardag), '', meta);
+    return;
+  }
+
   if (r.verstreken) {
-    meta += '<div class="result-let-op"><strong>Verstreken is niet hetzelfde als vernietigen.</strong> ' +
-      'Alleen de fiscale termijn volgens deze berekening is voorbij. Ga v&oacute;&oacute;r vernietiging ' +
-      'na of de zevenjaarstermijn van art. 2:10 BW nog loopt, of er nog bezwaar, beroep of een ' +
-      'boekenonderzoek open staat, of er arbeidsrechtelijke of civielrechtelijke redenen zijn om het ' +
-      'stuk te bewaren (bij bouwwerken tot twintig jaar na oplevering), en wat uw eigen bewaarbeleid ' +
-      'voorschrijft.</div>';
+    meta += '<div class="result-let-op">' + TEKSTEN.verstrekenLetOp + '</div>';
     zet('is-verstreken', 'Fiscale bewaartermijn volgens deze berekening verstreken',
       'Was te bewaren t/m ' + formatDatumNl(b.laatsteBewaardag),
       '<span class="result-status status-verstreken">Verstreken sinds ' +

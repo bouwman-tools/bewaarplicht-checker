@@ -80,10 +80,17 @@ describe('kalenderhulpjes', () => {
     assert.equal(dagenInMaand(2024, 4), 30);
   });
 
-  test('datumPlusJaren klemt 29 februari naar 28 februari', () => {
+  test('datumPlusJaren klemt 29 februari, standaard achteruit', () => {
     assert.deepEqual(plat(datumPlusJaren(d(2024, 2, 29), 5)), d(2029, 2, 28));
-    assert.deepEqual(plat(datumPlusJaren(d(2024, 2, 29), 4)), d(2028, 2, 29));
+    assert.deepEqual(plat(datumPlusJaren(d(2024, 2, 29), 4)), d(2028, 2, 29), 'bestaat wél');
     assert.deepEqual(plat(datumPlusJaren(d(2022, 6, 15), 7)), d(2029, 6, 15));
+  });
+
+  test('datumPlusJaren kan ook vooruit klemmen, naar 1 maart', () => {
+    assert.deepEqual(plat(datumPlusJaren(d(2024, 2, 29), 5, 'vooruit')), d(2029, 3, 1));
+    assert.deepEqual(plat(datumPlusJaren(d(2024, 2, 29), 4, 'vooruit')), d(2028, 2, 29),
+      'bestaat wél, dus niet klemmen');
+    assert.deepEqual(plat(datumPlusJaren(d(2022, 6, 15), 7, 'vooruit')), d(2029, 6, 15));
   });
 
   test('dagErvoor steekt maand- en jaargrenzen over', () => {
@@ -162,10 +169,19 @@ describe('bewaartermijnVanafDatum — de datumklok (Wwft)', () => {
     assert.deepEqual(plat(r.verstrekenVanaf), d(2031, 1, 1));
   });
 
-  test('29 februari wordt netjes geklemd', () => {
+  test('29 februari wordt vooruit geklemd zodat de vijf jaar echt vol zijn', () => {
+    // Art. 33 lid 3 Wwft is óók een bewaarplicht. Achteruit klemmen (28 februari)
+    // zou vernietigen adviseren vóórdat er vijf volle jaren om zijn.
     const r = bewaartermijnVanafDatum(d(2024, 2, 29), 5);
-    assert.deepEqual(plat(r.verstrekenVanaf), d(2029, 2, 28));
-    assert.deepEqual(plat(r.laatsteBewaardag), d(2029, 2, 27));
+    assert.deepEqual(plat(r.verstrekenVanaf), d(2029, 3, 1));
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2029, 2, 28));
+  });
+
+  test('een relatie die 29 februari eindigt krijgt niet minder dan één die 28 februari eindigt', () => {
+    const opDe28 = bewaartermijnVanafDatum(d(2024, 2, 28), 5);
+    const opDe29 = bewaartermijnVanafDatum(d(2024, 2, 29), 5);
+    assert.ok(vergelijkDatum(opDe29.verstrekenVanaf, opDe28.verstrekenVanaf) > 0,
+      'later eindigen mag nooit een kortere termijn opleveren');
   });
 });
 

@@ -140,7 +140,40 @@ describe('onroerende zaken (art. 34a Wet OB) — negen jaren ná ingebruikneming
     const r = reken('og-onderhoud', '2010-01-01', d(2026, 8, 21), '');
     assert.equal(r.termijnen.length, 1);
     assert.deepEqual(plat(r.laatsteBewaardag), d(2019, 12, 31));
-    assert.equal(r.verstreken, true);
+  });
+
+  test('verstreken OB-termijn zónder tweede datum heet "onvolledig", niet "verstreken"', () => {
+    // Anders is de uitkomst een vernietigingssignaal voor een stuk waarop de
+    // zevenjaarstermijn van art. 52 AWR nog kan lopen.
+    const r = reken('og-onderhoud', '2010-01-01', d(2026, 8, 21), '');
+    assert.equal(r.onvolledig, true);
+  });
+
+  test('met de tweede datum erbij is de uitkomst wél compleet', () => {
+    const r = reken('og-onderhoud', '2010-01-01', d(2026, 8, 21), '2024-07-01');
+    assert.equal(r.onvolledig, false);
+  });
+
+  test('een nog lopende OB-termijn is niet onvolledig', () => {
+    const r = reken('og-akte', '2024-01-01', d(2026, 8, 21), '');
+    assert.equal(r.onvolledig, false);
+    assert.equal(r.verstreken, false);
+  });
+
+  test('de primaire termijn draagt zijn eigen grondslag, niet null', () => {
+    const r = reken('og-akte', '2022-01-01', d(2026, 8, 21), '2023-01-01');
+    for (const t of r.termijnen) {
+      assert.ok(t.grondslag, `termijn ${t.rol} mist een grondslag voor de uitkomsttekst`);
+    }
+    assert.match(r.termijnen[0].grondslag, /34a/);
+    assert.match(r.termijnen[1].grondslag, /52/);
+  });
+
+  test('een vertypt jaartal in het TWEEDE veld wordt opgemerkt', () => {
+    const r = reken('og-akte', '2020-01-01', d(2026, 8, 21), '2090-01-01');
+    assert.equal(r.bepalend.rol, 'tweede', 'de typefout wordt bepalend...');
+    assert.equal(r.datumInToekomst, true, '...dus moet hij ook gesignaleerd worden');
+    assert.equal(r.datumOnwaarschijnlijk, true, 'meer dan 25 jaar vooruit is vrijwel zeker een typefout');
   });
 
   test('een onleesbare tweede datum wordt gemeld en niet meegerekend', () => {
@@ -256,6 +289,27 @@ describe('Wwft — een maximumtermijn met vernietigingsplicht', () => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 describe('invoervalidatie en randgevallen', () => {
+  test('een misvormde "vandaag" faalt luid in plaats van stil naar "loopt nog"', () => {
+    // vergelijkDatum({}, x) geeft NaN, en NaN >= 0 is false: zonder controle zou
+    // de tool "termijn loopt nog" tonen — bij de Wwft juist de onveilige kant.
+    for (const kapot of [undefined, null, {}, '2026-08-21', 42, { jaar: 2026 },
+                         { jaar: 2026, maand: 13, dag: 1 }, { jaar: 2026, maand: 2, dag: 30 }]) {
+      // Let op: de kern draait in een eigen realm, dus zijn TypeError is niet
+      // dezelfde class als die hier. We toetsen daarom op de boodschap.
+      assert.throws(() => berekenBewaarplicht('inkoopfactuur', { datum: '2022-01-01' }, kapot),
+        /verwacht "vandaag"/, `had moeten falen op ${JSON.stringify(kapot)}`);
+    }
+  });
+
+  test('de configuratie is bevroren: één documenttype kan een ander niet beïnvloeden', () => {
+    const doc = vindDocumentType('og-akte');
+    assert.throws(() => { doc.termijn = 99; }, TypeError);
+    assert.throws(() => { doc.tweedeTermijn.termijn = 99; }, TypeError);
+    // en de rekenuitkomst van een ánder og-type blijft ongemoeid
+    const r = reken('og-onderhoud', '2022-01-01', d(2026, 8, 21), '2022-01-01');
+    assert.deepEqual(plat(r.laatsteBewaardag), d(2031, 12, 31));
+  });
+
   test('geen documenttype gekozen', () => {
     assert.equal(reken('', '2022-01-01', d(2026, 8, 21)).status, 'geen-document');
     assert.equal(reken('bestaat-niet', '2022-01-01', d(2026, 8, 21)).status, 'geen-document');
