@@ -9,7 +9,7 @@ oordeel waarde heeft — niet de technische wijzigingen.
 
 ## 1. Wat de tool doet
 
-De tool bestaat uit een kennisbank (36 documenttypen in 7 categorieën) en een rekentool. Je kiest
+De tool bestaat uit een kennisbank (37 documenttypen in 7 categorieën) en een rekentool. Je kiest
 een documenttype, vult één datum in, en de tool geeft de laatste dag waarop het stuk bewaard moet
 blijven plus de dag waarop de termijn is verstreken.
 

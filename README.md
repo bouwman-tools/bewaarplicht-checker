@@ -9,7 +9,7 @@ de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelast
 ## Gebruik
 
 1. Open de tool via [bouwman.tools/bewaarplicht.html](https://bouwman.tools/bewaarplicht.html)
-2. **Kennisbank** — 36 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
+2. **Kennisbank** — 37 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
    of het een basisgegeven is
 3. **Einddatum berekenen** — kies een documenttype en vul de datum in waar dat type om vraagt. Welke
    datum dat is verschilt per type en staat onder het invoerveld
