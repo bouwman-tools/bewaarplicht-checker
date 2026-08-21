@@ -9,7 +9,7 @@ de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelast
 ## Gebruik
 
 1. Open de tool via [bouwman.tools/bewaarplicht.html](https://bouwman.tools/bewaarplicht.html)
-2. **Kennisbank** — 39 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
+2. **Kennisbank** — 40 documenttypen in 7 categorieën, met per type de termijn, het startmoment en
    of het een basisgegeven is
 3. **Einddatum berekenen** — kies een documenttype en vul de datum in waar dat type om vraagt. Welke
    datum dat is verschilt per type en staat onder het invoerveld
@@ -23,6 +23,7 @@ de Wet OB (onroerende zaken, eenloketsysteem), de Uitvoeringsregeling loonbelast
 | 10 jaar | Onroerende zaken: negen jaren volgend op het jaar van ingebruikneming | art. 34a Wet OB 1968 |
 | 10 jaar | OSS: tien jaar na afloop van het jaar van de handeling | art. 28rl, 28sj, 28tn Wet OB |
 | 5 jaar | Kopie identiteitsbewijs en opgaaf gegevens voor de loonheffingen | art. 7.5 lid 4 en 7.9 lid 2 URLB 2011 |
+| 5 jaar | Beschikking of verklaring ontvangen ván de werknemer; zelf aangevraagd is 7 jaar | Handboek Loonheffingen |
 | 5 jaar, vast | Wwft-cliëntonderzoek: bewaren én daarna vernietigen, vanaf einde zakelijke relatie | art. 33 lid 3 en 34a lid 3 Wwft |
 | 5 jaar, vast | Wwft-melding ongebruikelijke transactie, vanaf het tijdstip van de melding | art. 34 lid 2 en 34a lid 3 Wwft |
 | geen | Overig personeelsdossier, ziekteverzuimregistratie, sollicitatiegegevens | AVG, norminvulling AP |
@@ -111,7 +112,7 @@ verkeerde jaar op.
 npm test
 ```
 
-109 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
+113 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
 het HTML-bestand en draait die in een `vm`-sandbox. Die loader bewaakt ook dat de kern puur blijft:
 hij weigert DOM-toegang (`document.`, `window.`) en elk gebruik van `Date`.
 

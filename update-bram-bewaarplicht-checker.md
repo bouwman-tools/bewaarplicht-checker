@@ -372,21 +372,48 @@ vasthoudt. De tool adviseert nu ook uitdrukkelijk die twee technisch gescheiden 
 | Huur eindigt 2026, pand in gebruik sinds 2010 | t/m 31-12-2033 (art. 52 AWR na afloop huurperiode) |
 | Einde dienstbetrekking 10-01-2026, kopie identiteitsbewijs | t/m 31-12-2031 (niet 10-01-2031) |
 
-### Waar jouw oordeel het meest oplevert
+### Vier knopen die wij hebben doorgehakt
 
-Alle standpunten hierboven zijn van ons, dus overal is tegenspraak welkom. Deze vier wegen het
-zwaarst, omdat de wet er zelf geen uitsluitsel geeft:
+Op deze vier punten geeft de wet geen uitsluitsel en hebben wij zelf gekozen. De redenering staat
+erbij, zodat je kunt zien wáár je het eens of oneens bent.
 
-1. **Punt 2 en 8** — de lezing dat art. 34a ruim is in scope maar smal in termijn, en dat een
-   investeringsdienst daarom onder de zeven jaar van art. 52 AWR valt. Dit is de kern van onze
-   aanpassing en tegelijk de plek waar wij het meest interpreteren.
-2. **De Drebers-uitzondering** — in bijzondere gevallen kan een investeringsdienst een langere
-   herzieningsperiode vergen. Dat staat nu als waarschuwing bij het documenttype, niet als
-   rekenregel. Is dat de juiste plek?
-3. **Punt 4** — voor "beschikking/verklaring van de werknemer" blijft het Handboek de enige bron.
-   Heeft de voorzichtiger kant (zeven jaar via art. 52 AWR) de voorkeur, dan is dat één regel werk.
-4. **Punt 9** — de knip tussen loononderbouwing (zeven jaar) en verzuimregistratie (AP-richtsnoer
-   twee jaar). Werkbaar in de praktijk, of te fijnmazig?
+**1. Investeringsdienst vanaf € 30.000 → zeven jaar, geen kunstmatige tien.**
+Art. 13 Uitv.besch. OB maakt sinds 2026 juist uitdrukkelijk onderscheid tussen de onroerende zaak en
+de investeringsdienst, en voor die laatste geldt een herziening over effectief vijf boekjaren vanaf
+ingebruikneming van de dienst. De toelichting zegt zelfs dat die kortere periode bewust is gekozen.
+Art. 34a is ondertussen niet meegewijzigd. Voor een pand uit 1998 met een dakrenovatie in 2026 komt
+de factuur daarmee op art. 52 AWR: **t/m 31-12-2033**. Als kantoorbeleid mag je vrijwillig langer
+bewaren, maar de tool moet niet doen alsof tien jaar het wettelijke minimum is.
+
+**2. Drebers uit de standaardwaarschuwing.**
+Die stond bij élke onderhoudsfactuur, ook bij een schilderbeurt van € 400. Het kabinet zegt dat
+Drebers niet generiek mag worden toegepast; alleen bij bijvoorbeeld een aanzienlijke uitbreiding of
+grondige renovatie met de economische levensduur van een nieuw gebouw kan tien jaar in beeld komen.
+Bovendien kan de belastingplichtige zich erop beroepen zonder dat de termijn hem kan worden
+tegengeworpen. Daarmee is het een herzienings- en aftrekpunt, geen bewaarplichtwaarschuwing. De
+nuance staat nu bij de herzieningsbron (art. 13 Uitv.besch. OB).
+
+**3. Beschikking/verklaring gesplitst op herkomst.**
+Het Handboek is hier duidelijker dan wij eerst dachten: onder de afwijkende termijnen staat
+uitdrukkelijk "kopieën van beschikkingen of verklaringen die u van uw werknemer hebt gekregen", en
+§3.3.3 gebruikt dezelfde formulering. Daarom nu twee documenttypen:
+
+- ontvangen ván de werknemer → **5 jaar** (bij uitdienst in 2026: t/m 31-12-2031);
+- zelf aangevraagd of op gezamenlijk verzoek afgegeven → **7 jaar**, tenzij een eigen wettelijke
+  regel geldt.
+
+Voorbeelden als "doelgroepverklaring" zijn bewust uit de naam gehaald: juist daarvan verschilt de
+herkomst per geval, en dan zou de tool de grens die hij moet trekken zelf weer vertroebelen.
+
+**4. Knip verlof/verzuim behouden, met een expliciete instructie bij gemengde bestanden.**
+Het inhoudelijke onderscheid blijft. Maar de tool suggereert niet langer dat je bij één gemengde
+export simpelweg een van beide kunt kiezen — dan bewaar je óf fiscaal te kort, óf privacygevoelige
+verzuimdata zeven jaar zonder noodzaak. De regel is nu: bevat een bestand zowel loon- en
+ureninformatie als verzuimgegevens, maak dan vóór archivering een aparte fiscale export zonder de
+niet-noodzakelijke verzuimgegevens. Kan dat niet, dan is er voor dat bestand als geheel geen
+eenduidige bewaartermijn te geven.
+
+Alles hierboven is onze eigen invulling; tegenspraak blijft welkom, op deze vier punten het meest.
 
 ---
 

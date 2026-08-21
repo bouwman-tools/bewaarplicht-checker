@@ -8,7 +8,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import kern from './laad-kern.mjs';
+import kern, { plat } from './laad-kern.mjs';
 
 const {
   BRONNEN, DOCUMENT_TYPES, AANDACHTSPUNTEN,
@@ -249,6 +249,56 @@ test('een nog lopende primaire termijn is in beide richtingen niet onvolledig', 
     { datum: '2024-05-01', datum2: '' }, { jaar: 2026, maand: 8, dag: 21 });
   assert.equal(factuur.onvolledig, false);
   assert.equal(factuur.verstreken, false);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Vastgelegde inhoudelijke beslissingen. Dit zijn keuzes, geen wetmatigheden —
+// juist daarom moeten ze niet stil kunnen terugvallen.
+// ─────────────────────────────────────────────────────────────────────────────
+
+test('investeringsdienst: zeven jaar, geen kunstmatige tienjaarstermijn', () => {
+  // Pand uit 1998, dakrenovatie in gebruik 2026. Art. 34a is niet meegewijzigd
+  // bij de herzieningsregeling voor investeringsdiensten en blijft rekenen vanaf
+  // ingebruikneming van het góéd, dus de OB-klok liep in 2007 af.
+  const r = kern.berekenBewaarplicht('og-onderhoud',
+    { datum: '2026-06-01', datum2: '1998-01-01' }, { jaar: 2026, maand: 8, dag: 21 });
+  assert.deepEqual(plat(r.laatsteBewaardag), { jaar: 2033, maand: 12, dag: 31 });
+  assert.match(r.bepalend.grondslag, /52/, 'art. 52 AWR hoort hier bepalend te zijn');
+});
+
+test('Drebers staat niet als waarschuwing bij elke onderhoudsfactuur', () => {
+  // Het kabinet zegt dat Drebers niet generiek mag worden toegepast, en de
+  // termijn kan de belastingplichtige niet worden tegengeworpen. Een rode
+  // melding bij een schilderbeurt van € 400 is dus misplaatst. Het hoort bij de
+  // herziening, niet bij de bewaarplicht.
+  const doc = vindDocumentType('og-onderhoud');
+  assert.doesNotMatch(String(doc.waarschuwing || ''), /Drebers/);
+  assert.doesNotMatch(String(doc.toelichting || ''), /Drebers/);
+  assert.match(BRONNEN.ubob13.omschrijving, /Drebers/,
+    'de nuance hoort wel ergens te staan, namelijk bij de herzieningsbron');
+});
+
+test('beschikking/verklaring is gesplitst op herkomst, niet op documentsoort', () => {
+  const vanWerknemer = vindDocumentType('verklaring-werknemer');
+  const overig = vindDocumentType('beschikking-overig');
+  assert.equal(vanWerknemer.termijn, 5);
+  assert.equal(overig.termijn, 7);
+  // De vijfjaarscategorie geldt alleen voor wat je ván de werknemer krijgt.
+  assert.match(vanWerknemer.naam, /ván de werknemer/i);
+  // Voorbeelden waarvan de herkomst per geval verschilt horen niet in de naam:
+  // dan vertroebelt de tool de grens die hij juist moet trekken.
+  assert.doesNotMatch(vanWerknemer.naam, /doelgroepverklaring/i);
+  assert.match(String(vanWerknemer.waarschuwing || ''), /zelf aan|gezamenlijk verzoek/i);
+});
+
+test('bij gemengde bestanden zegt de tool: eerst splitsen', () => {
+  // Eén termijn kiezen voor een export met zowel uren als verzuimgegevens levert
+  // óf fiscaal te kort bewaren óf zeven jaar onnodige verzuimdata op.
+  const uren = vindDocumentType('verlof-uren');
+  const verzuim = vindDocumentType('verzuimregistratie');
+  assert.match(uren.waarschuwing, /aparte fiscale export|splits/i);
+  assert.match(uren.waarschuwing, /geen eenduidige bewaartermijn|niet.*eenduidig/i);
+  assert.match(verzuim.waarschuwing, /splits/i);
 });
 
 test('id, naam en datumLabel zijn uniek genoeg om niet te verwarren', () => {
