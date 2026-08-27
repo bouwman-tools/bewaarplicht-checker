@@ -3,6 +3,7 @@ name: Sync naar bouwman-tools
 on:
   push:
     branches: [main, master]
+  workflow_dispatch:
 
 jobs:
   sync:
