@@ -402,6 +402,51 @@ test('de code blijft benoemen dat het rekenanker een keuze van de tool is', () =
   assert.match(html, /praktische keuze van deze tool, geen letterlijke tekst van A85/);
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Het ankermoment van art. 34a Wet OB. Gesloten door de eigenaar op 06-09-2026:
+// het actualiteitscriterium van art. 52 AWR verschuift het wettelijke startmoment
+// niet. Aanleiding was de algemene webpagina van de Belastingdienst, waar de regel
+// "onroerende zaken — 10 jaar" vlak boven een blok staat dat het startmoment aan
+// de actualiteitswaarde ophangt.
+
+test('bij de twee typen met het 34a-anker staat waarom actualiteitswaarde dat anker niet verschuift', () => {
+  for (const id of ['og-akte', 'og-overig']) {
+    const doc = vindDocumentType(id);
+    assert.ok(doc.toelichting, `${id} heeft geen toelichting`);
+    assert.match(doc.toelichting, /negen jaren volgend op het jaar van ingebruikneming/i);
+    assert.match(doc.toelichting,
+      /actualiteitscriterium van art\. 52 AWR verschuift dit wettelijke startmoment niet/i,
+      `${id} legt niet uit waarom het anker niet meeschuift`);
+    assert.match(doc.toelichting, /zelfstandig een langere bewaarplicht/i,
+      `${id} zegt niet dat art. 52 AWR daarnaast langer kan verplichten`);
+    assert.ok((doc.bronnen || []).includes('bdConversie'),
+      `${id} verwijst niet naar de brochure waarin het onderscheid staat`);
+  }
+});
+
+test('de brochure onderbouwt het onderscheid tussen de twee startmomenten', () => {
+  // De algemene webpagina zet de tabelregel en het actualiteitsblok onder elkaar
+  // zonder te zeggen waarop dat blok ziet. Brochure AL 040 par. 1.2 doet dat wel:
+  // actualiteitswaarde hoort bij de zeven jaar, en een bijzondere wettelijke
+  // bepaling houdt haar eigen anker. Zonder die passage in de bron kan de lezer
+  // de keuze van de tool niet natrekken.
+  assert.match(BRONNEN.bdConversie.omschrijving, /Paragraaf 1\.2/);
+  assert.match(BRONNEN.bdConversie.omschrijving, /Vervalt de actualiteitswaarde/);
+  assert.match(BRONNEN.bdConversie.omschrijving,
+    /9 jaar, volgend op het jaar waarin het vastgoed in gebruik is genomen/);
+  assert.match(BRONNEN.bdConversie.omschrijving, /eigen anker/i);
+});
+
+test('het optionele tweede veld waarschuwt dat art. 52 AWR anders buiten beeld blijft', () => {
+  // Het veld blijft optioneel — dat is de keuze van de eigenaar — maar wie het
+  // leeg laat, moet weten dat de tool dan maar één van de twee klokken rekent.
+  const doc = vindDocumentType('og-akte');
+  assert.match(doc.tweedeTermijn.datumHint, /zelfstandig de gewone zevenjaarstermijn van art\. 52 AWR/i);
+  assert.match(doc.tweedeTermijn.datumHint, /buiten beeld/i);
+  assert.doesNotMatch(doc.tweedeTermijn.datumHint, /Laat leeg om alleen de OB-termijn te zien/i,
+    'de oude hint nodigde uit het veld leeg te laten');
+});
+
 test('het NVKS-overgangsrecht is niet absoluut geformuleerd', () => {
   // Niet ieder kantoor zonder vergunning valt automatisch tot 1-1-2027 onder de
   // NVKS: het mág onder de overgangsvoorwaarden, en eerder overstappen kan ook.

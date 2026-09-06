@@ -54,6 +54,13 @@ Twee valkuilen die de tool expliciet afvangt:
   daarom vooraan — die geldt altijd — met de OB-klok als optioneel tweede veld. Bij stukken die het
   pand zelf betreffen (akte, overige gegevens) is het andersom. De tool berekent beide en neemt de
   laatst aflopende termijn.
+- **Het actualiteitscriterium verschuift het anker van art. 34a niet.** De algemene webpagina van de
+  Belastingdienst zet de regel "onroerende zaken — 10 jaar" vlak boven een blok dat het startmoment
+  aan de actualiteitswaarde ophangt, wat de indruk wekt dat de klok pas bij verkoop of sloop gaat
+  lopen. Brochure AL 040 par. 1.2 scheidt die twee: het actualiteitscriterium hoort bij de
+  zevenjaarstermijn, en een bijzondere wettelijke bepaling houdt haar eigen anker. De tool rekent
+  daarom vanaf de ingebruikneming en maakt in de toelichting duidelijk dat art. 52 AWR daarnaast
+  zelfstandig tot langer bewaren kan verplichten.
 - **Ontbreekt de tweede datum en is de eerste termijn verstreken, dan zegt de tool "onvolledig"** in
   plaats van "verstreken". Dat voorkomt een vernietigingssignaal voor een stuk waarop de andere klok
   nog kan lopen.

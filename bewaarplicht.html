@@ -573,7 +573,15 @@ const BRONNEN = {
     url: 'https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/uw_geautomatiseerde_administratie_en_de_fiscale_bewaarplicht',
     omschrijving: 'De vijf voorwaarden voor conversie naar een andere gegevensdrager, de regel dat een ' +
       'balans en staat van baten en lasten op papier niet mag worden geconverteerd, en de eis dat van ' +
-      'douanedocumenten die de rechten bij in- of uitvoer bepalen het origineel bewaard blijft.',
+      'douanedocumenten die de rechten bij in- of uitvoer bepalen het origineel bewaard blijft. ' +
+      'Paragraaf 1.2 scheidt bovendien de twee startmomenten die op de algemene webpagina door ' +
+      'elkaar lopen: het actualiteitscriterium hoort bij de gewone zevenjaarstermijn — “Vervalt ' +
+      'de actualiteitswaarde? Dan begint de bewaartermijn van 7 jaar”, met een huurcontract van vijf ' +
+      'jaar als voorbeeld — en daarna volgt afzonderlijk: “Soms is door andere wettelijke ' +
+      'bepalingen de termijn langer dan 7 jaar. Voor de btw (omzetbelasting) geldt bijvoorbeeld voor ' +
+      'onroerende zaken een bewaartermijn van 9 jaar, volgend op het jaar waarin het vastgoed in ' +
+      'gebruik is genomen.” Een bijzondere wettelijke termijn heeft dus een eigen anker; het ' +
+      'actualiteitscriterium verschuift dat niet.',
   },
   ob34a: {
     icoon: '⚖️', kort: 'art. 34a Wet OB', host: 'wetten.overheid.nl',
@@ -863,6 +871,18 @@ const OG_TEKST_34A = 'negen jaren volgend op het jaar van ingebruikneming (art. 
 // Vastgesteld door de eigenaar op 06-09-2026 en letterlijk over te nemen: de
 // eerdere formulering ("start geen nieuwe bewaartermijn") was te absoluut, want
 // zij ontkende de algemene bewaarplicht die op het latere stuk zelf blijft rusten.
+// Vastgesteld door de eigenaar op 06-09-2026. De tabelregel “onroerende zaken — 10 jaar” op de
+// algemene webpagina van de Belastingdienst staat vlak boven een blok dat het startmoment aan de
+// actualiteitswaarde ophangt. Wie alleen die pagina leest, komt uit op verkoop of sloop als anker.
+// De brochure AL 040 par. 1.2 laat zien dat dat niet klopt: het actualiteitscriterium hoort bij de
+// zevenjaarstermijn, en een bijzondere wettelijke bepaling houdt haar eigen anker. Daarom blijft het
+// tweede veld hier optioneel en wordt de ingebruikneming niet vervangen.
+const OG_34A_ANKER =
+  'De bijzondere bewaartermijn van art. 34a Wet OB loopt gedurende negen jaren volgend op het jaar ' +
+  'van ingebruikneming. Het algemene actualiteitscriterium van art. 52 AWR verschuift dit ' +
+  'wettelijke startmoment niet. Voor hetzelfde document kan art. 52 AWR wel zelfstandig een langere ' +
+  'bewaarplicht opleveren.';
+
 const OG_LATER_DOCUMENT =
   'Een later document over het pand, zoals een onderhoudsfactuur of nieuwe huurovereenkomst, start ' +
   'niet opnieuw de bijzondere bewaartermijn van art. 34a Wet OB. Voor dat document kan wel een ' +
@@ -884,8 +904,10 @@ const OG_TWEEDE_TERMIJN = {
   termijn: 7,
   datumLabel: 'Datum waarop dit stuk zijn actuele waarde verliest (optioneel)',
   datumHint: 'Bijvoorbeeld de verkoop of sloop van het pand, of het einde van de huurperiode. Naast ' +
-    'de OB-termijn loopt op dit stuk ook de gewone zevenjaarstermijn van art. 52 AWR; de langste van ' +
-    'de twee is bepalend. Laat leeg om alleen de OB-termijn te zien.',
+    'de OB-termijn rust op dit stuk zelfstandig de gewone zevenjaarstermijn van art. 52 AWR. Die ' +
+    'begint pas zodra het stuk zijn actuele waarde verliest en kan daardoor later aflopen dan de ' +
+    'OB-termijn; de langste van de twee is bepalend. Laat u dit veld leeg, dan rekent de tool alleen ' +
+    'de OB-termijn en blijft die tweede bewaarplicht buiten beeld.',
   grondslag: 'art. 52 lid 4 AWR — zeven jaar op het stuk zelf',
 };
 
@@ -1299,10 +1321,10 @@ const DOCUMENT_TYPES = [
     basis: false, basisNoot: 'Eigen wettelijke termijn in de Wet OB.',
     primaireGrondslag: OG_PRIMAIRE_GRONDSLAG, termijnTekst: OG_TEKST_34A,
     tweedeTermijn: OG_TWEEDE_TERMIJN,
-    toelichting: 'Negen jaren volgend op het jaar van ingebruikneming; samen met dat jaar tien ' +
-      'boekjaren — en zo noemt de Belastingdienst het ook. Die termijn loopt één op één mee met de ' +
+    toelichting: OG_34A_ANKER + ' Samen met het jaar van ingebruikneming zijn dat tien boekjaren, ' +
+      'en zo noemt de Belastingdienst het ook; die termijn loopt één op één mee met de ' +
       'btw-herzieningsperiode van art. 13 lid 2 Uitv.besch. OB.',
-    bronnen: ['ob34a', 'ubob13', 'bdBewaartermijnen', 'awr52'],
+    bronnen: ['ob34a', 'ubob13', 'bdBewaartermijnen', 'bdConversie', 'awr52'],
   },
   {
     id: 'og-onderhoud', categorie: 'og', naam: 'Onderhouds- of investeringsfactuur onroerende zaak',
@@ -1354,9 +1376,10 @@ const DOCUMENT_TYPES = [
     basis: false, basisNoot: 'Eigen wettelijke termijn in de Wet OB.',
     primaireGrondslag: OG_PRIMAIRE_GRONDSLAG, termijnTekst: OG_TEKST_34A,
     tweedeTermijn: OG_TWEEDE_TERMIJN,
+    toelichting: OG_34A_ANKER,
     // awr52 hoort erbij omdat dit documenttype een tweede termijn kent die
     // daarop is gegrond; zonder die bron mist de grondslagregel die link.
-    bronnen: ['ob34a', 'awr52', 'bdBewaartermijnen'],
+    bronnen: ['ob34a', 'awr52', 'bdBewaartermijnen', 'bdConversie'],
   },
 
   // ── Bijzondere btw-regelingen ──────────────────────────────────────────────
