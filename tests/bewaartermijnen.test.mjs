@@ -24,6 +24,7 @@ import kern, { plat } from './laad-kern.mjs';
 const {
   DOCUMENT_TYPES, CATEGORIEEN, BRONNEN, AANDACHTSPUNTEN,
   berekenBewaarplicht, vindDocumentType, documentenInCategorie, formatDatumNl,
+  vergelijkDatum,
 } = kern;
 
 const d = (jaar, maand, dag) => ({ jaar, maand, dag });
@@ -193,6 +194,56 @@ describe('onroerende zaken (art. 34a Wet OB) — negen jaren ná ingebruikneming
     assert.equal(r.tweedeOngeldig, true);
     assert.equal(r.termijnen.length, 1);
     assert.equal(r.status, 'ok', 'de primaire berekening blijft gewoon geldig');
+  });
+
+  // REKENREGEL (eigenaar, 06-09-2026): art. 34a Wet OB mag er nooit toe leiden
+  // dat een stuk eerder weg mag dan de algemene bewaartermijn op het stuk zelf
+  // toestaat. Bij een pand uit 2010 en een onderhoudsfactuur uit 2026 is de
+  // OB-termijn verstreken, maar op die factuur begint de gewone termijn dan nog
+  // te lopen. Deze toets bewaakt dat de uitkomst daar nooit onder komt.
+  test('de uitkomst komt nooit lager uit dan de algemene termijn op het stuk zelf', () => {
+    const peil = d(2026, 8, 21);
+    const jaren = [1995, 2010, 2018, 2024, 2026, 2030];
+    for (const doc of documentenInCategorie('og')) {
+      for (const j1 of jaren) {
+        for (const j2 of jaren) {
+          const r = reken(doc.id, `${j1}-07-01`, peil, `${j2}-07-01`);
+          const algemeen = r.termijnen.find((t) => /52/.test(t.grondslag || ''));
+          assert.ok(algemeen,
+            `${doc.id}: art. 52 AWR komt in de uitkomst niet voor, dus de algemene termijn ` +
+            'kan niet worden gewaarborgd');
+          assert.ok(
+            vergelijkDatum(r.laatsteBewaardag, algemeen.termijn.laatsteBewaardag) >= 0,
+            `${doc.id} (stuk ${j1}, pand ${j2}): de uitkomst valt vóór de algemene termijn ` +
+            'op het stuk zelf'
+          );
+        }
+      }
+    }
+  });
+
+  test('valt de algemene termijn niet te berekenen, dan is de uitkomst onvolledig', () => {
+    // Bij een akte draagt het tweede veld de algemene termijn. Ontbreekt dat
+    // veld en is art. 34a verstreken, dan mag de tool geen vernietigingssignaal
+    // geven: zij weet dan niet of de termijn op het stuk zelf nog loopt.
+    const r = reken('og-akte', '1995-07-01', d(2026, 8, 21), '');
+    assert.equal(r.termijnen.length, 1);
+    assert.equal(r.onvolledig, true);
+  });
+
+  test('een later document over het pand houdt zijn eigen algemene bewaartermijn', () => {
+    // De eerdere formulering ("start géén nieuwe tienjaarsklok") was te absoluut:
+    // zij ontkende de bewaarplicht die op het latere stuk zelf blijft rusten.
+    for (const id of ['og-onderhoud', 'og-huur-verhuurder']) {
+      const doc = vindDocumentType(id);
+      assert.match(doc.toelichting,
+        /start niet opnieuw de bijzondere bewaartermijn van art\. 34a Wet OB/,
+        `${id} zegt niet dat alleen de bijzondere termijn niet opnieuw begint`);
+      assert.match(doc.toelichting, /algemene administratie- en bewaarplicht/,
+        `${id} noemt de eigen bewaartermijn van het latere stuk niet`);
+      assert.doesNotMatch(doc.toelichting, /start géén nieuwe tienjaarsklok/i,
+        `${id} bevat nog de te absolute formulering`);
+    }
   });
 
   test('elk onroerendezaak-type kent beide klokken en vraagt nergens de transportdatum', () => {

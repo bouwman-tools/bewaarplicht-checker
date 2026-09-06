@@ -46,8 +46,11 @@ Twee valkuilen die de tool expliciet afvangt:
   Bij hetzelfde ankerjaar 2022 is dat 31-12-2031 tegen 31-12-2032.
 - **Bij onroerende zaken lopen twee termijnen naast elkaar**, en welke vooraan staat verschilt per
   documenttype. Art. 34a is ruim in scope maar smal in termijn: de klok hangt aan de ingebruikneming
-  van het *pand*, niet aan het stuk, dus onderhoud of een nieuw huurcontract start geen nieuwe
-  tienjaarsklok. Bij stukken met een eigen ankermoment (factuur, huurovereenkomst) staat art. 52 AWR
+  van het *pand*, niet aan het stuk. Een later document over het pand, zoals een onderhoudsfactuur
+  of nieuwe huurovereenkomst, start dus niet opnieuw die bijzondere termijn — maar het houdt wel
+  zijn eigen bewaartermijn op grond van de algemene administratie- en bewaarplicht, en de uitkomst
+  komt nooit lager uit dan die algemene termijn.
+  Bij stukken met een eigen ankermoment (factuur, huurovereenkomst) staat art. 52 AWR
   daarom vooraan — die geldt altijd — met de OB-klok als optioneel tweede veld. Bij stukken die het
   pand zelf betreffen (akte, overige gegevens) is het andersom. De tool berekent beide en neemt de
   laatst aflopende termijn.

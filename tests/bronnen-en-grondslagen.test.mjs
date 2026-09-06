@@ -8,7 +8,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import kern, { plat } from './laad-kern.mjs';
+import kern, { plat, html } from './laad-kern.mjs';
 
 const {
   BRONNEN, DOCUMENT_TYPES, AANDACHTSPUNTEN,
@@ -307,6 +307,37 @@ test('bij gemengde bestanden zegt de tool: eerst splitsen', () => {
   assert.match(verzuim.waarschuwing, /splits/i);
 });
 
+test('overig personeelsdossier sluit de fiscale bewaarplicht niet absoluut uit', () => {
+  // Art. 52 AWR kijkt naar het belang van gegevens voor de administratie en de
+  // belastingheffing; de kring van administratie kan ruimer zijn dan de vijf
+  // basisadministraties. "Valt buiten de fiscale bewaarplicht" is daarom te sterk.
+  // Wat wél klopt: een beoordelingsverslag wordt geen loonadministratie doordat
+  // het naast een loonstaat is opgeslagen.
+  const doc = vindDocumentType('personeelsdossier-overig');
+  assert.match(doc.toelichting, /in de regel niet tot de fiscale loonadministratie/i);
+  assert.doesNotMatch(doc.toelichting, /(hoort niet bij|valt buiten) de fiscale bewaarplicht/i);
+  // De scheiding met het fiscale minimum blijft expliciet benoemd.
+  assert.match(doc.toelichting, /AVG-maximum verward met een fiscaal minimum/);
+});
+
+test('de uitzondering bij een geschil is doelgericht en geen algemene verlenging', () => {
+  // Langer bewaren mag voor de stukken die nodig zijn voor een rechtsvordering,
+  // zolang dat belang bestaat — niet het hele dossier voor de zekerheid.
+  const doc = vindDocumentType('personeelsdossier-overig');
+  assert.match(doc.indicatief, /maximaal twee jaar na uitdiensttreding/i,
+    'de AVG-norminvulling van twee jaar blijft de standaardwaarde');
+  assert.match(doc.indicatief, /instellen, uitoefenen of onderbouwen van een rechtsvordering/i);
+  assert.match(doc.indicatief, /zolang dat concrete belang bestaat/i);
+  assert.match(doc.indicatief, /geen algemene verlenging/i);
+});
+
+test('het aandachtspunt over AVG-maximum versus fiscaal minimum blijft bestaan', () => {
+  const kaart = AANDACHTSPUNTEN.find((n) => /AVG-maximum/i.test(n.titel));
+  assert.ok(kaart, 'de waarschuwing dat een AVG-maximum geen fiscaal minimum is, ontbreekt');
+  assert.match(kaart.body, /moet<\/em> bewaren/);
+  assert.match(kaart.body, /mag<\/em> /);
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Accountancy: de bewaarplicht van de accountant zelf, niet die van de cliënt.
 // Beide lopen op de datumklok en hebben een eigen startmoment.
@@ -345,6 +376,30 @@ test('de afsluitdatum geldt onder beide regimes en is als keuze uitgelegd', () =
   assert.match(doc.waarschuwing, /nooit te kort/i);
   assert.match(BRONNEN.qms1.omschrijving, /A85/);
   assert.match(BRONNEN.qms1.omschrijving, /geen afzonderlijk startanker/i);
+});
+
+test('par. 31(f) SKM 1 wordt niet als zelfstandige zevenjaarsplicht gepresenteerd', () => {
+  // Par. 31(f) verplicht tot beleid en procedures voor het bewaren van
+  // opdrachtdocumentatie; een termijn staat er niet in. A85 draagt het kantoor op
+  // de termijn zelf te bepalen waar die niet is voorgeschreven, en noemt de zeven
+  // jaar vanaf de rapportagedatum alleen voor controle- en assurance-opdrachten.
+  // Voor samenstellen mag de tool die zeven jaar dus niet aan par. 31(f) ophangen.
+  assert.match(BRONNEN.qms1.omschrijving, /beleid en procedures/i);
+  assert.match(BRONNEN.qms1.omschrijving, /noemt zelf geen termijn/i);
+  assert.doesNotMatch(BRONNEN.qms1.omschrijving, /(ten ?minste|tenminste) zeven jaar bewaard/i,
+    'de bronkaart schrijft de zeven jaar nog aan par. 31(f) zelf toe');
+
+  const doc = vindDocumentType('opdrachtdossier');
+  assert.match(doc.toelichting, /praktisch rekenanker/i);
+  assert.match(doc.toelichting, /A85 noemt voor deze opdrachten geen afzonderlijk startmoment/);
+  assert.doesNotMatch(doc.toelichting, /par\. 31\(f\)/i,
+    'de toelichting hangt de termijn nog aan par. 31(f) op');
+});
+
+test('de code blijft benoemen dat het rekenanker een keuze van de tool is', () => {
+  // Deze transparantie hoort bij de keuze: wie de kern leest moet zien dat de
+  // afsluitdatum niet uit de tekst van A85 volgt.
+  assert.match(html, /praktische keuze van deze tool, geen letterlijke tekst van A85/);
 });
 
 test('het NVKS-overgangsrecht is niet absoluut geformuleerd', () => {
