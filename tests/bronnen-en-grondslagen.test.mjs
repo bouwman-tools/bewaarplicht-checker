@@ -378,22 +378,34 @@ test('de afsluitdatum geldt onder beide regimes en is als keuze uitgelegd', () =
   assert.match(BRONNEN.qms1.omschrijving, /geen afzonderlijk startanker/i);
 });
 
-test('par. 31(f) SKM 1 wordt niet als zelfstandige zevenjaarsplicht gepresenteerd', () => {
-  // Par. 31(f) verplicht tot beleid en procedures voor het bewaren van
-  // opdrachtdocumentatie; een termijn staat er niet in. A85 draagt het kantoor op
-  // de termijn zelf te bepalen waar die niet is voorgeschreven, en noemt de zeven
-  // jaar vanaf de rapportagedatum alleen voor controle- en assurance-opdrachten.
-  // Voor samenstellen mag de tool die zeven jaar dus niet aan par. 31(f) ophangen.
-  assert.match(BRONNEN.qms1.omschrijving, /beleid en procedures/i);
-  assert.match(BRONNEN.qms1.omschrijving, /noemt zelf geen termijn/i);
-  assert.doesNotMatch(BRONNEN.qms1.omschrijving, /(ten ?minste|tenminste) zeven jaar bewaard/i,
-    'de bronkaart schrijft de zeven jaar nog aan par. 31(f) zelf toe');
+test('de bronkaart citeert par. 31(f) letterlijk in plaats van hem samen te vatten', () => {
+  // Nagelezen in de HRA-tekst op nba.nl op 06-09-2026: par. 31 is een lijst
+  // kwaliteitsdoelstellingen met zes onderdelen (ol type="a"), en onderdeel f is het
+  // zesde. Daar staat letterlijk "tenminste zeven jaar bewaard". Een eerdere versie
+  // van deze kaart beweerde dat de paragraaf zelf geen termijn noemde; dat was
+  // onjuist. Een letterlijk citaat kan die fout niet opnieuw maken.
+  assert.match(BRONNEN.qms1.omschrijving, /kwaliteitsdoelstellingen vast te stellen/i);
+  assert.match(BRONNEN.qms1.omschrijving, /tenminste zeven jaar bewaard/,
+    'de kaart citeert de termijn niet die in onderdeel f zelf staat');
+  assert.doesNotMatch(BRONNEN.qms1.omschrijving, /noemt zelf geen termijn/i,
+    'de weerlegde bewering staat er nog');
+});
+
+test('alleen het startmoment van A85 wordt tot controle en assurance beperkt', () => {
+  // Wat eruit ging is niet de zeven jaar maar de suggestie dat A85 ook voor
+  // samenstellen een startmoment geeft. A85 koppelt de zeven jaar aan de datum van
+  // de opdrachtrapportage, of de latere groepscontroleverklaring, en doet dat
+  // uitsluitend voor opdrachten volgens de standaarden voor controle of assurance.
+  assert.match(BRONNEN.qms1.omschrijving, /geen afzonderlijk startanker/i);
+  assert.match(BRONNEN.qms1.omschrijving, /alleen het startmoment uit/i);
+  assert.match(BRONNEN.qms1.omschrijving, /geldt voor het hele toepassingsgebied/i,
+    'de kaart zegt niet dat de zeven jaar voor het hele toepassingsgebied geldt');
 
   const doc = vindDocumentType('opdrachtdossier');
   assert.match(doc.toelichting, /praktisch rekenanker/i);
   assert.match(doc.toelichting, /A85 noemt voor deze opdrachten geen afzonderlijk startmoment/);
   assert.doesNotMatch(doc.toelichting, /par\. 31\(f\)/i,
-    'de toelichting hangt de termijn nog aan par. 31(f) op');
+    'de toelichting hangt het startmoment nog aan par. 31(f) op');
 });
 
 test('de code blijft benoemen dat het rekenanker een keuze van de tool is', () => {

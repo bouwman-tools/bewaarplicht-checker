@@ -745,16 +745,29 @@ const BRONNEN = {
     icoon: '\u{1F4BC}', kort: 'SKM 1, par. 31(f)', host: 'nba.nl',
     titel: 'Standaard voor kwaliteitsmanagement 1 (SKM 1, NBA) — opdrachtdocumentatie',
     url: 'https://www.nba.nl/wet--en-regelgeving/hra/1619/1600/',
-    omschrijving: 'Par. 31(f) verplicht het kantoor beleid en procedures te hebben voor het bewaren ' +
-      'en onderhouden van opdrachtdocumentatie, voor alle opdrachten binnen het toepassingsgebied: ' +
-      'controle, beoordeling, andere assurance, en aan assurance verwante opdrachten zoals ' +
-      'samenstellen en overeengekomen specifieke werkzaamheden. De paragraaf noemt zelf geen ' +
-      'termijn: A85 draagt het kantoor op de bewaartermijn te bepalen waar die niet is ' +
-      'voorgeschreven, en koppelt de zeven jaar uitdrukkelijk aan de datum van de opdrachtrapportage ' +
-      'voor controle- en assurance-opdrachten. Voor de aan assurance verwante opdrachten geeft A85 ' +
-      'geen afzonderlijk startanker. De NBA-transponeringstabel brengt art. 25 lid 1 onderdeel e ' +
-      'NVKS over naar par. 31(f). Deze standaard vervangt de NVKS zodra het overgangsrecht van ' +
-      'art. 6 NVKM is uitgewerkt.',
+    // Nagelezen in HRA 2026 op 06-09-2026. Par. 31 is een lijst kwaliteitsdoelstellingen
+    // met een <ol type="a"> van zes onderdelen; onderdeel f is het zesde en bevat
+    // letterlijk "tenminste zeven jaar bewaard". Deze kaart citeert daarom en vat niet
+    // samen. De zeven jaar blijft daarmee staan voor het hele toepassingsgebied; wat
+    // eruit ging is de suggestie dat A85 ook voor samenstellen een startmoment geeft.
+    omschrijving: 'Par. 31 verplicht het kantoor kwaliteitsdoelstellingen vast te stellen voor de ' +
+      'uitvoering van opdrachten. Onderdeel f luidt: de opdrachtdocumentatie “wordt tijdig ' +
+      'samengevoegd na de datum van de opdrachtrapportage en wordt op passende wijze bijgehouden en ' +
+      'tenminste zeven jaar bewaard om te voldoen aan: de behoeften van het kantoor; en wet- en ' +
+      'regelgeving, relevante ethische voorschriften of professionele standaarden”. Het ' +
+      'toepassingsgebied van deze standaard omvat controle, beoordeling, andere assurance, en aan ' +
+      'assurance verwante opdrachten zoals samenstellen (par. 1). Een startmoment voor die zeven ' +
+      'jaar noemt onderdeel f niet. A85 noemt er wel een, maar uitsluitend voor opdrachten ' +
+      'uitgevoerd volgens de standaarden voor controle- of assurance-opdrachten: zeven jaar vanaf ' +
+      'de datum van de opdrachtrapportage, of vanaf de controleverklaring betreffende de ' +
+      'financiële overzichten van de groep als die later valt. Voor de aan assurance verwante ' +
+      'opdrachten geeft A85 geen afzonderlijk startanker; waar geen bewaartermijn is voorgeschreven ' +
+      'kan het kantoor de aard van de opdrachten en zijn eigen omstandigheden in aanmerking nemen. ' +
+      'De zeven jaar staat dus in de eis zelf en geldt voor het hele toepassingsgebied; A85 werkt ' +
+      'alleen het startmoment uit, en doet dat niet voor samenstellen. Vandaar dat deze tool voor ' +
+      'die opdrachten een praktisch rekenanker kiest en dat erbij zegt. De NBA-transponeringstabel ' +
+      'brengt art. 25 lid 1 onderdeel e NVKS over naar par. 31(f). Deze standaard vervangt de NVKS ' +
+      'zodra het overgangsrecht van art. 6 NVKM is uitgewerkt.',
   },
   bw3307: {
     icoon: '⚖️', kort: 'art. 3:307 BW', host: 'wetten.overheid.nl',
