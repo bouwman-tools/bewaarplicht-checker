@@ -8,7 +8,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import kern, { plat } from './laad-kern.mjs';
+import kern, { plat, html } from './laad-kern.mjs';
 
 const {
   BRONNEN, DOCUMENT_TYPES, AANDACHTSPUNTEN,
@@ -307,6 +307,37 @@ test('bij gemengde bestanden zegt de tool: eerst splitsen', () => {
   assert.match(verzuim.waarschuwing, /splits/i);
 });
 
+test('overig personeelsdossier sluit de fiscale bewaarplicht niet absoluut uit', () => {
+  // Art. 52 AWR kijkt naar het belang van gegevens voor de administratie en de
+  // belastingheffing; de kring van administratie kan ruimer zijn dan de vijf
+  // basisadministraties. "Valt buiten de fiscale bewaarplicht" is daarom te sterk.
+  // Wat wél klopt: een beoordelingsverslag wordt geen loonadministratie doordat
+  // het naast een loonstaat is opgeslagen.
+  const doc = vindDocumentType('personeelsdossier-overig');
+  assert.match(doc.toelichting, /in de regel niet tot de fiscale loonadministratie/i);
+  assert.doesNotMatch(doc.toelichting, /(hoort niet bij|valt buiten) de fiscale bewaarplicht/i);
+  // De scheiding met het fiscale minimum blijft expliciet benoemd.
+  assert.match(doc.toelichting, /AVG-maximum verward met een fiscaal minimum/);
+});
+
+test('de uitzondering bij een geschil is doelgericht en geen algemene verlenging', () => {
+  // Langer bewaren mag voor de stukken die nodig zijn voor een rechtsvordering,
+  // zolang dat belang bestaat — niet het hele dossier voor de zekerheid.
+  const doc = vindDocumentType('personeelsdossier-overig');
+  assert.match(doc.indicatief, /maximaal twee jaar na uitdiensttreding/i,
+    'de AVG-norminvulling van twee jaar blijft de standaardwaarde');
+  assert.match(doc.indicatief, /instellen, uitoefenen of onderbouwen van een rechtsvordering/i);
+  assert.match(doc.indicatief, /zolang dat concrete belang bestaat/i);
+  assert.match(doc.indicatief, /geen algemene verlenging/i);
+});
+
+test('het aandachtspunt over AVG-maximum versus fiscaal minimum blijft bestaan', () => {
+  const kaart = AANDACHTSPUNTEN.find((n) => /AVG-maximum/i.test(n.titel));
+  assert.ok(kaart, 'de waarschuwing dat een AVG-maximum geen fiscaal minimum is, ontbreekt');
+  assert.match(kaart.body, /moet<\/em> bewaren/);
+  assert.match(kaart.body, /mag<\/em> /);
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Accountancy: de bewaarplicht van de accountant zelf, niet die van de cliënt.
 // Beide lopen op de datumklok en hebben een eigen startmoment.
@@ -345,6 +376,87 @@ test('de afsluitdatum geldt onder beide regimes en is als keuze uitgelegd', () =
   assert.match(doc.waarschuwing, /nooit te kort/i);
   assert.match(BRONNEN.qms1.omschrijving, /A85/);
   assert.match(BRONNEN.qms1.omschrijving, /geen afzonderlijk startanker/i);
+});
+
+test('de bronkaart citeert par. 31(f) letterlijk in plaats van hem samen te vatten', () => {
+  // Nagelezen in de HRA-tekst op nba.nl op 06-09-2026: par. 31 is een lijst
+  // kwaliteitsdoelstellingen met zes onderdelen (ol type="a"), en onderdeel f is het
+  // zesde. Daar staat letterlijk "tenminste zeven jaar bewaard". Een eerdere versie
+  // van deze kaart beweerde dat de paragraaf zelf geen termijn noemde; dat was
+  // onjuist. Een letterlijk citaat kan die fout niet opnieuw maken.
+  assert.match(BRONNEN.qms1.omschrijving, /kwaliteitsdoelstellingen vast te stellen/i);
+  assert.match(BRONNEN.qms1.omschrijving, /tenminste zeven jaar bewaard/,
+    'de kaart citeert de termijn niet die in onderdeel f zelf staat');
+  assert.doesNotMatch(BRONNEN.qms1.omschrijving, /noemt zelf geen termijn/i,
+    'de weerlegde bewering staat er nog');
+});
+
+test('alleen het startmoment van A85 wordt tot controle en assurance beperkt', () => {
+  // Wat eruit ging is niet de zeven jaar maar de suggestie dat A85 ook voor
+  // samenstellen een startmoment geeft. A85 koppelt de zeven jaar aan de datum van
+  // de opdrachtrapportage, of de latere groepscontroleverklaring, en doet dat
+  // uitsluitend voor opdrachten volgens de standaarden voor controle of assurance.
+  assert.match(BRONNEN.qms1.omschrijving, /geen afzonderlijk startanker/i);
+  assert.match(BRONNEN.qms1.omschrijving, /alleen het startmoment uit/i);
+  assert.match(BRONNEN.qms1.omschrijving, /geldt voor het hele toepassingsgebied/i,
+    'de kaart zegt niet dat de zeven jaar voor het hele toepassingsgebied geldt');
+
+  const doc = vindDocumentType('opdrachtdossier');
+  assert.match(doc.toelichting, /praktisch rekenanker/i);
+  assert.match(doc.toelichting, /A85 noemt voor deze opdrachten geen afzonderlijk startmoment/);
+  assert.doesNotMatch(doc.toelichting, /par\. 31\(f\)/i,
+    'de toelichting hangt het startmoment nog aan par. 31(f) op');
+});
+
+test('de code blijft benoemen dat het rekenanker een keuze van de tool is', () => {
+  // Deze transparantie hoort bij de keuze: wie de kern leest moet zien dat de
+  // afsluitdatum niet uit de tekst van A85 volgt.
+  assert.match(html, /praktische keuze van deze tool, geen letterlijke tekst van A85/);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Het ankermoment van art. 34a Wet OB. Gesloten door de eigenaar op 06-09-2026:
+// het actualiteitscriterium van art. 52 AWR verschuift het wettelijke startmoment
+// niet. Aanleiding was de algemene webpagina van de Belastingdienst, waar de regel
+// "onroerende zaken — 10 jaar" vlak boven een blok staat dat het startmoment aan
+// de actualiteitswaarde ophangt.
+
+test('bij de twee typen met het 34a-anker staat waarom actualiteitswaarde dat anker niet verschuift', () => {
+  for (const id of ['og-akte', 'og-overig']) {
+    const doc = vindDocumentType(id);
+    assert.ok(doc.toelichting, `${id} heeft geen toelichting`);
+    assert.match(doc.toelichting, /negen jaren volgend op het jaar van ingebruikneming/i);
+    assert.match(doc.toelichting,
+      /actualiteitscriterium van art\. 52 AWR verschuift dit wettelijke startmoment niet/i,
+      `${id} legt niet uit waarom het anker niet meeschuift`);
+    assert.match(doc.toelichting, /zelfstandig een langere bewaarplicht/i,
+      `${id} zegt niet dat art. 52 AWR daarnaast langer kan verplichten`);
+    assert.ok((doc.bronnen || []).includes('bdConversie'),
+      `${id} verwijst niet naar de brochure waarin het onderscheid staat`);
+  }
+});
+
+test('de brochure onderbouwt het onderscheid tussen de twee startmomenten', () => {
+  // De algemene webpagina zet de tabelregel en het actualiteitsblok onder elkaar
+  // zonder te zeggen waarop dat blok ziet. Brochure AL 040 par. 1.2 doet dat wel:
+  // actualiteitswaarde hoort bij de zeven jaar, en een bijzondere wettelijke
+  // bepaling houdt haar eigen anker. Zonder die passage in de bron kan de lezer
+  // de keuze van de tool niet natrekken.
+  assert.match(BRONNEN.bdConversie.omschrijving, /Paragraaf 1\.2/);
+  assert.match(BRONNEN.bdConversie.omschrijving, /Vervalt de actualiteitswaarde/);
+  assert.match(BRONNEN.bdConversie.omschrijving,
+    /9 jaar, volgend op het jaar waarin het vastgoed in gebruik is genomen/);
+  assert.match(BRONNEN.bdConversie.omschrijving, /eigen anker/i);
+});
+
+test('het optionele tweede veld waarschuwt dat art. 52 AWR anders buiten beeld blijft', () => {
+  // Het veld blijft optioneel — dat is de keuze van de eigenaar — maar wie het
+  // leeg laat, moet weten dat de tool dan maar één van de twee klokken rekent.
+  const doc = vindDocumentType('og-akte');
+  assert.match(doc.tweedeTermijn.datumHint, /zelfstandig de gewone zevenjaarstermijn van art\. 52 AWR/i);
+  assert.match(doc.tweedeTermijn.datumHint, /buiten beeld/i);
+  assert.doesNotMatch(doc.tweedeTermijn.datumHint, /Laat leeg om alleen de OB-termijn te zien/i,
+    'de oude hint nodigde uit het veld leeg te laten');
 });
 
 test('het NVKS-overgangsrecht is niet absoluut geformuleerd', () => {
