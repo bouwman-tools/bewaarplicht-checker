@@ -259,6 +259,104 @@ test('een nog lopende primaire termijn is in beide richtingen niet onvolledig', 
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Het tweede datumveld vraagt om aandacht naar de stand van de eerste termijn.
+//
+// Beslissing van de eigenaar op 16-09-2026: het gedrag blijft zoals het was. Een
+// leeg tweede veld bij een verstreken eerste termijn geeft "onvolledig" en geen
+// einddatum; dat is bewust conservatief. Wat wél verandert is de aandacht voor
+// het veld: zolang de eerste termijn loopt blijft het rustig "(optioneel)", en
+// zodra die termijn voorbij is zegt het veld zelf waarom het er dan toe doet.
+// Verplicht wordt het niet — wie de datum niet kent, kan hem niet verzinnen.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const OG_PEIL = { jaar: 2026, maand: 8, dag: 21 };
+
+test('lopende eerste termijn: het tweede veld blijft rustig optioneel', () => {
+  for (const id of [...OG_34A_PRIMAIR, ...OG_AWR_PRIMAIR]) {
+    const r = kern.berekenBewaarplicht(id, { datum: '2024-05-01', datum2: '' }, OG_PEIL);
+    const p = kern.tweedeVeldPresentatie(r);
+    assert.equal(p.dringend, false, `${id}: veldsignaal is ten onrechte dringend`);
+    assert.equal(p.melding, '', `${id}: er hoort hier geen extra melding te staan`);
+    assert.equal(p.label, vindDocumentType(id).tweedeTermijn.datumLabel,
+      `${id}: het label hoort ongewijzigd te blijven`);
+    assert.match(p.label, /\(optioneel\)/, `${id}: het label noemt het veld niet optioneel`);
+  }
+});
+
+test('verstreken eerste termijn met leeg tweede veld maakt het veldsignaal dringend', () => {
+  // Pand respectievelijk factuur uit 2010: bij og-akte liep art. 34a t/m 2019,
+  // bij og-onderhoud liep art. 52 AWR t/m 2017. In beide richtingen hangt de
+  // uitkomst dan volledig aan het tweede veld.
+  for (const id of [...OG_34A_PRIMAIR, ...OG_AWR_PRIMAIR]) {
+    const doc = vindDocumentType(id);
+    const r = kern.berekenBewaarplicht(id, { datum: '2010-05-01', datum2: '' }, OG_PEIL);
+    assert.equal(r.onvolledig, true, `${id}: de uitkomst hoort onvolledig te zijn`);
+
+    const p = kern.tweedeVeldPresentatie(r);
+    assert.equal(p.dringend, true, `${id}: veldsignaal blijft ten onrechte rustig`);
+    assert.notEqual(p.label, doc.tweedeTermijn.datumLabel,
+      `${id}: het label verandert niet terwijl het veld er nu toe doet`);
+    assert.ok(p.melding, `${id}: er hoort een melding bij het veld te staan`);
+
+    const primair = kern.TEKSTEN.kortGrondslag(r.bepalend.grondslag);
+    const tweede = kern.TEKSTEN.kortGrondslag(doc.tweedeTermijn.grondslag);
+    assert.ok(p.melding.includes(primair), `${id}: de melding noemt de verstreken grondslag niet`);
+    assert.ok(p.melding.includes(tweede), `${id}: de melding noemt de tweede grondslag niet`);
+  }
+});
+
+test('het dringende label maakt het veld niet verplicht', () => {
+  // De melding legt uit waarom het veld ertoe doet en geeft tegelijk de uitweg
+  // voor wie de datum niet kent. Een verzonnen datum zou een onjuiste einddatum
+  // opleveren, dus afdwingen is hier de verkeerde kant op.
+  const r = kern.berekenBewaarplicht('og-akte', { datum: '2010-05-01', datum2: '' }, OG_PEIL);
+  const p = kern.tweedeVeldPresentatie(r);
+  assert.match(p.label, /optioneel/i, 'het label noemt het veld niet meer optioneel');
+  assert.match(p.label, /nu wel van belang/i);
+  assert.match(p.melding, /niet verplicht/i);
+  assert.match(p.melding, /laat het veld dan leeg/i);
+  assert.match(p.melding, /geen einddatum/i);
+  assert.doesNotMatch(p.label, /verplicht in te vullen/i);
+
+  // En het invoerveld zelf mag geen browserafdwinging krijgen.
+  assert.doesNotMatch(html, /id="datum2"[^>]*\brequired\b/);
+});
+
+test('bij een documenttype zonder tweede termijn is er geen veldsignaal', () => {
+  const r = kern.berekenBewaarplicht('inkoopfactuur', { datum: '2010-05-01', datum2: '' }, OG_PEIL);
+  assert.equal(kern.tweedeVeldPresentatie(r), null);
+  assert.equal(kern.tweedeVeldPresentatie(null), null);
+  assert.equal(kern.tweedeVeldPresentatie({ status: 'geen-document' }), null);
+});
+
+test('zolang er nog niets te rekenen valt blijft het veldsignaal rustig', () => {
+  // Geen datum ingevuld: dan is er nog geen reden om het veld te benadrukken.
+  const leeg = kern.berekenBewaarplicht('og-akte', { datum: '', datum2: '' }, OG_PEIL);
+  assert.equal(kern.tweedeVeldPresentatie(leeg).dringend, false);
+});
+
+test('het assurancedossier herhaalt niet twee keer dezelfde grondslag', () => {
+  // Beide termijnen staan daar op SKM 1 A85; die naam twee keer noemen leest als
+  // een fout in plaats van als twee klokken naast elkaar.
+  const r = kern.berekenBewaarplicht('opdrachtdossier-assurance',
+    { datum: '2010-05-01', datum2: '' }, OG_PEIL);
+  assert.equal(r.onvolledig, true);
+  const p = kern.tweedeVeldPresentatie(r);
+  assert.equal(p.dringend, true);
+  assert.match(p.melding, /de tweede termijn/);
+});
+
+test('de UI toont het dringende signaal bij het veld zelf, niet alleen in de uitkomst', () => {
+  // De melding in de uitkomst wordt pas gelezen als iemand daarheen kijkt. Deze
+  // check houdt vast dat er ook een element bij het invoerveld staat en dat de
+  // UI het bij elke herberekening bijwerkt.
+  assert.match(html, /id="datum2-alert"/);
+  assert.match(html, /aria-describedby="datum2-note datum2-alert datum2-error"/);
+  assert.match(html, /function updateTweedeVeld\(/);
+  assert.match(html, /updateTweedeVeld\(r\);/);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Vastgelegde inhoudelijke beslissingen. Dit zijn keuzes, geen wetmatigheden —
 // juist daarom moeten ze niet stil kunnen terugvallen.
 // ─────────────────────────────────────────────────────────────────────────────
