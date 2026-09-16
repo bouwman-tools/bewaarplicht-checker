@@ -535,3 +535,21 @@ terugkoppelingen bij `auto-fiscaal-2027` en `auto-van-de-zaak`; die logica wordt
 **Voorbehoud.** Dit document beschrijft de uitgangspunten van een intern hulpmiddel en is geen
 fiscaal advies. De tool geeft een berekende indicatie van de fiscale bewaartermijn; de beoordeling
 of een stuk daadwerkelijk kan worden vernietigd blijft een oordeel per geval.
+
+---
+
+## Aanvulling 16 september 2026 — actuele broncontrole
+
+De actuele SKM 1-tekst is opnieuw gecontroleerd. Par. 31(f) schrijft zelf ten minste zeven jaar
+bewaren voor; A85 geeft voor controle- en assuranceopdrachten het startmoment vanaf de
+opdrachtrapportage, of vanaf de latere groepscontroleverklaring. De tool onderscheidt die route nu
+van samenstellings- en andere aan assurance verwante opdrachten, waarvoor A85 geen afzonderlijk
+startmoment noemt. Een regulier adviesdossier valt niet zonder meer onder SKM 1 en krijgt daarom
+geen automatische termijn. Bronnen: NBA HRA, SKM 1 par. 1, 31(f) en A85; Stcrt. 2025, 44926,
+geraadpleegd op 16 september 2026.
+
+Ook de herzieningswaarden voor investeringsdiensten zijn centraal vastgelegd: vanaf eerste
+ingebruikneming op of na 1 januari 2026, vergoeding ten minste € 30.000 exclusief btw, en vijf
+boekjaren (het ingebruiknemingsjaar plus vier volgende). Bron: Eindejaarsregeling 2024, art. VII en
+toelichting, Stcrt. 2024, 41523, geraadpleegd op 16 september 2026. Drebers blijft een
+casusafhankelijke herzieningsvraag en geen zelfstandige bewaartermijn.

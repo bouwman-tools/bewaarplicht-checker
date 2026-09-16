@@ -10,7 +10,7 @@ Daarnaast staan er de bewaarplichten in voor het opdracht- en controledossier va
 ## Gebruik
 
 1. Open de tool via [bouwman.tools/bewaarplicht.html](https://bouwman.tools/bewaarplicht.html)
-2. **Kennisbank** — 42 documenttypen in 8 categorieën, met per type de termijn, het startmoment en
+2. **Kennisbank** — 44 documenttypen in 8 categorieën, met per type de termijn, het startmoment en
    of het een basisgegeven is
 3. **Einddatum berekenen** — kies een documenttype en vul de datum in waar dat type om vraagt. Welke
    datum dat is verschilt per type en staat onder het invoerveld
@@ -28,7 +28,8 @@ Daarnaast staan er de bewaarplichten in voor het opdracht- en controledossier va
 | 5 jaar, vast | Wwft-cliëntonderzoek: bewaren én daarna vernietigen, vanaf einde zakelijke relatie | art. 33 lid 3 en 34a lid 3 Wwft |
 | 5 jaar, vast | Wwft-melding ongebruikelijke transactie, vanaf het tijdstip van de melding | art. 34 lid 2 en 34a lid 3 Wwft |
 | geen | Overig personeelsdossier, ziekteverzuimregistratie, sollicitatiegegevens | AVG, norminvulling AP |
-| 7 jaar, dossier accountant | Opdrachtdossier: nadat het dossier is afgesloten | art. 25 NVKS, via overgangsrecht art. 6 NVKM |
+| 7 jaar, dossier accountant | Samenstel- en andere aan assurance verwante opdracht: praktische keuze vanaf dossierafsluiting | SKM 1 par. 31(f); A85 geeft hier geen startmoment |
+| 7 jaar, dossier accountant | Controle, beoordeling of andere assurance: vanaf rapportage, of latere groepscontroleverklaring | SKM 1 par. 31(f) en A85 |
 | 7 jaar, dossier accountant | Controledossier wettelijke controle: nadat het dossier is afgesloten | art. 11 lid 6 Bta |
 
 De termijn begint niet op de aanmaakdatum maar op **1 januari van het jaar volgend op het moment
@@ -131,7 +132,7 @@ verkeerde jaar op.
 npm test
 ```
 
-123 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
+138 acceptatiechecks via `node --test`, zonder dependencies. `tests/laad-kern.mjs` snijdt de kern uit
 het HTML-bestand en draait die in een `vm`-sandbox. Die loader bewaakt ook dat de kern puur blijft:
 hij weigert DOM-toegang (`document.`, `window.`) en elk gebruik van `Date`.
 

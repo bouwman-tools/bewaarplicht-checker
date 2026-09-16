@@ -11,7 +11,7 @@ import assert from 'node:assert/strict';
 import kern, { plat, html } from './laad-kern.mjs';
 
 const {
-  BRONNEN, DOCUMENT_TYPES, AANDACHTSPUNTEN,
+  JAARWAARDEN, BRONNEN, DOCUMENT_TYPES, AANDACHTSPUNTEN,
   vindDocumentType, termijnOmschrijving,
 } = kern;
 
@@ -171,6 +171,7 @@ test('documenttypen met een tweede termijn leggen beide grondslagen vast', () =>
   for (const doc of DOCUMENT_TYPES) {
     if (!doc.tweedeTermijn) continue;
     assert.ok(doc.tweedeTermijn.grondslag, `${doc.id}: tweede termijn zonder grondslag`);
+    if (doc.categorie !== 'og') continue;
     assert.ok(doc.bronnen.includes('ob34a'), `${doc.id}: tweede termijn maar geen art. 34a als bron`);
     assert.ok(doc.bronnen.includes('awr52'), `${doc.id}: tweede termijn maar geen art. 52 AWR als bron`);
   }
@@ -347,14 +348,14 @@ const PEIL = { jaar: 2026, maand: 8, dag: 21 };
 const rekenAcc = (id, datum, vandaag = PEIL) =>
   kern.berekenBewaarplicht(id, { datum, datum2: '' }, vandaag);
 
-test('opdrachtdossier: zeven jaar vanaf de datum van de opdrachtrapportage', () => {
+test('opdrachtdossier aan assurance verwant: zeven jaar vanaf de afsluitdatum', () => {
   const r = rekenAcc('opdrachtdossier', '2026-08-21');
   assert.equal(r.bepalend.termijn.klok, 'datum', 'geen kalenderjaarklok');
   assert.deepEqual(plat(r.laatsteBewaardag), { jaar: 2033, maand: 8, dag: 21 });
   assert.deepEqual(plat(r.verstrekenVanaf), { jaar: 2033, maand: 8, dag: 22 });
 });
 
-test('opdrachtdossier ankert op de afsluiting, niet op de rapportagedatum', () => {
+test('opdrachtdossier aan assurance verwant ankert als praktische keuze op afsluiting', () => {
   // Voor een kantoor zonder Wta-vergunning geldt de NVKS via art. 6 NVKM nog tot
   // 1 januari 2027. Art. 25 lid 1 sub e rekent vanaf de afsluiting van het
   // dossier; afsluiten gebeurt ná rapporteren, dus dat anker valt later en is
@@ -365,15 +366,15 @@ test('opdrachtdossier ankert op de afsluiting, niet op de rapportagedatum', () =
   assert.ok(doc.bronnen.includes('nvks25'), 'art. 25 NVKS hoort de primaire bron te zijn');
 });
 
-test('de afsluitdatum geldt onder beide regimes en is als keuze uitgelegd', () => {
+test('de afsluitdatum is alleen voor aan assurance verwante opdrachten als keuze uitgelegd', () => {
   // SKM 1 par. 31(f) eist zeven jaar voor alle opdrachten binnen het
   // toepassingsgebied, maar A85 koppelt die aan de rapportagedatum alleen voor
   // controle- en assurance-opdrachten. Voor de aan assurance verwante opdrachten
   // houdt de tool de latere afsluitdatum aan: conservatief, en uitgelegd als
   // keuze van de tool in plaats van als tekst van A85.
   const doc = vindDocumentType('opdrachtdossier');
-  assert.match(doc.waarschuwing, /afsluiting van het dossier/i);
-  assert.match(doc.waarschuwing, /nooit te kort/i);
+  assert.match(doc.waarschuwing, /Vanaf 1 januari 2027/i);
+  assert.match(doc.waarschuwing, /aparte documenttype/i);
   assert.match(BRONNEN.qms1.omschrijving, /A85/);
   assert.match(BRONNEN.qms1.omschrijving, /geen afzonderlijk startanker/i);
 });
@@ -402,16 +403,42 @@ test('alleen het startmoment van A85 wordt tot controle en assurance beperkt', (
     'de kaart zegt niet dat de zeven jaar voor het hele toepassingsgebied geldt');
 
   const doc = vindDocumentType('opdrachtdossier');
-  assert.match(doc.toelichting, /praktisch rekenanker/i);
-  assert.match(doc.toelichting, /A85 noemt voor deze opdrachten geen afzonderlijk startmoment/);
-  assert.doesNotMatch(doc.toelichting, /par\. 31\(f\)/i,
-    'de toelichting hangt het startmoment nog aan par. 31(f) op');
+  assert.match(doc.toelichting, /praktisch, conservatief rekenanker/i);
+  assert.match(doc.toelichting, /opdrachten noemt A85 geen afzonderlijk startmoment/);
+  assert.match(doc.toelichting, /par\. 31\(f\)/i,
+    'de toelichting legt niet vast waar de termijn zelf staat');
 });
 
 test('de code blijft benoemen dat het rekenanker een keuze van de tool is', () => {
   // Deze transparantie hoort bij de keuze: wie de kern leest moet zien dat de
   // afsluitdatum niet uit de tekst van A85 volgt.
-  assert.match(html, /praktische keuze van deze tool, geen letterlijke tekst van A85/);
+  assert.match(html, /keuze van deze tool, geen letterlijke startregel uit A85/);
+});
+
+test('assurance rekent vanaf de rapportage of de latere groepscontroleverklaring', () => {
+  const doc = vindDocumentType('opdrachtdossier-assurance');
+  assert.match(doc.datumLabel, /opdrachtrapportage/i);
+  assert.match(doc.tweedeTermijn.datumLabel, /groepscontroleverklaring/i);
+  const r = kern.berekenBewaarplicht('opdrachtdossier-assurance', {
+    datum: '2026-03-01', datum2: '2026-05-01',
+  }, PEIL);
+  assert.deepEqual(plat(r.laatsteBewaardag), { jaar: 2033, maand: 5, dag: 1 });
+  assert.equal(r.bepalend.rol, 'tweede');
+});
+
+test('adviesdossier buiten SKM 1 geeft geen verzonnen termijn', () => {
+  const r = kern.berekenBewaarplicht('adviesdossier', {}, PEIL);
+  assert.equal(r.status, 'indicatief');
+});
+
+test('investeringsdienstwaarden zijn benoemd, volledig en brongebonden', () => {
+  const waarde = JAARWAARDEN.investeringsdienst2026;
+  assert.equal(waarde.ingangsdatum, '2026-01-01');
+  assert.equal(waarde.drempelExclBtw, 30000);
+  assert.equal(waarde.herzieningsBoekjaren, 5);
+  assert.equal(waarde.volgendeBoekjaren, 4);
+  assert.equal(waarde.bron, 'eindejaarsregeling2024');
+  assert.ok(BRONNEN[waarde.bron]);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
