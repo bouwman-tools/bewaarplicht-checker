@@ -47,9 +47,20 @@ De nieuwe tests dekken af: dat de uitkomst bij onroerende zaken nooit lager uitk
 
 ## 5. Wat u moet beoordelen
 
+Alle drie de punten zijn op 15 september 2026 door Sylvain Bouwman beoordeeld.
+
 1. Bij het opdrachtdossier: de tool zegt nu dat de zeven jaar in par. 31(f) zelf staat en voor het hele toepassingsgebied geldt, en dat alleen het startmoment van A85 tot controle en assurance beperkt is. Klopt die verhouding zoals u haar aan een collega zou uitleggen?
+   **Bevestigd zonder wijziging: ja, klopt zo.** Zie ook de onafhankelijke verificatie
+   hierover in punt 6, "Afgerond op 16 september 2026 — accountancy".
 2. Bij het personeelsdossier: is "in de regel niet tot de fiscale loonadministratie" sterk genoeg om het praktijkmisverstand te keren, of moet er nog bij dat opslag naast een loonstaat daar niets aan verandert?
+   **Bevestigd zonder wijziging: de huidige tekst is genoeg.**
 3. Bij onroerende zaken: het tweede veld blijft optioneel. Laat een gebruiker het leeg bij een akte van een oud pand, dan zegt de tool "onvolledig" en geeft zij geen einddatum. Is dat de uitkomst die u wilt, of moet daar een sterker signaal bij?
+   **Beslist: sterker signaal, veld blijft optioneel.** Doorgevoerd en gepubliceerd op
+   16-09-2026: zodra de art. 34a-termijn is verstreken en het veld nog leeg is, kleurt het
+   label oranje met een uitlegtekst erboven; loopt die termijn nog, dan verandert er niets.
+   Hetzelfde signaal is toegepast op het vergelijkbare tweede datumveld bij het
+   opdrachtdossier (controle/assurance), op verzoek bevestigd. Zie
+   `tests/bronnen-en-grondslagen.test.mjs`.
 
 ## 6. Openstaande punten
 
