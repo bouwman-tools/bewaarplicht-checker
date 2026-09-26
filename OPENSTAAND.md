@@ -62,7 +62,7 @@ afgesproken kortere bewaartermijnen. Dat zijn beschreven keuzes zonder gevraagde
 ### 1. Verlof- en ziektestaten als basisgegeven aanmerken
 
 **Status:** gesloten op 26-09-2026. Gebouwd: de verlof- en urenregistratie en de
-leerwerkovereenkomst staan in `bewaarplicht.html` op `basis: true` met een basisNoot die Handboek
+leerwerkovereenkomst staan in `bewaarplicht.html` op `basis: true` als eigen keuze, met een basisNoot die Handboek
 Loonheffingen 2026 §3.2.2 en §3.5.2 noemt; het code-commentaar schrijft de knip met de
 verzuimgegevens niet langer aan het Handboek toe maar aan de AVG. Termijn blijft zeven jaar,
 verzuimregistratie blijft apart. Test in `tests/bronnen-en-grondslagen.test.mjs`. Zie

@@ -684,8 +684,8 @@ const BRONNEN = {
       'huurovereenkomst of het verzoek wordt vermeld een omschrijving van de onroerende zaak met ' +
       'plaatselijke en kadastrale aanduiding alsmede de datum van aanvang van het boekjaar van de ' +
       'huurder.” Lid 2 vervolgt met de door de huurder ondertekende verklaring over zijn ' +
-      'aftrekrecht. De huurovereenkomst draagt zo de keuze voor belaste verhuur van een bepaalde ' +
-      'onroerende zaak; dat ondersteunt de lezing dat zij een bescheid “betreffende onroerende ' +
+      'aftrekrecht. Wordt de keuze in de huurovereenkomst gemaakt, dan draagt die de keuze voor ' +
+      'belaste verhuur van een bepaalde onroerende zaak; dat ondersteunt de lezing dat zij een bescheid “betreffende onroerende ' +
       'zaken” is in de zin van art. 34a Wet OB.',
   },
   ubob31: {
@@ -1124,7 +1124,7 @@ const DOCUMENT_TYPES = [
     datumHint: 'De aangifte verliest haar actuele waarde na afloop van het tijdvak waarop zij ziet.',
     startMoment: '1 januari na het jaar van het aangiftetijdvak',
     basis: true,
-    basisNoot: 'Onderdeel van de loonadministratie, die als geheel een basisgegeven is. Geen bron ' +
+    basisNoot: 'Onderdeel van de loonadministratie, die een basisgegeven is. Geen bron ' +
       'noemt aangiften afzonderlijk; dit is een eigen keuze. De aangifte loonheffingen volgt ' +
       'rechtstreeks uit de loonadministratie. De btw-aangifte en de aangifte IB/Vpb volgen uit het ' +
       'grootboek, dat zelf al basisgegeven is, en staan daarom als overig gegeven.',
@@ -1290,16 +1290,21 @@ const DOCUMENT_TYPES = [
       'verlofrechten. Het Handboek Loonheffingen rekent verlof- en ziektestaten tot de gegevens die ' +
       'u bij de loonadministratie bewaart.',
     startMoment: '1 januari na het kalenderjaar',
-    // Handboek Loonheffingen 2026 §3.2.2 rekent de verlof- en ziektestaten tot
-    // de loonadministratie, en §3.5.2 merkt de loonadministratie als geheel aan
-    // als basisgegeven; de arbeidsovereenkomst uit dezelfde lijst staat hier al
-    // op basis:true. Besluit Sylvain 26-09-2026: de staten die de loonbetaling
-    // onderbouwen zijn basisgegeven. De knip met de verzuimgegevens volgt niet
-    // uit het Handboek maar uit de AVG en blijft daarom staan.
+    // Handboek Loonheffingen 2026 §3.2.2 noemt de verlof- en ziektestaten onder
+    // de kop "Overige gegevens bij de loonadministratie"; §3.5.2 noemt de
+    // loonadministratie als basisgegeven, maar laat voor "de overige gegevens"
+    // een kortere termijn in overleg toe. Het Handboek is op dit punt dus niet
+    // eenduidig (bron-controleur 26-09-2026). Eigen keuze, besluit Sylvain
+    // 26-09-2026: de staten die de loonbetaling onderbouwen horen bij de
+    // loonadministratie en zijn basisgegeven, net als de arbeidsovereenkomst uit
+    // dezelfde lijst. De knip met de verzuimgegevens volgt niet uit het Handboek
+    // maar uit de AVG en blijft daarom staan.
     basis: true,
-    basisNoot: 'Onderdeel van de loonadministratie (Handboek Loonheffingen 2026 §3.2.2 en ' +
-      '§3.5.2). Dat geldt voor de staten die de loonbetaling onderbouwen, niet voor ' +
-      'verzuimgegevens.',
+    basisNoot: 'Onderdeel van de loonadministratie, die een basisgegeven is (Handboek ' +
+      'Loonheffingen 2026 §3.2.2 en §3.5.2). Het Handboek zet deze staten onder de kop “overige ' +
+      'gegevens bij de loonadministratie” en is daarin niet eenduidig; basisgegeven is een eigen ' +
+      'keuze, gelijk aan de arbeidsovereenkomst uit dezelfde lijst. Dat geldt voor de staten die de ' +
+      'loonbetaling onderbouwen, niet voor verzuimgegevens.',
     toelichting: 'Dit gaat om wat nodig is om loon, verlofrechten en betalingen te reconstrueren. ' +
       'De ziekteverzuimkant — ziekmeldingen, hersteldata, verzuimfrequentie — staat hiernaast als ' +
       'eigen documenttype met een privacytermijn. Bewaar die twee ook technisch gescheiden.',
@@ -1339,10 +1344,13 @@ const DOCUMENT_TYPES = [
     datumHint: 'Zolang de leerwerkovereenkomst loopt houdt zij actuele waarde; de termijn begint pas ' +
       'daarna.',
     startMoment: '1 januari na het jaar waarin de dienstbetrekking eindigt',
-    // Zelfde lijst in §3.2.2 als de arbeidsovereenkomst; besluit 26-09-2026.
+    // Zelfde lijst in §3.2.2 als de arbeidsovereenkomst; eigen keuze, besluit
+    // 26-09-2026 (zie het commentaar bij de verlof- en urenregistratie).
     basis: true,
-    basisNoot: 'Onderdeel van de loonadministratie (Handboek Loonheffingen 2026 §3.2.2 en ' +
-      '§3.5.2).',
+    basisNoot: 'Onderdeel van de loonadministratie, die een basisgegeven is (Handboek ' +
+      'Loonheffingen 2026 §3.2.2 en §3.5.2). Het Handboek zet dit stuk onder de kop “overige ' +
+      'gegevens bij de loonadministratie” en is daarin niet eenduidig; basisgegeven is een eigen ' +
+      'keuze, gelijk aan de arbeidsovereenkomst uit dezelfde lijst.',
     toelichting: 'Het Handboek Loonheffingen noemt de leerwerkovereenkomst op grond van de ' +
       'beroepsbegeleidende leerweg uitdrukkelijk bij de gegevens die u bij de loonadministratie ' +
       'bewaart. Anders dan de verlof- en ziektestaten bevat dit stuk geen gezondheidsgegevens.',
@@ -1451,8 +1459,9 @@ const DOCUMENT_TYPES = [
     toelichting: 'Bij btw-belaste verhuur onderbouwt de huurovereenkomst de optie en de herziening; ' +
       'daarmee is zij een bescheid “betreffende onroerende zaken” in de zin van art. 34a Wet OB. ' +
       'Art. 6a lid 1 en 2 Uitv.besch. OB ondersteunt dat: de keuze voor belaste verhuur blijkt uit ' +
-      'de schriftelijke huurovereenkomst, die de onroerende zaak met plaatselijke en kadastrale ' +
-      'aanduiding vermeldt. Dat art. 34a ook de huurovereenkomst omvat, is een eigen lezing zonder ' +
+      'de schriftelijke huurovereenkomst of uit een verzoek aan de inspecteur. Is de keuze in de ' +
+      'huurovereenkomst opgenomen, dan vermeldt die de onroerende zaak met plaatselijke en ' +
+      'kadastrale aanduiding. Dat art. 34a ook de huurovereenkomst omvat, is een eigen lezing zonder ' +
       'dwingende bron. ' +
       OG_LATER_DOCUMENT + ' Die bijzondere termijn blijft hangen aan de ingebruikneming van het ' +
       'pand. Bij een langlopende huur komt art. 52 AWR juist vaak later uit, omdat die pas na ' +

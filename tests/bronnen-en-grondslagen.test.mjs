@@ -119,6 +119,9 @@ test('verlof- en urenregistratie en leerwerkovereenkomst zijn basisgegeven', () 
     assert.match(doc.basisNoot, /§3\.2\.2/, `${id} noemt de vindplaats niet`);
     assert.match(doc.basisNoot, /§3\.5\.2/, `${id} noemt de vindplaats niet`);
     assert.doesNotMatch(doc.basisNoot, /kortere termijn/i, `${id} biedt bij een basisgegeven een kortere termijn aan`);
+    // Het Handboek is hier niet eenduidig; de tool presenteert het als eigen keuze.
+    assert.match(doc.basisNoot, /eigen keuze/, `${id} presenteert de keuze als bron`);
+    assert.doesNotMatch(doc.basisNoot, /als geheel/, `${id} legt het Handboek woorden in de mond`);
   }
   // De knip met de verzuimgegevens blijft: die zijn geen fiscaal stuk.
   const verzuim = vindDocumentType('verzuimregistratie');
@@ -158,6 +161,8 @@ test('de huurovereenkomst van de verhuurder verwijst naar art. 6a Uitv.besch. OB
   assert.match(BRONNEN.ubob6a.omschrijving, /blijkens de schriftelijke huurovereenkomst/);
   assert.match(doc.toelichting, /art\. 6a lid 1 en 2 Uitv\.besch\. OB/i);
   assert.match(doc.toelichting, /eigen lezing/);
+  // Art. 6a noemt de huurovereenkomst "of het verzoek"; dat alternatief mag niet wegvallen.
+  assert.match(doc.toelichting, /verzoek aan de inspecteur/);
 });
 
 test('de ziekteverzuimkant staat los van de loononderbouwing', () => {
