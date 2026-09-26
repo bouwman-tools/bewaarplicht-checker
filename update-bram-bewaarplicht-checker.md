@@ -67,7 +67,10 @@ huurovereenkomst staat daarbij art. 52 AWR vooraan en is de OB-klok het optionel
 hieronder en §7.2). De grondslag is de zinsnede
 "**betreffende** onroerende zaken en rechten waaraan deze zijn onderworpen", die ruimer is dan de
 zaak zelf. De Belastingdienst bevestigt het voor facturen ("Facturen over onroerende zaken bewaart u
-10 jaar").
+10 jaar", pagina "Uw facturen bewaren",
+https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/btw/administratie_bijhouden/facturen_maken/uw_facturen_bewaren,
+geraadpleegd 26-09-2026). Die pagina steunt alleen dat facturen onder de tienjaarstermijn vallen; voor
+het anker bij de ingebruikneming en de OB-klok als tweede veld zegt zij niets.
 
 Voor de **huurovereenkomst** hebben wij geen expliciete bron gevonden. Onze redenering: bij optie
 belaste verhuur is het contract onderdeel van de onderbouwing van de optie en van de herziening.
@@ -584,8 +587,16 @@ Kamerstukken II 1997/98, 25 753, nr. 5, HvJ 12-09-2024, C-243/23), geraadpleegd 
 
 Hiermee vervalt de passage in §2.3 dat verlof- en ziektestaten niet meer als basisgegeven zijn
 aangemerkt. Het citaat
-"Facturen over onroerende zaken bewaart u 10 jaar" in §2.2 is bij deze toets op de drie
-Belastingdienstpagina's niet teruggevonden; ook dat staat in `OPENSTAAND.md`.
+"Facturen over onroerende zaken bewaart u 10 jaar" in §2.2 werd bij deze toets op drie
+Belastingdienstpagina's niet teruggevonden. Het staat letterlijk op een vierde, "Uw facturen
+bewaren" (geraadpleegd 26-09-2026); de vindplaats staat nu in §2.2.
+
+Nagekomen op 26 september 2026. De AP-pagina Personeelsdossier is die dag opnieuw gelezen: de kop
+"Maximaal 2 jaar bewaren" staat er nog, met twee jaar na uitdiensttreding voor gegevens zonder
+wettelijke termijn (pagina bijgewerkt op 15 september 2026). En de zin bij de margeadministratie
+dat voor een onroerende zaak de langere OB-termijn geldt, is uit de tool gehaald: gebruikte goederen
+zijn volgens art. 2a lid 1 onder l Wet OB roerende zaken, dus een onroerende zaak valt nooit onder de
+margeregeling. Zie `vrijgave-bewaarplicht-checker-2026-09-26-bronpunten.md`.
 
 De vier bouwpunten uit deze toets (verlof- en urenregistratie en leerwerkovereenkomst als
 basisgegeven, de motivering van het verschil tussen de aangiften, de bronkaart Eindejaarsregeling
