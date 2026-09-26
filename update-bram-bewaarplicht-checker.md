@@ -583,6 +583,11 @@ Kamerstukken II 1997/98, 25 753, nr. 5, HvJ 12-09-2024, C-243/23), geraadpleegd 
 | §2.2 en §7 punt 2: huurovereenkomst verhuurder onder art. 34a | verdedigbaar zonder dwingende bron; art. 6a lid 1 en 2 Uitv.besch. OB (keuze "blijkens de schriftelijke huurovereenkomst") ondersteunt de lezing | bevestigd als eigen keuze; art. 6a komt als vindplaats in de tool, zie `OPENSTAAND.md` |
 
 Hiermee vervalt de passage in §2.3 dat verlof- en ziektestaten niet meer als basisgegeven zijn
-aangemerkt; tot de tool is bijgewerkt wijkt zij op dat label af van dit besluit. Het citaat
+aangemerkt. Het citaat
 "Facturen over onroerende zaken bewaart u 10 jaar" in §2.2 is bij deze toets op de drie
 Belastingdienstpagina's niet teruggevonden; ook dat staat in `OPENSTAAND.md`.
+
+De vier bouwpunten uit deze toets (verlof- en urenregistratie en leerwerkovereenkomst als
+basisgegeven, de motivering van het verschil tussen de aangiften, de bronkaart Eindejaarsregeling
+2024 en art. 6a Uitv.besch. OB bij de huurovereenkomst van de verhuurder) zijn op 26 september 2026
+in de tool verwerkt; zie `vrijgave-bewaarplicht-checker-2026-09-26.md`.

@@ -97,16 +97,72 @@ test('de grondslagtekst van art. 34a hangt niet aan het getal negen', () => {
   assert.match(termijnOmschrijving(echt), /art\. 34a Wet OB/);
 });
 
-test('gegevens met een AVG-gevoelige kant zijn geen basisgegeven', () => {
-  // Het Handboek noemt verlof- en ziektestaten en de rittenregistratie niet in
-  // de opsomming van basisgegevens. Ze als basisgegeven aanmerken ontneemt de
-  // gebruiker bovendien de route naar een kortere termijn, en die is hier door
-  // de AVG juist nodig.
-  // Bankafschriften staan evenmin in die opsomming: zeven jaar bewaren wel,
-  // maar zonder het label basisgegeven.
-  for (const id of ['verlof-uren', 'rittenregistratie', 'bankafschrift']) {
+test('rittenregistratie en bankafschriften zijn geen basisgegeven', () => {
+  // Het Handboek noemt de rittenregistratie niet in de opsomming van
+  // basisgegevens. Bankafschriften staan evenmin in die opsomming: zeven jaar
+  // bewaren wel, maar zonder het label basisgegeven.
+  for (const id of ['rittenregistratie', 'bankafschrift']) {
     assert.equal(vindDocumentType(id).basis, false, `${id} staat ten onrechte als basisgegeven`);
   }
+});
+
+test('verlof- en urenregistratie en leerwerkovereenkomst zijn basisgegeven', () => {
+  // Handboek Loonheffingen 2026 §3.2.2 rekent ze tot de loonadministratie, en
+  // die is volgens §3.5.2 een basisgegeven; besluit Sylvain 26-09-2026. Ze
+  // horen dus gelijk te lopen met de arbeidsovereenkomst uit dezelfde lijst.
+  const arbeid = vindDocumentType('arbeidsovereenkomst');
+  assert.equal(arbeid.basis, true);
+  for (const id of ['verlof-uren', 'leerwerkovereenkomst']) {
+    const doc = vindDocumentType(id);
+    assert.equal(doc.basis, true, `${id} hoort basisgegeven te zijn`);
+    assert.equal(doc.termijn, 7, `${id} houdt de termijn van zeven jaar`);
+    assert.match(doc.basisNoot, /§3\.2\.2/, `${id} noemt de vindplaats niet`);
+    assert.match(doc.basisNoot, /§3\.5\.2/, `${id} noemt de vindplaats niet`);
+    assert.doesNotMatch(doc.basisNoot, /kortere termijn/i, `${id} biedt bij een basisgegeven een kortere termijn aan`);
+    // Het Handboek is hier niet eenduidig; de tool presenteert het als eigen keuze.
+    assert.match(doc.basisNoot, /eigen keuze/, `${id} presenteert de keuze als bron`);
+    assert.doesNotMatch(doc.basisNoot, /als geheel/, `${id} legt het Handboek woorden in de mond`);
+  }
+  // De knip met de verzuimgegevens blijft: die zijn geen fiscaal stuk.
+  const verzuim = vindDocumentType('verzuimregistratie');
+  assert.equal(verzuim.basis, false);
+  assert.match(vindDocumentType('verlof-uren').basisNoot, /niet voor verzuimgegevens/);
+});
+
+test('het verschil tussen de aangiften is gemotiveerd', () => {
+  // Besluit 26-09-2026: de aangifte loonheffingen volgt uit de loonadministratie,
+  // de btw-aangifte en de aangifte IB/Vpb volgen uit het grootboek. Geen bron
+  // noemt aangiften, dus de tool presenteert het als eigen keuze.
+  const lh = vindDocumentType('aangifte-loonheffingen');
+  assert.equal(lh.basis, true);
+  assert.match(lh.basisNoot, /loonadministratie/);
+  assert.match(lh.basisNoot, /eigen keuze/);
+  for (const id of ['btwaangifte', 'aangifte-ib-vpb']) {
+    const doc = vindDocumentType(id);
+    assert.equal(doc.basis, false, `${id} hoort overig gegeven te blijven`);
+    assert.match(doc.basisNoot, /grootboek/, `${id} motiveert het verschil niet`);
+    assert.match(doc.basisNoot, /eigen keuze/, `${id} presenteert de motivering als bron`);
+  }
+});
+
+test('de bronkaart Eindejaarsregeling 2024 schrijft art. VII alleen de ingangsdatum toe', () => {
+  // Bron-controleur 26-09-2026: art. VII noemt alleen de ingangsdatum; het
+  // ingebruiknemingscriterium staat in de toelichting (Stcrt. 2024, 41523).
+  const tekst = BRONNEN.eindejaarsregeling2024.omschrijving;
+  assert.doesNotMatch(tekst, /Art\. VII laat[^.]*ingebruikneming/);
+  assert.match(tekst, /Art\. VII wijzigt[^.]*met ingang van 1 januari 2026/);
+  assert.match(tekst, /toelichting: “de hier bedoelde investeringsdiensten die vanaf 1 januari 2026 in gebruik worden genomen”/);
+});
+
+test('de huurovereenkomst van de verhuurder verwijst naar art. 6a Uitv.besch. OB', () => {
+  const doc = vindDocumentType('og-huur-verhuurder');
+  assert.ok(doc.bronnen.includes('ubob6a'));
+  assert.match(BRONNEN.ubob6a.url, /BWBR0002634&artikel=6a$/);
+  assert.match(BRONNEN.ubob6a.omschrijving, /blijkens de schriftelijke huurovereenkomst/);
+  assert.match(doc.toelichting, /art\. 6a lid 1 en 2 Uitv\.besch\. OB/i);
+  assert.match(doc.toelichting, /eigen lezing/);
+  // Art. 6a noemt de huurovereenkomst "of het verzoek"; dat alternatief mag niet wegvallen.
+  assert.match(doc.toelichting, /verzoek aan de inspecteur/);
 });
 
 test('de ziekteverzuimkant staat los van de loononderbouwing', () => {
