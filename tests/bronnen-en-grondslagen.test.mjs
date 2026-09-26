@@ -716,3 +716,16 @@ test('id, naam en datumLabel zijn uniek genoeg om niet te verwarren', () => {
   const namen = DOCUMENT_TYPES.map((d) => d.naam);
   assert.equal(new Set(namen).size, namen.length, 'dubbele naam in DOCUMENT_TYPES');
 });
+
+test('de margeadministratie sluit onroerende zaken uit en noemt art. 2a Wet OB', () => {
+  // Gebruikte goederen zijn roerende zaken (art. 2a lid 1 onder l Wet OB); de
+  // oude zin "dan geldt dus de langere OB-termijn" had geen toepassingsbereik.
+  const doc = vindDocumentType('margeregeling');
+  assert.equal(doc.termijn, 7);
+  assert.doesNotMatch(doc.toelichting, /dan geldt dus de langere/i);
+  assert.match(doc.toelichting, /onroerende zaak valt nooit onder de margeregeling/);
+  assert.match(doc.toelichting, /art\. 2a lid 1 onder l Wet OB/);
+  assert.ok(doc.bronnen.includes('ob2a'));
+  assert.match(BRONNEN.ob2a.url, /BWBR0002629&artikel=2a$/);
+  assert.match(BRONNEN.ob2a.omschrijving, /alle roerende lichamelijke zaken/);
+});

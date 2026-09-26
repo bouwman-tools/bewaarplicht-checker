@@ -1,41 +1,12 @@
 # Openstaande punten
 
-Laatst bijgewerkt: 26-09-2026 23:22 CEST.
+Laatst bijgewerkt: 26-09-2026 23:38 CEST.
 
-**Stand:** van de 12 punten staan er nog 3 open, is er 1 gepland en zijn er 8 gesloten.
+**Stand:** van de 12 punten staat er geen meer open, is er 1 gepland en zijn er 11 gesloten.
 
 ## Nog te doen
 
-### 5. Zin over onroerende zaken bij de margeregeling is niet getoetst
-
-**Status:** open, nog niet beoordeeld.
-**Eigenaar:** Sylvain.
-
-De toelichting bij de margeadministratie eindigt met "Gaat het om een onroerende zaak, dan geldt
-dus de langere OB-termijn." Of een onroerende zaak onder de margeregeling kan vallen, is bij de
-broncontrole van 26-09-2026 niet nagelezen. Te beslissen: onderbouwen of schrappen. Vindplaats:
-`bewaarplicht.html`, documenttype margeadministratie.
-
-### 6. Citaat "Facturen over onroerende zaken bewaart u 10 jaar" niet teruggevonden
-
-**Status:** open, gevonden op 26-09-2026.
-**Eigenaar:** Sylvain.
-
-`update-bram-bewaarplicht-checker.md` §2.2 citeert de Belastingdienst zo. De bron-controleur vond
-het citaat op 26-09-2026 niet op de pagina's "Hoelang moet u gegevens bewaren?", "Administratie
-bewaren voor de btw: 7 of 10 jaar?" en "Wat moet u bewaren?". De tool zelf gebruikt het citaat niet.
-Te doen: vindplaats zoeken, of het citaat in het document vervangen door de tekst van de btw-pagina
-("Gegevens over onroerende zaken en rechten op onroerende zaken moet u 10 jaar bewaren").
-
-### 7. AP-pagina Personeelsdossier handmatig nalezen
-
-**Status:** open, gevonden op 26-09-2026.
-**Eigenaar:** Sylvain.
-
-Het AP-richtsnoer van maximaal twee jaar na uitdiensttreding (overig personeelsdossier,
-verzuimgegevens) is op 06-09-2026 nagelezen, maar de pagina gaf de bron-controleur op 26-09-2026
-een HTTP 403. Even in een browser openen en bevestigen dat de kop "Maximaal 2 jaar bewaren" er nog
-staat: https://www.autoriteitpersoonsgegevens.nl/themas/werk-en-uitkering/personeelsgegevens/personeelsdossier
+Geen open punten.
 
 ## Gepland, niet open
 
@@ -88,6 +59,35 @@ ongewijzigd; `JAARWAARDEN.investeringsdienst2026` bevatte geen toeschrijving en 
 lid 1 en 2 (wetten.overheid.nl, BWBR0002634, geraadpleegd 26-09-2026); het documenttype
 huurovereenkomst verhuurder verwijst ernaar en noemt de lezing onder art. 34a Wet OB een eigen
 keuze.
+
+### 5. Zin over onroerende zaken bij de margeregeling
+
+**Status:** gesloten op 26-09-2026. Een onroerende zaak kan niet onder de margeregeling vallen:
+gebruikte goederen zijn volgens art. 2a lid 1 onder l Wet OB "alle roerende lichamelijke zaken", en
+kunstvoorwerpen, verzamelvoorwerpen en antiquiteiten zijn de goederen van bijlage J Uitv.besch. OB
+(art. 4 lid 2), elk met een GN-code (wetten.overheid.nl, BWBR0002629 en BWBR0002634, versie
+01-01-2026, geraadpleegd 26-09-2026). Dat een gebouw van meer dan honderd jaar geen antiquiteit is,
+rust op die GN-code (hoofdstuk 97 van het douanetarief deelt goederen in) en is een lezing zonder
+tegenstrijdige bron. Sylvain koos op 26-09-2026 de zin te schrappen en er de uitleg voor in de plaats
+te zetten. Vindplaats: `bewaarplicht.html`, documenttype `margeregeling` en nieuwe bronkaart `ob2a`;
+test in `tests/bronnen-en-grondslagen.test.mjs`. Zie `vrijgave-bewaarplicht-checker-2026-09-26-bronpunten.md`.
+
+### 6. Citaat "Facturen over onroerende zaken bewaart u 10 jaar"
+
+**Status:** gesloten op 26-09-2026. Het citaat staat letterlijk op de Belastingdienstpagina "Uw
+facturen bewaren":
+https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/btw/administratie_bijhouden/facturen_maken/uw_facturen_bewaren
+(geraadpleegd 26-09-2026). URL en datum staan nu in `update-bram-bewaarplicht-checker.md` §2.2, met
+de kanttekening van de bron-controleur dat de pagina alleen de tienjaarstermijn voor facturen steunt
+en niets zegt over het anker bij de ingebruikneming. Het citaat is niet vervangen.
+
+### 7. AP-pagina Personeelsdossier
+
+**Status:** gesloten op 26-09-2026. De pagina is in de browser geopend en door de bron-controleur
+zelf gelezen (pagina bijgewerkt op 15 september 2026). Onder "Bewaren personeelsdossier" staat de
+kop "Maximaal 2 jaar bewaren" met de tekst dat gegevens zonder wettelijke termijn "over het algemeen"
+twee jaar na uitdiensttreding worden bewaard; verzuimfrequentie staat bij de voorbeelden. Vindplaats:
+https://www.autoriteitpersoonsgegevens.nl/themas/werk-en-uitkering/personeelsgegevens/personeelsdossier
 
 ### 9. Toets door Bram van de eigen standpunten (§3 en §7)
 
