@@ -1,58 +1,10 @@
 # Openstaande punten
 
-Laatst bijgewerkt: 26-09-2026 23:06 CEST.
+Laatst bijgewerkt: 26-09-2026 23:22 CEST.
 
-**Stand:** van de 12 punten staan er nog 7 open, is er 1 gepland en zijn er 4 gesloten.
+**Stand:** van de 12 punten staan er nog 3 open, is er 1 gepland en zijn er 8 gesloten.
 
 ## Nog te doen
-
-### 1. Verlof- en ziektestaten als basisgegeven aanmerken
-
-**Status:** open, besloten op 26-09-2026, nog niet gebouwd.
-**Eigenaar:** bouwsessie (Code); het besluit is van Sylvain.
-
-De tool zet de verlof- en urenregistratie en de leerwerkovereenkomst op `basis: false` (overig
-gegeven). Handboek Loonheffingen 2026 §3.2.2 rekent deze staten tot de loonadministratie, en die is
-volgens §3.5.2 een basisgegeven; de arbeidsovereenkomst uit dezelfde lijst staat in de tool al op
-`basis: true`. Sylvain besloot op 26-09-2026 het Handboek te volgen: de staten die de loonbetaling
-onderbouwen worden basisgegeven, de scheiding met verzuimgegevens (AVG) blijft. De termijn van zeven
-jaar verandert niet. Aan te passen: de twee documenttypen, het commentaar dat de knip aan het
-Handboek toeschrijft en een test. Vindplaats: `bewaarplicht.html`, documenttypen in de categorie
-personeel (zoek op `basis: false` bij verlof en leerwerkovereenkomst); bronoordeel in
-`update-bram-bewaarplicht-checker.md`, aanvulling 26 september 2026.
-
-### 2. Het verschil tussen de aangiften motiveren
-
-**Status:** open, besloten op 26-09-2026, nog niet gebouwd.
-**Eigenaar:** bouwsessie (Code); het besluit is van Sylvain.
-
-De aangifte loonheffingen staat op basisgegeven, de btw-aangifte en de aangifte IB/Vpb op overig
-gegeven. Geen bron noemt aangiften. Sylvain koos op 26-09-2026 de uitkomst te houden en het verschil
-in de tool uit te leggen: de aangifte loonheffingen volgt uit de loonadministratie, de andere
-aangiften volgen uit het grootboek, dat zelf al basisgegeven is. Vindplaats: `bewaarplicht.html`,
-`basisNoot` bij de drie aangiften.
-
-### 3. Bronkaart Eindejaarsregeling 2024 schrijft art. VII te veel toe
-
-**Status:** open, gevonden op 26-09-2026.
-**Eigenaar:** bouwsessie (Code).
-
-De bronkaart `eindejaarsregeling2024` zegt dat art. VII de regeling laat gelden "bij eerste
-ingebruikneming op of na 1 januari 2026". Volgens de bron-controleur (26-09-2026) noemt art. VII
-alleen de ingangsdatum; het ingebruiknemingscriterium staat in de toelichting, en het woord "eerste"
-staat in geen van beide. Uitkomst en termijn veranderen niet. Vindplaats: `bewaarplicht.html`,
-bronkaart `eindejaarsregeling2024`.
-
-### 4. Art. 6a Uitv.besch. OB als vindplaats bij de huurovereenkomst
-
-**Status:** open, gevonden op 26-09-2026.
-**Eigenaar:** bouwsessie (Code).
-
-Dat de huurovereenkomst van de verhuurder onder art. 34a Wet OB valt, is een lezing zonder
-dwingende bron; Sylvain bevestigde haar op 26-09-2026 als eigen keuze. Art. 6a lid 1 en 2
-Uitv.besch. OB ("blijkens de schriftelijke huurovereenkomst") ondersteunt haar en staat nog niet in
-de tool. Vindplaats: `bewaarplicht.html`, documenttype huurovereenkomst verhuurder;
-`update-bram-bewaarplicht-checker.md` §2.2.
 
 ### 5. Zin over onroerende zaken bij de margeregeling is niet getoetst
 
@@ -106,6 +58,36 @@ zelf, de verlengde navorderingstermijn, civielrechtelijke verjaring, de btw-herz
 afgesproken kortere bewaartermijnen. Dat zijn beschreven keuzes zonder gevraagde actie.
 
 ## Gesloten
+
+### 1. Verlof- en ziektestaten als basisgegeven aanmerken
+
+**Status:** gesloten op 26-09-2026. Gebouwd: de verlof- en urenregistratie en de
+leerwerkovereenkomst staan in `bewaarplicht.html` op `basis: true` met een basisNoot die Handboek
+Loonheffingen 2026 §3.2.2 en §3.5.2 noemt; het code-commentaar schrijft de knip met de
+verzuimgegevens niet langer aan het Handboek toe maar aan de AVG. Termijn blijft zeven jaar,
+verzuimregistratie blijft apart. Test in `tests/bronnen-en-grondslagen.test.mjs`. Zie
+`vrijgave-bewaarplicht-checker-2026-09-26.md`.
+
+### 2. Het verschil tussen de aangiften motiveren
+
+**Status:** gesloten op 26-09-2026. Gebouwd: de basisNoot van de aangifte loonheffingen en van de
+btw-aangifte en de aangifte IB/Vpb (constante `AANGIFTE_OVERIG_NOOT`) legt het verschil uit als
+eigen keuze: loonheffingen volgt uit de loonadministratie, de andere aangiften uit het grootboek.
+Uitkomst ongewijzigd. Zie `vrijgave-bewaarplicht-checker-2026-09-26.md`.
+
+### 3. Bronkaart Eindejaarsregeling 2024 schrijft art. VII te veel toe
+
+**Status:** gesloten op 26-09-2026. De bronkaart `eindejaarsregeling2024` schrijft art. VII nu
+alleen de ingangsdatum toe ("met ingang van 1 januari 2026") en citeert voor het
+ingebruiknemingscriterium de toelichting (Stcrt. 2024, 41523, nagelezen 26-09-2026). Uitkomst
+ongewijzigd; `JAARWAARDEN.investeringsdienst2026` bevatte geen toeschrijving en is niet aangepast.
+
+### 4. Art. 6a Uitv.besch. OB als vindplaats bij de huurovereenkomst
+
+**Status:** gesloten op 26-09-2026. Nieuwe bronkaart `ubob6a` met letterlijk citaat van art. 6a
+lid 1 en 2 (wetten.overheid.nl, BWBR0002634, geraadpleegd 26-09-2026); het documenttype
+huurovereenkomst verhuurder verwijst ernaar en noemt de lezing onder art. 34a Wet OB een eigen
+keuze.
 
 ### 9. Toets door Bram van de eigen standpunten (§3 en §7)
 
