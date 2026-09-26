@@ -47,7 +47,7 @@ De test die de verlof- en urenregistratie op overig gegeven vastpinde is omgezet
 
 **Bron-controleur, 26-09-2026.** Negen uitspraken getoetst: zeven klopten, één klopte niet en één was niet te verifiëren. Niet te verifiëren was de formulering dat §3.5.2 de loonadministratie "als geheel" basisgegeven noemt: het Handboek zet de verlof- en ziektestaten onder de kop "overige gegevens" en laat voor overige gegevens een kortere termijn toe. Hersteld: de tool en deze notitie presenteren basisgegeven nu als eigen keuze met de vindplaatsen, zonder "als geheel". Niet klopte de zin dat de keuze voor belaste verhuur "blijkt uit de schriftelijke huurovereenkomst": art. 6a noemt "de schriftelijke huurovereenkomst of het verzoek". Hersteld in de toelichting en op de bronkaart. Beide herstellingen zijn met een test vastgelegd. Letterlijk juist bevonden: de citaten uit art. VII en de toelichting (Stcrt. 2024, 41523) en uit art. 6a lid 1 en 2 Uitv.besch. OB; de motivering bij de aangiften schrijft niets aan een bron toe.
 
-**Publicatiepoort:** uitkomst staat in het voorstel (pull request) bij deze branch.
+**Publicatiepoort, 26-09-2026: GO.** npm test zelf gedraaid (149 geslaagd, 0 gefaald, 14 suites); vrijgavenotitie compleet; gelijkwaardigheidstoets niet van toepassing (geen rekenregel of modelvervanging); elke geraakte uitspraak draagt haar vindplaats. Kanttekening van de poort dat art. 6a de inspecteur niet noemt, is nagelezen en onjuist: art. 6a lid 3 luidt "De inspecteur beslist op het verzoek"; de tekst blijft.
 
 ## 6. Openstaande punten
 
