@@ -70,7 +70,8 @@ Twee valkuilen die de tool expliciet afvangt:
 
 De fiscale keuzes en de bronnen staan in
 [`update-bram-bewaarplicht-checker.md`](update-bram-bewaarplicht-checker.md). Dat document is de
-plek voor inhoudelijke discussie; deze README beschrijft alleen het gebruik en de opzet.
+plek voor inhoudelijke discussie; deze README beschrijft alleen het gebruik en de opzet. Wat nog
+openstaat, staat in [`OPENSTAAND.md`](OPENSTAAND.md).
 
 ## Toegang
 

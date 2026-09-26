@@ -1,5 +1,9 @@
 # Terugkoppeling: bewaarplicht-checker
 
+**Status: afgerond (26-09-2026).** De toets in paragraaf 7 is door Sylvain Bouwman zelf gedaan;
+zie de aanvulling van 26 september 2026 onderaan. Wat nog openstaat, staat in
+[`OPENSTAAND.md`](OPENSTAAND.md).
+
 **Aan** Bram, DK Accountants · **Van** Join Administraties · **Datum** 21 augustus 2026
 **Aanleiding** De bewaarplicht-tool is inhoudelijk herzien. Bij die herziening zijn een paar
 uitgangspunten van de vorige versie gesneuveld. Hieronder staan alleen de punten waarop jouw
@@ -9,7 +13,7 @@ oordeel waarde heeft — niet de technische wijzigingen.
 
 ## 1. Wat de tool doet
 
-De tool bestaat uit een kennisbank (42 documenttypen in 8 categorieën) en een rekentool. Je kiest
+De tool bestaat uit een kennisbank (44 documenttypen in 8 categorieën) en een rekentool. Je kiest
 een documenttype, vult één datum in, en de tool geeft de laatste dag waarop het stuk bewaard moet
 blijven plus de dag waarop de termijn is verstreken.
 
@@ -57,8 +61,10 @@ onroerendezaakgegevens, zodat een gebruiker niet standaard met twee datums wordt
 
 ### 2.2 De reikwijdte van art. 34a — hier zit onze zwakste onderbouwing
 
-Wij passen de tienjaarstermijn toe op vier typen: de akte, de onderhouds-/investeringsfactuur, de
-huurovereenkomst van de verhuurder, en overige gegevens over de zaak. De grondslag is de zinsnede
+Wij rekenen art. 34a tot de scope van vier typen: de akte, de onderhouds-/investeringsfactuur, de
+huurovereenkomst van de verhuurder, en overige gegevens over de zaak. Bij de factuur en de
+huurovereenkomst staat daarbij art. 52 AWR vooraan en is de OB-klok het optionele tweede veld (zie
+hieronder en §7.2). De grondslag is de zinsnede
 "**betreffende** onroerende zaken en rechten waaraan deze zijn onderworpen", die ruimer is dan de
 zaak zelf. De Belastingdienst bevestigt het voor facturen ("Facturen over onroerende zaken bewaart u
 10 jaar").
@@ -210,9 +216,10 @@ Deze keuzes zijn van ons en staan los van de wet. Ze bepalen wel wat de gebruike
   zeven jaar) of een overig gegeven (kortere termijn in overleg met de Belastingdienst mogelijk).
   Voor het grootboek, de debiteuren-/crediteurenadministratie, de voorraadadministratie, de in- en
   verkoopadministratie, de loonadministratie en gegevens ten behoeve van derden is dat de letterlijke
-  opsomming van de Belastingdienst. Bij **bankafschriften**, de **aangifte loonheffingen** en de
-  **margeadministratie** is het onze toerekening: wij scharen die onder respectievelijk het
-  grootboek, de loonadministratie en de in- en verkoopadministratie. Die drie mag je tegenspreken.
+  opsomming van de Belastingdienst. Bij de **aangifte loonheffingen** en de
+  **margeadministratie** is het onze toerekening: wij scharen die onder respectievelijk de
+  loonadministratie en de in- en verkoopadministratie. **Bankafschriften** staan niet in de
+  opsomming en zijn in de tool een overig gegeven (§7, punt 7).
 
 ---
 
@@ -323,8 +330,9 @@ Dat is hersteld:
   in aanmerking komen, maar rekent geen afgesproken termijn.
 - **Investeringsdiensten vanaf € 30.000.** Per 1 januari 2026 kennen die een eigen herziening over
   vijf boekjaren (art. 13 lid 1 sub c en lid 3 Uitv.besch. OB). Art. 34a Wet OB is daarbij **niet**
-  meegewijzigd. Wij behandelen zo'n factuur daarom als een bescheid "betreffende onroerende zaken",
-  dus tien jaar. Zie de open vragen.
+  meegewijzigd. Zo'n factuur start daarom geen eigen tienjaarstermijn: de tool rekent zeven jaar via
+  art. 52 AWR, met de art. 34a-termijn van het pand als optioneel tweede veld (§7, knoop 1). Wat nog
+  openstaat staat in [`OPENSTAAND.md`](OPENSTAAND.md).
 
 ---
 
@@ -553,3 +561,28 @@ ingebruikneming op of na 1 januari 2026, vergoeding ten minste € 30.000 exclus
 boekjaren (het ingebruiknemingsjaar plus vier volgende). Bron: Eindejaarsregeling 2024, art. VII en
 toelichting, Stcrt. 2024, 41523, geraadpleegd op 16 september 2026. Drebers blijft een
 casusafhankelijke herzieningsvraag en geen zelfstandige bewaartermijn.
+
+---
+
+## Aanvulling 26 september 2026 — toets van paragraaf 7 afgerond
+
+De toets die paragraaf 7 vraagt, heeft Sylvain Bouwman als fiscale eigenaar zelf gedaan, op
+26 september 2026. Van Bram werd hier geen reactie verwacht. De bron-controleur heeft vooraf elk standpunt tegen de primaire bron
+gelegd (wetten.overheid.nl, belastingdienst.nl, Handboek Loonheffingen 2026, Stcrt. 2024, 41523,
+Kamerstukken II 1997/98, 25 753, nr. 5, HvJ 12-09-2024, C-243/23), geraadpleegd op 26-09-2026.
+
+| Standpunt | Bronoordeel | Besluit |
+|---|---|---|
+| Knoop 1: investeringsdienst vanaf € 30.000, zeven jaar | verdedigbaar zonder dwingende bron; art. 34a Wet OB noemt nog steeds "het goed", art. 13 lid 1 sub c en lid 3 Uitv.besch. OB geeft de investeringsdienst een eigen herziening | bevestigd als eigen keuze |
+| Knoop 2: Drebers uit de standaardwaarschuwing | bevestigd; Stcrt. 2024, 41523, consultatieparagraaf: niet zonder meer te extrapoleren en de tienjaarstermijn kan de belastingplichtige niet worden tegengeworpen | bevestigd |
+| Knoop 3: beschikking/verklaring op herkomst | vijf jaar bevestigd (Handboek §3.5.2 en §17.2, geen wetsbepaling); zeven jaar bij zelf aangevraagd is verdedigbaar zonder dwingende bron | bevestigd als eigen keuze |
+| Knoop 4 en §7 punt 9: verlof- en ziektestaten als overig gegeven | niet bevestigd; Handboek §3.2.2 rekent ze tot de loonadministratie, die in §3.5.2 een basisgegeven is. De termijn van zeven jaar klopt wel | **gewijzigd**: de staten die de loonbetaling onderbouwen worden basisgegeven, zoals de arbeidsovereenkomst uit dezelfde lijst. De scheiding met verzuimgegevens blijft. Nog niet in de tool, zie `OPENSTAAND.md` |
+| §7 punt 7: bankafschriften geen basisgegeven | bevestigd; de opsomming op belastingdienst.nl noemt ze niet | bevestigd |
+| §3: aangifte loonheffingen basisgegeven | verdedigbaar zonder dwingende bron; in de tool staan btw- en IB/Vpb-aangifte wel op overig gegeven | bevestigd; het verschil wordt in de tool gemotiveerd (de aangifte loonheffingen volgt uit de loonadministratie, de andere aangiften uit het grootboek), zie `OPENSTAAND.md` |
+| §3: margeadministratie basisgegeven | verdedigbaar zonder dwingende bron | bevestigd als eigen keuze |
+| §2.2 en §7 punt 2: huurovereenkomst verhuurder onder art. 34a | verdedigbaar zonder dwingende bron; art. 6a lid 1 en 2 Uitv.besch. OB (keuze "blijkens de schriftelijke huurovereenkomst") ondersteunt de lezing | bevestigd als eigen keuze; art. 6a komt als vindplaats in de tool, zie `OPENSTAAND.md` |
+
+Hiermee vervalt de passage in §2.3 dat verlof- en ziektestaten niet meer als basisgegeven zijn
+aangemerkt; tot de tool is bijgewerkt wijkt zij op dat label af van dit besluit. Het citaat
+"Facturen over onroerende zaken bewaart u 10 jaar" in §2.2 is bij deze toets op de drie
+Belastingdienstpagina's niet teruggevonden; ook dat staat in `OPENSTAAND.md`.
