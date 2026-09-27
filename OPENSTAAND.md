@@ -1,12 +1,22 @@
 # Openstaande punten
 
-Laatst bijgewerkt: 26-09-2026 23:38 CEST.
+Laatst bijgewerkt: 27-09-2026 12:09 CEST.
 
-**Stand:** van de 12 punten staat er geen meer open, is er 1 gepland en zijn er 11 gesloten.
+**Stand:** van de 13 punten staat er 1 open, is er 1 gepland en zijn er 11 gesloten.
 
 ## Nog te doen
 
-Geen open punten.
+### 13. Kopie van xlsx-schrijver.js bevestigen tegen de bron in gedeelde-kern
+
+**Status:** open sinds 27-09-2026. **Eigenaar:** wie als volgende in deze repository werkt.
+
+`bewaarplicht.html` bevat nu een handmatig neergezette kopie van
+`gedeelde-kern/blokken/xlsx-schrijver.js` (tussen de markers `XLSX-SCHRIJVER — BEGIN/EINDE`),
+omdat `gedeelde-kern/manifest.json` bij het bouwen van de uitgangen een ongecommitte
+wijziging van een andere sessie bevatte en `node verspreid.mjs` die had kunnen raken. Draai
+de reguliere verspreidingsroute uit de README van `gedeelde-kern` zodra die repository rustig
+is, en bevestig dat de kopie in `bewaarplicht.html` bit-voor-bit gelijk is aan de bron. Zie
+`vrijgave-bewaarplicht-checker-2026-09-27-uitgangen.md`.
 
 ## Gepland, niet open
 
